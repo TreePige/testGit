@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_profile表:附件类型管理模块 -->
+<mapper namespace="com.rongdu.eloan.modules.common.dao.PubProfileDao">
+	<!--返回MAP-->		
+	<resultMap id="PubProfileResult" type="PubProfile">
+		<id column="id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="product_id" property="productId" />
+		<result column="ptype" property="ptype" />
+		<result column="is_required" property="isRequired" />
+		<result column="remark" property="remark" />
+		<result column="remark2" property="remark2" />
+		<result column="sort" property="sort" />
+		<result column="disable" property="disable" />
+	</resultMap>
+	
+	<resultMap id="PubProfileTreeMap" type="java.util.HashMap">
+        <id column="id" property="value" />
+        <result column="parent_id" property="parentId" />
+        <result column="product_id" property="productId" />
+        <result column="ptype" property="label" />
+        <result column="is_required" property="isRequired" />
+        <result column="remark" property="remark" />
+        <result column="remark2" property="remark2" />
+        <result column="sort" property="sort" />
+        <result column="disable" property="disable" />
+    </resultMap>
+    
+    <resultMap id="PubProfileMap" type="java.util.HashMap">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="product_id" property="productId" />
+        <result column="ptype" property="ptype" />
+        <result column="is_required" property="isRequired" />
+        <result column="remark" property="remark" />
+        <result column="remark2" property="remark2" />
+        <result column="sort" property="sort" />
+        <result column="disable" property="disable" />
+    </resultMap>
+    
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="parentId !='' and parentId !=null">
+            	and parent_id = #{parentId}
+            </if>
+            <if test="productId !='' and productId !=null">
+            	and product_id = #{productId}
+            </if>
+            <if test="ptype !='' and ptype !=null">
+            	and ptype = #{ptype}
+            </if>
+            <if test="isRequired !='' and isRequired !=null">
+            	and is_required = #{isRequired}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="remark2 !='' and remark2 !=null">
+            	and remark2 = #{remark2}
+            </if>
+            <if test="sort !='' and sort !=null">
+            	and sort = #{sort}
+            </if>
+            <if test="disable !='' and disable !=null">
+            	and disable = #{disable}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="parentId != '' and parentId!= null">		
+	    		parent_id = #{parentId},		
+	    	</if>
+	    	<if test="productId != '' and productId!= null">		
+	    		product_id = #{productId},		
+	    	</if>
+	    	<if test="ptype != '' and ptype!= null">		
+	    		ptype = #{ptype},		
+	    	</if>
+	    	<if test="isRequired != '' and isRequired!= null">		
+	    		is_required = #{isRequired},		
+	    	</if>
+	    	<if test="remark != '' and remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="remark2 != '' and remark2!= null">		
+	    		remark2 = #{remark2},		
+	    	</if>
+	    	<if test="sort != '' and sort!= null">		
+	    		sort = #{sort},		
+	    	</if>
+	    	<if test="disable != '' and disable!= null">		
+	    		disable = #{disable},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubProfile">
+		insert into pub_profile(
+        	parent_id,		
+        	product_id,		
+        	ptype,		
+        	is_required,		
+        	remark,		
+        	remark2,		
+        	sort,		
+        	disable,		
+			id
+        )values(
+        	#{parentId},
+        	#{productId},
+        	#{ptype},
+        	#{isRequired},
+        	#{remark},
+        	#{remark2},
+        	#{sort},
+        	#{disable},
+        	#{id}
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey keyProperty="id" resultType="long" order="BEFORE">
+        select pub_profile_seq.nextval as id from dual
+     </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubProfile">
+        update pub_profile
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubProfileResult" parameterType="java.util.HashMap" >
+		select * from pub_profile
+		<include refid="searchByPo"/>
+		<if test="sort != '' and sort!= null">      
+            order by #{sortStr},       
+        </if>	
+	</select>
+    
+    <!--分页记录数-->
+	<select id="getPageCountByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+		select count(*)	from pub_profile
+		<include refid="searchByPo"/>
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_profile
+        where
+        id  = #{id}
+    </delete>
+    
+    <!-- 查找所有类型 -->
+    <select id="fetchAllAttach" resultMap="PubProfileTreeMap">
+        SELECT
+		    "ID",
+		    parent_id,
+		    remark,
+		    remark2,
+		    ptype,
+		    "SORT"
+		FROM
+		    PUB_PROFILE
+		WHERE
+		    "DISABLE" = 0
+		ORDER BY
+		    "SORT",
+		    "ID"
+    </select>
+    
+    <select id="getByPrimary" resultMap="PubProfileResult">
+        SELECT
+		    *
+		FROM
+		    PUB_PROFILE
+		WHERE
+		    ID = #{id}
+    </select>
+    
+    <select id="queryAttachTreeByTaskId" resultMap="PubProfileMap">
+        select
+            if(b.fileCnt=0,concat(a.remark,'&lt;span style="color:red" &gt;【补充】 &lt;/span&gt;'),a.remark) remark,
+            a.*
+        from(
+            select
+                (
+                    select
+                        count(1)
+                    from
+                    pub_attachment attach
+                    where
+                        attach.btype=profile.ptype
+                        and attach.process_instance_id=(
+                            select
+                                process_instance_id
+                            from pub_loanprocess
+                            where
+                                new_task_id=#taskId#
+                        )
+                )   attachCnt,
+                profile.id,
+                profile.parent_id,
+                profile.ptype,
+                profile.product_id,
+                profile.remark
+            from pub_profile profile
+            where
+                profile.disable=0
+        )a
+        left join (
+            select
+                profile.id          profileId,
+                process.process_instance_id processInstanceId,
+                process.new_task_id         newTaskId,
+                profile.remark           typeName,
+                count(attach.id)            fileCnt
+            from pub_loanprocess process
+            join pub_profile profile on FIND_IN_SET(profile.id,process.category)
+            left join pub_attachment attach
+                on attach.process_instance_id=process.process_instance_id
+                and attach.btype=profile.ptype
+                and attach.create_time>process.create_time
+            where
+                profile.disable=0
+                and process.new_task_id=#taskId#
+            group by
+                profile.ptype
+        )b on b.profileId=a.id
+    </select>
+    
+    <select id="queryAttachTreeByProjectId" resultMap="PubProfileMap">
+        select
+            (
+                select
+                    count(1)
+                from
+                pub_attachment attach
+                where
+                    attach.rd_btype=profile.ptype
+                    and attach.project_id=#projectId#
+            )   attachCnt,
+            profile.*
+        from pub_profile profile
+        where
+            profile.disable=0
+    </select>
+    
+    <select id="queryAttachTreeByConsultId" resultMap="PubProfileMap">
+        select
+            (
+                select
+                    count(1)
+                from
+                pub_attachment attach
+                where
+                    attach.btype=profile.ptype
+                    and attach.consult_id=#consultId#
+            )   attachCnt,
+            profile.*
+        from pub_profile profile
+        where
+            profile.disable=0
+    </select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rongdu.eloan.modules.system.dao.SysRoleMenuDao">
+	<resultMap id="roleMenuResult" type="roleMenu">
+		<result column="id" property="id" />
+		<result column="role_id" property="roleId" />
+		<result column="menu_id" property="menuId" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="roleMenu">
+		<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		insert into sys_role_menu(
+			role_id,
+			menu_id				
+		)
+		values (
+			#{roleId},
+			#{menuId}				
+		)
+	</insert>
+	
+	<delete id="deleteByRoleId" parameterType="long">
+ 	  delete from sys_role_menu
+ 	  where
+ 	  role_id = #{roleId}
+ 	</delete>
+ 	
+ 	<select id="getRoleMenuHrefList" parameterType="Long" resultType="java.lang.String">
+
+
+		select s1.href as href
+		from sys_menu s1, sys_role s2, sys_role_menu s3
+		where s1.id = s3.menu_id
+		and s2.id = s3.role_id
+		and s2.id = #{roleId}
+
+	</select>
+</mapper>

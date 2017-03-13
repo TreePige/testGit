@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_attachment表:补充资料模块 -->
+<mapper namespace="com.rongdu.eloan.modules.supplymaterial.dao.PubSupplyMaterialDao">
+	<!--返回MAP-->		
+	<resultMap id="PubSupplymaterialResult" type="PubSupplymaterial">
+		<id column="id" property="id" />
+		<result column="state" property="state" />
+		<result column="create_time" property="createTime" />
+		<result column="operator_id" property="operatorId" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="other_material_name" property="otherMaterialName" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			state,
+			create_time,
+			operator_id,
+			consult_id,
+			process_instance_id,
+			project_id,
+			other_material_name			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="state !='' and state !=null">
+            	and state = #{state}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="operatorId !='' and operatorId !=null">
+            	and operator_id = #{operatorId}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="otherMaterialName !='' and otherMaterialName !=null">
+            	and other_material_name = #{otherMaterialName}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="state!= null">		
+	    		state = #{state},		
+	    	</if>
+	    	<if test="operatorId!= null">		
+	    		operator_id = #{operatorId},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="otherMaterialName!= null">		
+	    		other_material_name = #{otherMaterialName},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubSupplymaterial">
+		insert into pub_supplymaterial(
+        	state,
+        	create_time,
+        	operator_id,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	other_material_name			
+        )values(
+        	#{state},
+        	#{createTime},
+        	#{operatorId},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{otherMaterialName}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	 
+	 <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_supplymaterial
+        where
+        id  = #{id}
+    </delete>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubSupplymaterial">
+        update pub_supplymaterial
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubSupplymaterialResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_supplymaterial
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubSupplymaterialResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_supplymaterial
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<select id="getItemByPo" resultMap="PubSupplymaterialResult" parameterType="PubSupplymaterial" >
+		select 
+		<include refid="searchSql"/>
+		from pub_attachment
+		<include refid="searchByPo"/>
+		order by id desc
+	</select>
+    
+	
+	<!--分页列表查询-->
+	<!-- <select id="getPageListByMap" resultMap="PubSupplymaterialResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_attachment
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select> -->
+	
+	<sql id="baseSupplySelectSql">
+		p.code AS projectCode,
+		cc.name AS customerName,
+		cc.customer_manager AS customerManagerName,
+		bo.account AS amount,
+		bo.time_limit AS timeLimit,
+		bo.financial_advisers AS financialAdvisers,
+		assignee.`name` AS executor,
+		
+		p.id AS projectId,
+		cc.id AS consultid,
+		cc.product_id AS productId,
+		cc.`STATUS` AS currentProcessStateCode,
+		dd.item_value AS consultProcessState,
+		task.ID_ AS taskId,
+		task.PROC_INST_ID_ AS processInstanceId,
+		task.NAME_ AS processState,
+	 	task.TASK_DEF_KEY_ AS processStateCode
+	</sql>
+	
+	<!-- 待处理 基本的sql查询字段-->
+	<sql id="undoneBaseSelectSql">
+		<include refid="baseSupplySelectSql" />
+		,task.CREATE_TIME_ as startTime
+	</sql>
+	<!-- 已处理 基本的sql查询字段-->
+	<sql id="doneBaseSelectSql">
+		<include refid="baseSupplySelectSql" />
+		,task.START_TIME_ as startTime
+		,task.END_TIME_ as endTime
+		<!--,oper_dict.item_value as commentType-->
+	</sql>
+	
+	<sql id="baseJoinSql">
+		INNER JOIN pub_project_process pp ON pp.process_instance_id = task.PROC_INST_ID_
+		AND pp.process_type = '0'
+		INNER JOIN pub_project p ON p.id = pp.project_id
+		INNER JOIN sys_user assignee ON assignee.user_name = task.ASSIGNEE_
+		INNER JOIN pl_consult cc ON cc.project_id = p.id
+		LEFT JOIN sys_user customerMgr ON customerMgr.id = cc.customer_manager
+		INNER JOIN sys_dict_detail dd ON dd.item_code = cc.`STATUS`
+		AND dd.parent_id = 23
+		INNER JOIN pl_borrow_requirement bo ON bo.process_instance_id = cc.process_instance_id
+		INNER JOIN pl_product pro ON pro.id = bo.product_id
+		INNER JOIN sys_role r ON r.nid = task.DESCRIPTION_
+	</sql>
+	
+	<sql id="dynamicQuerySql">
+		AND assignee.id = (
+			SELECT
+				id
+			FROM
+				sys_user
+			WHERE
+				user_name = #{userName}
+		)
+		AND (
+			(
+				<if test="coverdOffices != null">
+					customerMgr.office_id IN
+					<foreach item="office" collection="coverdOffices" open="(" separator="," close=")" >
+						#{office}
+					</foreach>
+				</if>
+			)
+			OR (task.ASSIGNEE_ = #{userName})
+		)
+		AND r.id = #{roleId}
+		<if test="projectCode!=null and projectCode != ''">
+			and p.code = #{projectCode}
+		</if>
+		<if test="customerName!=null and customerName != ''">
+			and cc.name like concat('%',#{customerName},'%')
+		</if>
+		<if test="customerManagerName!=null and customerManagerName != ''">
+			and cc.customer_manager like concat('%',#{customerManagerName},'%')
+		</if>
+	</sql>
+	
+	<select id="getUnCompletePageListByMap" resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+			SELECT
+				<include refid="undoneBaseSelectSql" />
+			FROM
+				ACT_RU_TASK task
+			<include refid="baseJoinSql" />
+			<where>
+				task.TASK_DEF_KEY_ LIKE concat(#{taskDefinition},'%')
+				<include refid="dynamicQuerySql" />
+				ORDER BY task.CREATE_TIME_
+			</where>
+	</select>
+    
+    <select id="getCompletedPageListByMap" resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+			SELECT
+				<include refid="doneBaseSelectSql" />
+			FROM
+				ACT_HI_TASKINST task
+			<include refid="baseJoinSql" />
+			<where>
+				task.END_TIME_ IS NOT NULL
+				and task.TASK_DEF_KEY_ LIKE concat(#{taskDefinition},'%')
+				<include refid="dynamicQuerySql" />
+				ORDER BY task.END_TIME_ DESC
+			</where>
+	</select>
+	
+</mapper>

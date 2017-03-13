@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_repayloaninfo表:放款模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PubRepaymentdetailDao">
+	<!--返回MAP-->		
+	<resultMap id="PubRepayloaninfoResult" type="PubRepayloaninfo">
+		<id column="id" property="id" />
+		<result column="borrowid" property="borrowid" />
+		<result column="contract_no" property="contractNo" />
+		<result column="contractid" property="contractid" />
+		<result column="customer_name" property="customerName" />
+		<result column="customerid" property="customerid" />
+		<result column="customer_account" property="customerAccount" />
+		<result column="time_limit" property="timeLimit" />
+		<result column="officeid" property="officeid" />
+		<result column="servicefee" property="servicefee" />
+		<result column="projectid" property="projectid" />
+		<result column="productid" property="productid" />
+		<result column="mortgage_type" property="mortgageType" />
+		<result column="vouch_type" property="vouchType" />
+		<result column="repaymenttime" property="repaymenttime" />
+		<result column="repayment_capital_amount" property="repaymentCapitalAmount" />
+		<result column="repayment_interest_amount" property="repaymentInterestAmount" />
+		<result column="capital_amount" property="capitalAmount" />
+		<result column="interest_amount" property="interestAmount" />
+		<result column="repayment_status" property="repaymentStatus" />
+		<result column="repayment_process" property="repaymentProcess" />
+		<result column="islocked" property="islocked" />
+		<result column="disposal_amount" property="disposalAmount" />
+		<result column="disposal_balance" property="disposalBalance" />
+		<result column="risk_level" property="riskLevel" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			borrowid,
+			contract_no,
+			contractid,
+			customer_name,
+			customerid,
+			customer_account,
+			time_limit,
+			officeid,
+			servicefee,
+			projectid,
+			productid,
+			mortgage_type,
+			vouch_type,
+			repaymenttime,
+			repayment_capital_amount,
+			repayment_interest_amount,
+			capital_amount,
+			interest_amount,
+			repayment_status,
+			repayment_process,
+			islocked,
+			disposal_amount,
+			disposal_balance,
+			risk_level			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="borrowid !='' and borrowid !=null">
+            	and borrowid = #{borrowid}
+            </if>
+            <if test="contractNo !='' and contractNo !=null">
+            	and contract_no = #{contractNo}
+            </if>
+            <if test="contractid !='' and contractid !=null">
+            	and contractid = #{contractid}
+            </if>
+            <if test="customerName !='' and customerName !=null">
+            	and customer_name = #{customerName}
+            </if>
+            <if test="customerid !='' and customerid !=null">
+            	and customerid = #{customerid}
+            </if>
+            <if test="customerAccount !='' and customerAccount !=null">
+            	and customer_account = #{customerAccount}
+            </if>
+            <if test="timeLimit !='' and timeLimit !=null">
+            	and time_limit = #{timeLimit}
+            </if>
+            <if test="officeid !='' and officeid !=null">
+            	and officeid = #{officeid}
+            </if>
+            <if test="servicefee !='' and servicefee !=null">
+            	and servicefee = #{servicefee}
+            </if>
+            <if test="projectid !='' and projectid !=null">
+            	and projectid = #{projectid}
+            </if>
+            <if test="productid !='' and productid !=null">
+            	and productid = #{productid}
+            </if>
+            <if test="mortgageType !='' and mortgageType !=null">
+            	and mortgage_type = #{mortgageType}
+            </if>
+            <if test="vouchType !='' and vouchType !=null">
+            	and vouch_type = #{vouchType}
+            </if>
+            <if test="repaymenttime !='' and repaymenttime !=null">
+            	and repaymenttime = #{repaymenttime}
+            </if>
+            <if test="repaymentCapitalAmount !='' and repaymentCapitalAmount !=null">
+            	and repayment_capital_amount = #{repaymentCapitalAmount}
+            </if>
+            <if test="repaymentInterestAmount !='' and repaymentInterestAmount !=null">
+            	and repayment_interest_amount = #{repaymentInterestAmount}
+            </if>
+            <if test="capitalAmount !='' and capitalAmount !=null">
+            	and capital_amount = #{capitalAmount}
+            </if>
+            <if test="interestAmount !='' and interestAmount !=null">
+            	and interest_amount = #{interestAmount}
+            </if>
+            <if test="repaymentStatus !='' and repaymentStatus !=null">
+            	and repayment_status = #{repaymentStatus}
+            </if>
+            <if test="repaymentProcess !='' and repaymentProcess !=null">
+            	and repayment_process = #{repaymentProcess}
+            </if>
+            <if test="islocked !='' and islocked !=null">
+            	and islocked = #{islocked}
+            </if>
+            <if test="disposalAmount !='' and disposalAmount !=null">
+            	and disposal_amount = #{disposalAmount}
+            </if>
+            <if test="disposalBalance !='' and disposalBalance !=null">
+            	and disposal_balance = #{disposalBalance}
+            </if>
+            <if test="riskLevel !='' and riskLevel !=null">
+            	and risk_level = #{riskLevel}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="borrowid!= null">		
+	    		borrowid = #{borrowid},		
+	    	</if>
+	    	<if test="contractNo!= null">		
+	    		contract_no = #{contractNo},		
+	    	</if>
+	    	<if test="contractid!= null">		
+	    		contractid = #{contractid},		
+	    	</if>
+	    	<if test="customerName!= null">		
+	    		customer_name = #{customerName},		
+	    	</if>
+	    	<if test="customerid!= null">		
+	    		customerid = #{customerid},		
+	    	</if>
+	    	<if test="customerAccount!= null">		
+	    		customer_account = #{customerAccount},		
+	    	</if>
+	    	<if test="timeLimit!= null">		
+	    		time_limit = #{timeLimit},		
+	    	</if>
+	    	<if test="officeid!= null">		
+	    		officeid = #{officeid},		
+	    	</if>
+	    	<if test="servicefee!= null">		
+	    		servicefee = #{servicefee},		
+	    	</if>
+	    	<if test="projectid!= null">		
+	    		projectid = #{projectid},		
+	    	</if>
+	    	<if test="productid!= null">		
+	    		productid = #{productid},		
+	    	</if>
+	    	<if test="mortgageType!= null">		
+	    		mortgage_type = #{mortgageType},		
+	    	</if>
+	    	<if test="vouchType!= null">		
+	    		vouch_type = #{vouchType},		
+	    	</if>
+	    	<if test="repaymenttime!= null">		
+	    		repaymenttime = #{repaymenttime},		
+	    	</if>
+	    	<if test="repaymentCapitalAmount!= null">		
+	    		repayment_capital_amount = #{repaymentCapitalAmount},		
+	    	</if>
+	    	<if test="repaymentInterestAmount!= null">		
+	    		repayment_interest_amount = #{repaymentInterestAmount},		
+	    	</if>
+	    	<if test="capitalAmount!= null">		
+	    		capital_amount = #{capitalAmount},		
+	    	</if>
+	    	<if test="interestAmount!= null">		
+	    		interest_amount = #{interestAmount},		
+	    	</if>
+	    	<if test="repaymentStatus!= null">		
+	    		repayment_status = #{repaymentStatus},		
+	    	</if>
+	    	<if test="repaymentProcess!= null">		
+	    		repayment_process = #{repaymentProcess},		
+	    	</if>
+	    	<if test="islocked!= null">		
+	    		islocked = #{islocked},		
+	    	</if>
+	    	<if test="disposalAmount!= null">		
+	    		disposal_amount = #{disposalAmount},		
+	    	</if>
+	    	<if test="disposalBalance!= null">		
+	    		disposal_balance = #{disposalBalance},		
+	    	</if>
+	    	<if test="riskLevel!= null">		
+	    		risk_level = #{riskLevel},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubRepayloaninfo">
+		insert into pub_repayloaninfo(
+        	borrowid,
+        	contract_no,
+        	contractid,
+        	customer_name,
+        	customerid,
+        	customer_account,
+        	time_limit,
+        	officeid,
+        	servicefee,
+        	projectid,
+        	productid,
+        	mortgage_type,
+        	vouch_type,
+        	repaymenttime,
+        	repayment_capital_amount,
+        	repayment_interest_amount,
+        	capital_amount,
+        	interest_amount,
+        	repayment_status,
+        	repayment_process,
+        	islocked,
+        	disposal_amount,
+        	disposal_balance,
+        	risk_level			
+        )values(
+        	#{borrowid},
+        	#{contractNo},
+        	#{contractid},
+        	#{customerName},
+        	#{customerid},
+        	#{customerAccount},
+        	#{timeLimit},
+        	#{officeid},
+        	#{servicefee},
+        	#{projectid},
+        	#{productid},
+        	#{mortgageType},
+        	#{vouchType},
+        	#{repaymenttime},
+        	#{repaymentCapitalAmount},
+        	#{repaymentInterestAmount},
+        	#{capitalAmount},
+        	#{interestAmount},
+        	#{repaymentStatus},
+        	#{repaymentProcess},
+        	#{islocked},
+        	#{disposalAmount},
+        	#{disposalBalance},
+        	#{riskLevel}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubRepayloaninfo">
+        update pub_repayloaninfo
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubRepayloaninfoResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_repayloaninfo
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubRepayloaninfoResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_repayloaninfo
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubRepayloaninfoResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_repayloaninfo
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_repayloaninfo
+        where
+        id  = #{id}
+    </delete>
+</mapper>

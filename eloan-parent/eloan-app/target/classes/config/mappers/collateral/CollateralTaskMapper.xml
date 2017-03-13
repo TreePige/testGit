@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_mortgage_registration表:押品登记表模块 -->
+<mapper
+	namespace="com.rongdu.eloan.modules.collateral.workflow.dao.CollateralTaskDao">
+	<sql id="collateralRegistSelectSql">
+		task.ID_ as taskId,
+		task.TASK_DEF_KEY_ as processStateCode,
+		task.PROC_INST_ID_  processInstanceId,
+		pp.id projectId,
+		pp.code projectCode,
+		pp.project_name as projectName,
+		pc.id consultId,
+		pc.name customerName,
+		pbr.financial_advisers as financialAdvisers,
+		task.ASSIGNEE_ as assignee,
+		sdd.item_value as currentProcessStateCode
+	</sql>
+	<sql id="collateralRegistJoinSql">
+		INNER JOIN pub_project_process ppp on task.PROC_INST_ID_=ppp.process_instance_id
+		INNER JOIN pub_project pp on ppp.project_id=pp.id
+		INNER JOIN pl_consult pc on pc.project_id=ppp.project_id
+		INNER JOIN pl_borrow_requirement pbr on ppp.project_id=pbr.project_id
+		INNER JOIN sys_role sr on sr.nid = task.DESCRIPTION_
+		INNER JOIN sys_user su ON su.user_name = task.ASSIGNEE_
+		INNER JOIN sys_dict_detail as sdd on sdd.item_code = pc.status
+	</sql>
+
+	<sql id="collateralRegistWhereSql">
+		<if test="projectCode !='' and projectCode !=null">
+			pp.code like CONCAT('%','${projectCode}','%')
+		</if>
+		<if test="projectName !='' and projectName !=null">
+			and pp.project_name like CONCAT('%','${projectName}','%')
+		</if>
+		<if test="name !='' and name !=null">
+			and pc.name like CONCAT('%','${customerName}','%')
+		</if>
+		<if test="customerManager!='' and customerManager !=null">
+			and pc.customer_manager like CONCAT('%','${customerManager}','%')
+		</if>
+		<if test="financialAdvisers!='' and financialAdvisers !=null">
+			pbr.financial_advisers  like CONCAT('%','${financialAdvisers}','%')
+		</if>
+		<if test="flowStatus !='' and flowStatus !=null">
+	                AND pc.status = #{flowStatus}
+	    </if>
+		<if test="isCompleted == true ">
+	                AND task.END_TIME_ is not null
+	    </if>
+
+	</sql>
+	
+	<sql id="baseRoleAndOfficeSql">
+       <if test="userName !=null or roleId !=null or coverdOffices != null" >
+	         and ((
+		        <if test="userName !='' and userName !=null">
+		                 task.ASSIGNEE_ = #{userName}  
+		        </if>
+		        <if test="roleId !='' and roleId !=null">
+		                AND sr.id = #{roleId}
+		        </if>
+	        	)
+	            or su.office_id IN
+		        <foreach item="item" index="index" collection="coverdOffices"
+			      open="(" separator="," close=")">
+			        #{item}
+			 	</foreach>
+		 	)
+		 </if>
+		<if test="taskDefinition != '' and taskDefinition != null">
+           and task.TASK_DEF_KEY_ = #{taskDefinition}
+       </if>
+    </sql>
+<!-- 查询押品登记信息 -->
+	<select id="getUnCollateralRegistList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+		,pb.account
+		,pb.time_limit as timeLimit
+		,task.CREATE_TIME_ as createTime
+		from ACT_RU_TASK task
+		<include refid="collateralRegistJoinSql"/>
+		INNER JOIN pl_borrow pb on pb.requirement_id=pbr.id
+		
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+		<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+
+	<select id="getDoneCollateralRegistList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+			,pb.account
+			,pb.time_limit as timeLimit
+			,hpi.property_area as propertyArea
+			,task.START_TIME_ as startTime
+			,task.END_TIME_ as endTime
+		from ACT_HI_TASKINST task
+		<include refid="collateralRegistJoinSql"/>
+		INNER JOIN pl_borrow pb on pb.requirement_id=pbr.id
+		INNER JOIN hous_property_information hpi ON hpi.process_instance_id =task.PROC_INST_ID_
+		
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+			<if test="processStatus!='' and processStatus !=null">
+				and pc.status=#{processStatus}
+			</if>
+			<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+	
+	
+	<!-- 查询押品解押信息 -->
+	<select id="getUnCollateralRelieveList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+		,pb.account
+		,pb.time_limit as timeLimit
+		,task.CREATE_TIME_ as createTime
+		from ACT_RU_TASK task
+		<include refid="collateralRegistJoinSql"/>
+		INNER JOIN pl_borrow pb on pb.requirement_id=pbr.id
+		
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+		<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+
+	<select id="getDoneCollateralRelieveList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+			,pb.account
+			,pb.time_limit as timeLimit
+			,hpi.property_area as propertyArea
+			,task.START_TIME_ as startTime
+		from ACT_HI_TASKINST task
+		<include refid="collateralRegistJoinSql"/>
+		INNER JOIN pl_borrow pb on pb.requirement_id=pbr.id
+		INNER JOIN hous_property_information hpi ON hpi.process_instance_id =task.PROC_INST_ID_
+		
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+			<if test="processStatus!='' and processStatus !=null">
+				and pc.status=#{processStatus}
+			</if>
+			<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+	
+	
+	
+	<!-- 查询抵押任务分配 -->
+	<select id="getUnCollateralRegistAssignList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+		,task.CREATE_TIME_ as createTime
+		from ACT_RU_TASK task
+		<include refid="collateralRegistJoinSql"/>
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+		<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+
+	<select id="getDoneCollateralRegistAssignList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+		,task.START_TIME_ as startTime
+		,task.END_TIME_ as endTime
+		from ACT_HI_TASKINST task
+		<include refid="collateralRegistJoinSql"/>
+		
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+			<if test="processStatus!='' and processStatus !=null">
+				and pc.status=#{processStatus}
+			</if>
+			<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+	
+		<!-- 查询解押分配任务 -->
+	<select id="getUnCollateralRelieveAssignList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+		,task.CREATE_TIME_ as createTime
+		from ACT_RU_TASK task
+		<include refid="collateralRegistJoinSql"/>
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+		<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+
+	<select id="getDoneCollateralRelieveAssignList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+		<include refid="collateralRegistSelectSql"/>
+		,task.START_TIME_ as startTime
+		,task.END_TIME_ as endTime
+		from ACT_HI_TASKINST task
+		<include refid="collateralRegistJoinSql"/>
+		
+		<trim prefix="where" prefixOverrides="and|or">
+		<include refid="collateralRegistWhereSql"/>
+			<if test="processStatus!='' and processStatus !=null">
+				and pc.status=#{processStatus}
+			</if>
+			<include refid="baseRoleAndOfficeSql"/>
+		</trim>
+	</select>
+	
+
+</mapper>

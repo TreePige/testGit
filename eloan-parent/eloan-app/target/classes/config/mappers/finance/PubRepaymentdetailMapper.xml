@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_repaymentdetail表:放款模块 -->
+<mapper namespace="com.rongdu.eloan.modules.finance.dao.PubRepaymentdetailDao">
+	<!--返回MAP-->		
+	<resultMap id="PubRepaymentdetailResult" type="PubRepaymentdetail">
+		<id column="id" property="id" />
+		<result column="default_interest" property="defaultInterest" />
+		<result column="penalty" property="penalty" />
+		<result column="real_account" property="realAccount" />
+		<result column="is_payoff" property="isPayoff" />
+		<result column="customer_id" property="customerId" />
+		<result column="account" property="account" />
+		<result column="capital" property="capital" />
+		<result column="interest" property="interest" />
+		<result column="gps_use_fee" property="gpsUseFee" />
+		<result column="other_fee" property="otherFee" />
+		<result column="parking_fee" property="parkingFee" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="period" property="period" />
+		<result column="realpayment_time" property="realpaymentTime" />
+		<result column="repayment_type" property="repaymentType" />
+		<result column="repayment_time" property="repaymentTime" />
+		<result column="repayment_staus" property="repaymentStaus" />
+		<result column="processinstanceid" property="processinstanceid" />
+		<result column="borrow_id" property="borrowId" />
+		<result column="violations_penalty" property="violationsPenalty" />
+		<result column="violations_truck_fee" property="violationsTruckFee" />
+		<result column="violations_travel_fee" property="violationsTravelFee" />
+		<result column="violations_other_fee" property="violationsOtherFee" />
+		<result column="violations_total_amount" property="violationsTotalAmount" />
+		<result column="reduction_penalty" property="reductionPenalty" />
+		<result column="breach_contract" property="breachContract" />
+		<result column="all_breaks" property="allBreaks" />
+		<result column="cancel_overdue" property="cancelOverdue" />
+		<result column="repayment_platform_amount" property="repaymentPlatformAmount" />
+		<result column="repayment_parking_amount" property="repaymentParkingAmount" />
+		<result column="repayment_gpsuse_amount" property="repaymentGpsuseAmount" />
+		<result column="repayment_capital_amount" property="repaymentCapitalAmount" />
+		<result column="repayment_interest_amount" property="repaymentInterestAmount" />
+		<result column="customer_balance" property="customerBalance" />
+		<result column="needrepay_capital" property="needrepayCapital" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			default_interest,
+			penalty,
+			real_account,
+			is_payoff,
+			customer_id,
+			account,
+			capital,
+			interest,
+			gps_use_fee,
+			other_fee,
+			parking_fee,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			period,
+			realpayment_time,
+			repayment_type,
+			repayment_time,
+			repayment_staus,
+			processinstanceid,
+			borrow_id,
+			violations_penalty,
+			violations_truck_fee,
+			violations_travel_fee,
+			violations_other_fee,
+			violations_total_amount,
+			reduction_penalty,
+			breach_contract,
+			all_breaks,
+			cancel_overdue,
+			repayment_platform_amount,
+			repayment_parking_amount,
+			repayment_gpsuse_amount,
+			repayment_capital_amount,
+			repayment_interest_amount,
+			customer_balance,
+			needrepay_capital			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="defaultInterest !='' and defaultInterest !=null">
+            	and default_interest = #{defaultInterest}
+            </if>
+            <if test="penalty !='' and penalty !=null">
+            	and penalty = #{penalty}
+            </if>
+            <if test="realAccount !='' and realAccount !=null">
+            	and real_account = #{realAccount}
+            </if>
+            <if test="isPayoff !='' and isPayoff !=null">
+            	and is_payoff = #{isPayoff}
+            </if>
+            <if test="customerId !='' and customerId !=null">
+            	and customer_id = #{customerId}
+            </if>
+            <if test="account !='' and account !=null">
+            	and account = #{account}
+            </if>
+            <if test="capital !='' and capital !=null">
+            	and capital = #{capital}
+            </if>
+            <if test="interest !='' and interest !=null">
+            	and interest = #{interest}
+            </if>
+            <if test="gpsUseFee !='' and gpsUseFee !=null">
+            	and gps_use_fee = #{gpsUseFee}
+            </if>
+            <if test="otherFee !='' and otherFee !=null">
+            	and other_fee = #{otherFee}
+            </if>
+            <if test="parkingFee !='' and parkingFee !=null">
+            	and parking_fee = #{parkingFee}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="period !='' and period !=null">
+            	and period = #{period}
+            </if>
+            <if test="realpaymentTime !='' and realpaymentTime !=null">
+            	and realpayment_time = #{realpaymentTime}
+            </if>
+            <if test="repaymentType !='' and repaymentType !=null">
+            	and repayment_type = #{repaymentType}
+            </if>
+            <if test="repaymentTime !='' and repaymentTime !=null">
+            	and repayment_time = #{repaymentTime}
+            </if>
+            <if test="repaymentStaus !='' and repaymentStaus !=null">
+            	and repayment_staus = #{repaymentStaus}
+            </if>
+            <if test="processinstanceid !='' and processinstanceid !=null">
+            	and processinstanceid = #{processinstanceid}
+            </if>
+            <if test="borrowId !='' and borrowId !=null">
+            	and borrow_id = #{borrowId}
+            </if>
+            <if test="violationsPenalty !='' and violationsPenalty !=null">
+            	and violations_penalty = #{violationsPenalty}
+            </if>
+            <if test="violationsTruckFee !='' and violationsTruckFee !=null">
+            	and violations_truck_fee = #{violationsTruckFee}
+            </if>
+            <if test="violationsTravelFee !='' and violationsTravelFee !=null">
+            	and violations_travel_fee = #{violationsTravelFee}
+            </if>
+            <if test="violationsOtherFee !='' and violationsOtherFee !=null">
+            	and violations_other_fee = #{violationsOtherFee}
+            </if>
+            <if test="violationsTotalAmount !='' and violationsTotalAmount !=null">
+            	and violations_total_amount = #{violationsTotalAmount}
+            </if>
+            <if test="reductionPenalty !='' and reductionPenalty !=null">
+            	and reduction_penalty = #{reductionPenalty}
+            </if>
+            <if test="breachContract !='' and breachContract !=null">
+            	and breach_contract = #{breachContract}
+            </if>
+            <if test="allBreaks !='' and allBreaks !=null">
+            	and all_breaks = #{allBreaks}
+            </if>
+            <if test="cancelOverdue !='' and cancelOverdue !=null">
+            	and cancel_overdue = #{cancelOverdue}
+            </if>
+            <if test="repaymentPlatformAmount !='' and repaymentPlatformAmount !=null">
+            	and repayment_platform_amount = #{repaymentPlatformAmount}
+            </if>
+            <if test="repaymentParkingAmount !='' and repaymentParkingAmount !=null">
+            	and repayment_parking_amount = #{repaymentParkingAmount}
+            </if>
+            <if test="repaymentGpsuseAmount !='' and repaymentGpsuseAmount !=null">
+            	and repayment_gpsuse_amount = #{repaymentGpsuseAmount}
+            </if>
+            <if test="repaymentCapitalAmount !='' and repaymentCapitalAmount !=null">
+            	and repayment_capital_amount = #{repaymentCapitalAmount}
+            </if>
+            <if test="repaymentInterestAmount !='' and repaymentInterestAmount !=null">
+            	and repayment_interest_amount = #{repaymentInterestAmount}
+            </if>
+            <if test="customerBalance !='' and customerBalance !=null">
+            	and customer_balance = #{customerBalance}
+            </if>
+            <if test="needrepayCapital !='' and needrepayCapital !=null">
+            	and needrepay_capital = #{needrepayCapital}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="defaultInterest!= null">		
+	    		default_interest = #{defaultInterest},		
+	    	</if>
+	    	<if test="penalty!= null">		
+	    		penalty = #{penalty},		
+	    	</if>
+	    	<if test="realAccount!= null">		
+	    		real_account = #{realAccount},		
+	    	</if>
+	    	<if test="isPayoff!= null">		
+	    		is_payoff = #{isPayoff},		
+	    	</if>
+	    	<if test="customerId!= null">		
+	    		customer_id = #{customerId},		
+	    	</if>
+	    	<if test="account!= null">		
+	    		account = #{account},		
+	    	</if>
+	    	<if test="capital!= null">		
+	    		capital = #{capital},		
+	    	</if>
+	    	<if test="interest!= null">		
+	    		interest = #{interest},		
+	    	</if>
+	    	<if test="gpsUseFee!= null">		
+	    		gps_use_fee = #{gpsUseFee},		
+	    	</if>
+	    	<if test="otherFee!= null">		
+	    		other_fee = #{otherFee},		
+	    	</if>
+	    	<if test="parkingFee!= null">		
+	    		parking_fee = #{parkingFee},		
+	    	</if>
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="period!= null">		
+	    		period = #{period},		
+	    	</if>
+	    	<if test="realpaymentTime!= null">		
+	    		realpayment_time = #{realpaymentTime},		
+	    	</if>
+	    	<if test="repaymentType!= null">		
+	    		repayment_type = #{repaymentType},		
+	    	</if>
+	    	<if test="repaymentTime!= null">		
+	    		repayment_time = #{repaymentTime},		
+	    	</if>
+	    	<if test="repaymentStaus!= null">		
+	    		repayment_staus = #{repaymentStaus},		
+	    	</if>
+	    	<if test="processinstanceid!= null">		
+	    		processinstanceid = #{processinstanceid},		
+	    	</if>
+	    	<if test="borrowId!= null">		
+	    		borrow_id = #{borrowId},		
+	    	</if>
+	    	<if test="violationsPenalty!= null">		
+	    		violations_penalty = #{violationsPenalty},		
+	    	</if>
+	    	<if test="violationsTruckFee!= null">		
+	    		violations_truck_fee = #{violationsTruckFee},		
+	    	</if>
+	    	<if test="violationsTravelFee!= null">		
+	    		violations_travel_fee = #{violationsTravelFee},		
+	    	</if>
+	    	<if test="violationsOtherFee!= null">		
+	    		violations_other_fee = #{violationsOtherFee},		
+	    	</if>
+	    	<if test="violationsTotalAmount!= null">		
+	    		violations_total_amount = #{violationsTotalAmount},		
+	    	</if>
+	    	<if test="reductionPenalty!= null">		
+	    		reduction_penalty = #{reductionPenalty},		
+	    	</if>
+	    	<if test="breachContract!= null">		
+	    		breach_contract = #{breachContract},		
+	    	</if>
+	    	<if test="allBreaks!= null">		
+	    		all_breaks = #{allBreaks},		
+	    	</if>
+	    	<if test="cancelOverdue!= null">		
+	    		cancel_overdue = #{cancelOverdue},		
+	    	</if>
+	    	<if test="repaymentPlatformAmount!= null">		
+	    		repayment_platform_amount = #{repaymentPlatformAmount},		
+	    	</if>
+	    	<if test="repaymentParkingAmount!= null">		
+	    		repayment_parking_amount = #{repaymentParkingAmount},		
+	    	</if>
+	    	<if test="repaymentGpsuseAmount!= null">		
+	    		repayment_gpsuse_amount = #{repaymentGpsuseAmount},		
+	    	</if>
+	    	<if test="repaymentCapitalAmount!= null">		
+	    		repayment_capital_amount = #{repaymentCapitalAmount},		
+	    	</if>
+	    	<if test="repaymentInterestAmount!= null">		
+	    		repayment_interest_amount = #{repaymentInterestAmount},		
+	    	</if>
+	    	<if test="customerBalance!= null">		
+	    		customer_balance = #{customerBalance},		
+	    	</if>
+	    	<if test="needrepayCapital!= null">		
+	    		needrepay_capital = #{needrepayCapital},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubRepaymentdetail">
+		insert into pub_repaymentdetail(
+        	default_interest,
+        	penalty,
+        	real_account,
+        	is_payoff,
+        	customer_id,
+        	account,
+        	capital,
+        	interest,
+        	gps_use_fee,
+        	other_fee,
+        	parking_fee,
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	period,
+        	realpayment_time,
+        	repayment_type,
+        	repayment_time,
+        	repayment_staus,
+        	processinstanceid,
+        	borrow_id,
+        	violations_penalty,
+        	violations_truck_fee,
+        	violations_travel_fee,
+        	violations_other_fee,
+        	violations_total_amount,
+        	reduction_penalty,
+        	breach_contract,
+        	all_breaks,
+        	cancel_overdue,
+        	repayment_platform_amount,
+        	repayment_parking_amount,
+        	repayment_gpsuse_amount,
+        	repayment_capital_amount,
+        	repayment_interest_amount,
+        	customer_balance,
+        	needrepay_capital			
+        )values(
+        	#{defaultInterest},
+        	#{penalty},
+        	#{realAccount},
+        	#{isPayoff},
+        	#{customerId},
+        	#{account},
+        	#{capital},
+        	#{interest},
+        	#{gpsUseFee},
+        	#{otherFee},
+        	#{parkingFee},
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{period},
+        	#{realpaymentTime},
+        	#{repaymentType},
+        	#{repaymentTime},
+        	#{repaymentStaus},
+        	#{processinstanceid},
+        	#{borrowId},
+        	#{violationsPenalty},
+        	#{violationsTruckFee},
+        	#{violationsTravelFee},
+        	#{violationsOtherFee},
+        	#{violationsTotalAmount},
+        	#{reductionPenalty},
+        	#{breachContract},
+        	#{allBreaks},
+        	#{cancelOverdue},
+        	#{repaymentPlatformAmount},
+        	#{repaymentParkingAmount},
+        	#{repaymentGpsuseAmount},
+        	#{repaymentCapitalAmount},
+        	#{repaymentInterestAmount},
+        	#{customerBalance},
+        	#{needrepayCapital}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubRepaymentdetail">
+        update pub_repaymentdetail
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubRepaymentdetailResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_repaymentdetail
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubRepaymentdetailResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_repaymentdetail
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubRepaymentdetailResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_repaymentdetail
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_repaymentdetail
+        where
+        id  = #{id}
+    </delete>
+</mapper>

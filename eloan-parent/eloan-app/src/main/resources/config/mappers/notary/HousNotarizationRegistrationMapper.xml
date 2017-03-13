@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_notarization_registration表:公证登记模块 -->
+<mapper namespace="com.rongdu.eloan.modules.notary.dao.NotaryManageDao">
+	<!--返回MAP-->		
+	<resultMap id="HousNotarizationRegistrationResult" type="HousNotarizationRegistration">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="lender" property="lender" />
+		<result column="trustee" property="trustee" />
+		<result column="trustee_of_lender" property="trusteeOfLender" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			consult_id,
+			process_instance_id,
+			project_id,
+			lender,
+			trustee,
+			trustee_of_lender,
+			remark			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="lender !='' and lender !=null">
+            	and lender = #{lender}
+            </if>
+            <if test="trustee !='' and trustee !=null">
+            	and trustee = #{trustee}
+            </if>
+            <if test="trusteeOfLender !='' and trusteeOfLender !=null">
+            	and trustee_of_lender = #{trusteeOfLender}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="lender!= null">		
+	    		lender = #{lender},		
+	    	</if>
+	    	<if test="trustee!= null">		
+	    		trustee = #{trustee},		
+	    	</if>
+	    	<if test="trusteeOfLender!= null">		
+	    		trustee_of_lender = #{trusteeOfLender},		
+	    	</if>
+	    	<if test="remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousNotarizationRegistration">
+		insert into hous_notarization_registration(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	lender,
+        	trustee,
+        	trustee_of_lender,
+        	remark			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{lender},
+        	#{trustee},
+        	#{trusteeOfLender},
+        	#{remark}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousNotarizationRegistration">
+        update hous_notarization_registration
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousNotarizationRegistrationResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_notarization_registration
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousNotarizationRegistrationResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_notarization_registration
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getHousNotarizationRegistrationByInstanceId" resultMap="HousNotarizationRegistrationResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_notarization_registration
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!-- 查询公证登记数据 -->
+	<select id="getNotaryRegistDataByInstanceId" parameterType="java.lang.String" resultType="java.util.HashMap">
+	select 
+	ppp.project_id projectId,
+	ppp.process_instance_id processInstanceId,
+	pc.id consultId,
+	pc.name customerName,
+	pb.account,
+	pb.time_limit timeLimit,
+	hnr.lender,
+	hnr.trustee,
+	hnr.remark,
+	hnr.trustee_of_lender trusteeOfLender
+	
+	from pub_project_process ppp
+	inner join pl_consult pc on ppp.project_id=pc.project_id
+	inner join pl_borrow pb on pb.project_id=pc.project_id
+	left join hous_notarization_registration hnr on hnr.process_instance_id=ppp.process_instance_id
+	
+	where ppp.process_instance_id=#{processInstanceId}
+	</select>
+
+</mapper>

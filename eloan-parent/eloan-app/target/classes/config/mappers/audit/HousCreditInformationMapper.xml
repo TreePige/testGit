@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_credit_information表:征信信息表(面审)模块 -->
+<mapper namespace="com.rongdu.eloan.modules.audit.dao.HousCreditInformationDao">
+	<!--返回MAP-->		
+	<resultMap id="HousCreditInformationResult" type="HousCreditInformation">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="good_credit" property="goodCredit" />
+		<result column="current_overdue" property="currentOverdue" />
+		<result column="overdue_amounts" property="overdueAmounts" />
+		<result column="secured_loan" property="securedLoan" />
+		<result column="secured_loan_amounts" property="securedLoanAmounts" />
+		<result column="bad_debt" property="badDebt" />
+		<result column="bad_debt_items" property="badDebtItems" />
+		<result column="bad_debt_amounts" property="badDebtAmounts" />
+		<result column="nearly_twp_years" property="nearlyTwpYears" />
+		<result column="remark" property="remark" />
+		<result column="photo_matches_id_card" property="photoMatchesIdCard" />
+		<result column="photo_matches_marriage_certificate" property="photoMatchesMarriageCertificate" />
+		<result column="photo_matches_divorce_certificate" property="photoMatchesDivorceCertificate" />
+		<result column="identity_informaiton_id_card" property="identityInformaitonIdCard" />
+		<result column="identity_informaiton_marriage_certificate" property="identityInformaitonMarriageCertificate" />
+		<result column="identity_informaiton_divorce_certificate" property="identityInformaitonDivorceCertificate" />
+		<result column="identity_informaiton_account_book" property="identityInformaitonAccountBook" />
+		<result column="location_property_consistent" property="locationPropertyConsistent" />
+		<result column="foreclosed_consistency" property="foreclosedConsistency" />
+		<result column="real_loan_name" property="realLoanName" />
+		<result column="whether_total" property="whetherTotal" />
+		<result column="guarantor" property="guarantor" />
+		<result column="only_housing" property="onlyHousing" />
+		<result column="room_is_full_five_years" property="roomIsFullFiveYears" />
+		<result column="alternate_property_address_id" property="alternatePropertyAddressId" />
+		<result column="alternate_property_address" property="alternatePropertyAddress" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			process_instance_id,
+			project_id,
+			good_credit,
+			current_overdue,
+			overdue_amounts,
+			secured_loan,
+			secured_loan_amounts,
+			bad_debt,
+			bad_debt_items,
+			bad_debt_amounts,
+			nearly_twp_years,
+			remark,
+			photo_matches_id_card,
+			photo_matches_marriage_certificate,
+			photo_matches_divorce_certificate,
+			identity_informaiton_id_card,
+			identity_informaiton_marriage_certificate,
+			identity_informaiton_divorce_certificate,
+			identity_informaiton_account_book,
+			location_property_consistent,
+			foreclosed_consistency,
+			real_loan_name,
+			whether_total,
+			guarantor,
+			only_housing,
+			room_is_full_five_years,
+			alternate_property_address_id,
+			alternate_property_address			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="goodCredit !='' and goodCredit !=null">
+            	and good_credit = #{goodCredit}
+            </if>
+            <if test="currentOverdue !='' and currentOverdue !=null">
+            	and current_overdue = #{currentOverdue}
+            </if>
+            <if test="overdueAmounts !='' and overdueAmounts !=null">
+            	and overdue_amounts = #{overdueAmounts}
+            </if>
+            <if test="securedLoan !='' and securedLoan !=null">
+            	and secured_loan = #{securedLoan}
+            </if>
+            <if test="securedLoanAmounts !='' and securedLoanAmounts !=null">
+            	and secured_loan_amounts = #{securedLoanAmounts}
+            </if>
+            <if test="badDebt !='' and badDebt !=null">
+            	and bad_debt = #{badDebt}
+            </if>
+            <if test="badDebtItems !='' and badDebtItems !=null">
+            	and bad_debt_items = #{badDebtItems}
+            </if>
+            <if test="badDebtAmounts !='' and badDebtAmounts !=null">
+            	and bad_debt_amounts = #{badDebtAmounts}
+            </if>
+            <if test="nearlyTwpYears !='' and nearlyTwpYears !=null">
+            	and nearly_twp_years = #{nearlyTwpYears}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="photoMatchesIdCard !='' and photoMatchesIdCard !=null">
+            	and photo_matches_id_card = #{photoMatchesIdCard}
+            </if>
+            <if test="photoMatchesMarriageCertificate !='' and photoMatchesMarriageCertificate !=null">
+            	and photo_matches_marriage_certificate = #{photoMatchesMarriageCertificate}
+            </if>
+            <if test="photoMatchesDivorceCertificate !='' and photoMatchesDivorceCertificate !=null">
+            	and photo_matches_divorce_certificate = #{photoMatchesDivorceCertificate}
+            </if>
+            <if test="identityInformaitonIdCard !='' and identityInformaitonIdCard !=null">
+            	and identity_informaiton_id_card = #{identityInformaitonIdCard}
+            </if>
+            <if test="identityInformaitonMarriageCertificate !='' and identityInformaitonMarriageCertificate !=null">
+            	and identity_informaiton_marriage_certificate = #{identityInformaitonMarriageCertificate}
+            </if>
+            <if test="identityInformaitonDivorceCertificate !='' and identityInformaitonDivorceCertificate !=null">
+            	and identity_informaiton_divorce_certificate = #{identityInformaitonDivorceCertificate}
+            </if>
+            <if test="identityInformaitonAccountBook !='' and identityInformaitonAccountBook !=null">
+            	and identity_informaiton_account_book = #{identityInformaitonAccountBook}
+            </if>
+            <if test="locationPropertyConsistent !='' and locationPropertyConsistent !=null">
+            	and location_property_consistent = #{locationPropertyConsistent}
+            </if>
+            <if test="foreclosedConsistency !='' and foreclosedConsistency !=null">
+            	and foreclosed_consistency = #{foreclosedConsistency}
+            </if>
+            <if test="realLoanName !='' and realLoanName !=null">
+            	and real_loan_name = #{realLoanName}
+            </if>
+            <if test="whetherTotal !='' and whetherTotal !=null">
+            	and whether_total = #{whetherTotal}
+            </if>
+            <if test="guarantor !='' and guarantor !=null">
+            	and guarantor = #{guarantor}
+            </if>
+            <if test="onlyHousing !='' and onlyHousing !=null">
+            	and only_housing = #{onlyHousing}
+            </if>
+            <if test="roomIsFullFiveYears !='' and roomIsFullFiveYears !=null">
+            	and room_is_full_five_years = #{roomIsFullFiveYears}
+            </if>
+            <if test="alternatePropertyAddressId !='' and alternatePropertyAddressId !=null">
+            	and alternate_property_address_id = #{alternatePropertyAddressId}
+            </if>
+            <if test="alternatePropertyAddress !='' and alternatePropertyAddress !=null">
+            	and alternate_property_address = #{alternatePropertyAddress}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="goodCredit!= null">		
+	    		good_credit = #{goodCredit},		
+	    	</if>
+	    	<if test="currentOverdue!= null">		
+	    		current_overdue = #{currentOverdue},		
+	    	</if>
+	    	<if test="overdueAmounts!= null">		
+	    		overdue_amounts = #{overdueAmounts},		
+	    	</if>
+	    	<if test="securedLoan!= null">		
+	    		secured_loan = #{securedLoan},		
+	    	</if>
+	    	<if test="securedLoanAmounts!= null">		
+	    		secured_loan_amounts = #{securedLoanAmounts},		
+	    	</if>
+	    	<if test="badDebt!= null">		
+	    		bad_debt = #{badDebt},		
+	    	</if>
+	    	<if test="badDebtItems!= null">		
+	    		bad_debt_items = #{badDebtItems},		
+	    	</if>
+	    	<if test="badDebtAmounts!= null">		
+	    		bad_debt_amounts = #{badDebtAmounts},		
+	    	</if>
+	    	<if test="nearlyTwpYears!= null">		
+	    		nearly_twp_years = #{nearlyTwpYears},		
+	    	</if>
+	    	<if test="remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="photoMatchesIdCard!= null">		
+	    		photo_matches_id_card = #{photoMatchesIdCard},		
+	    	</if>
+	    	<if test="photoMatchesMarriageCertificate!= null">		
+	    		photo_matches_marriage_certificate = #{photoMatchesMarriageCertificate},		
+	    	</if>
+	    	<if test="photoMatchesDivorceCertificate!= null">		
+	    		photo_matches_divorce_certificate = #{photoMatchesDivorceCertificate},		
+	    	</if>
+	    	<if test="identityInformaitonIdCard!= null">		
+	    		identity_informaiton_id_card = #{identityInformaitonIdCard},		
+	    	</if>
+	    	<if test="identityInformaitonMarriageCertificate!= null">		
+	    		identity_informaiton_marriage_certificate = #{identityInformaitonMarriageCertificate},		
+	    	</if>
+	    	<if test="identityInformaitonDivorceCertificate!= null">		
+	    		identity_informaiton_divorce_certificate = #{identityInformaitonDivorceCertificate},		
+	    	</if>
+	    	<if test="identityInformaitonAccountBook!= null">		
+	    		identity_informaiton_account_book = #{identityInformaitonAccountBook},		
+	    	</if>
+	    	<if test="locationPropertyConsistent!= null">		
+	    		location_property_consistent = #{locationPropertyConsistent},		
+	    	</if>
+	    	<if test="foreclosedConsistency!= null">		
+	    		foreclosed_consistency = #{foreclosedConsistency},		
+	    	</if>
+	    	<if test="realLoanName!= null">		
+	    		real_loan_name = #{realLoanName},		
+	    	</if>
+	    	<if test="whetherTotal!= null">		
+	    		whether_total = #{whetherTotal},		
+	    	</if>
+	    	<if test="guarantor!= null">		
+	    		guarantor = #{guarantor},		
+	    	</if>
+	    	<if test="onlyHousing!= null">		
+	    		only_housing = #{onlyHousing},		
+	    	</if>
+	    	<if test="roomIsFullFiveYears!= null">		
+	    		room_is_full_five_years = #{roomIsFullFiveYears},		
+	    	</if>
+	    	<if test="alternatePropertyAddressId!= null">		
+	    		alternate_property_address_id = #{alternatePropertyAddressId},		
+	    	</if>
+	    	<if test="alternatePropertyAddress!= null">		
+	    		alternate_property_address = #{alternatePropertyAddress},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousCreditInformation">
+		insert into hous_credit_information(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	process_instance_id,
+        	project_id,
+        	good_credit,
+        	current_overdue,
+        	overdue_amounts,
+        	secured_loan,
+        	secured_loan_amounts,
+        	bad_debt,
+        	bad_debt_items,
+        	bad_debt_amounts,
+        	nearly_twp_years,
+        	remark,
+        	photo_matches_id_card,
+        	photo_matches_marriage_certificate,
+        	photo_matches_divorce_certificate,
+        	identity_informaiton_id_card,
+        	identity_informaiton_marriage_certificate,
+        	identity_informaiton_divorce_certificate,
+        	identity_informaiton_account_book,
+        	location_property_consistent,
+        	foreclosed_consistency,
+        	real_loan_name,
+        	whether_total,
+        	guarantor,
+        	only_housing,
+        	room_is_full_five_years,
+        	alternate_property_address_id,
+        	alternate_property_address			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{goodCredit},
+        	#{currentOverdue},
+        	#{overdueAmounts},
+        	#{securedLoan},
+        	#{securedLoanAmounts},
+        	#{badDebt},
+        	#{badDebtItems},
+        	#{badDebtAmounts},
+        	#{nearlyTwpYears},
+        	#{remark},
+        	#{photoMatchesIdCard},
+        	#{photoMatchesMarriageCertificate},
+        	#{photoMatchesDivorceCertificate},
+        	#{identityInformaitonIdCard},
+        	#{identityInformaitonMarriageCertificate},
+        	#{identityInformaitonDivorceCertificate},
+        	#{identityInformaitonAccountBook},
+        	#{locationPropertyConsistent},
+        	#{foreclosedConsistency},
+        	#{realLoanName},
+        	#{whetherTotal},
+        	#{guarantor},
+        	#{onlyHousing},
+        	#{roomIsFullFiveYears},
+        	#{alternatePropertyAddressId},
+        	#{alternatePropertyAddress}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousCreditInformation">
+        update hous_credit_information
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousCreditInformationResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_credit_information
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousCreditInformationResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_credit_information
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousCreditInformationResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_credit_information
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_credit_information
+        where
+        id  = #{id}
+    </delete>
+</mapper>

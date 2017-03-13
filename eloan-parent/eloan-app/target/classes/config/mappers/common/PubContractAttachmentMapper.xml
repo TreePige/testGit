@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_contract_attachment表:合同附件信息模块 -->
+<mapper namespace="com.rongdu.eloan.modules.common.dao.PubContractAttachmentDao">
+	<!--返回MAP-->		
+	<resultMap id="PubContractAttachmentResult" type="PubContractAttachment">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="state" property="state" />
+		<result column="is_delete" property="isDelete" />
+		<result column="name" property="name" />
+		<result column="file_name" property="fileName" />
+		<result column="newfile_name" property="newfileName" />
+		<result column="effective_node" property="effectiveNode" />
+		<result column="file_size" property="fileSize" />
+		<result column="file_path" property="filePath" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			state,
+			is_delete,
+			name,
+			file_name,
+			newfile_name,
+			effective_node,
+			file_size,
+			file_path			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="state !='' and state !=null">
+            	and state = #{state}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="name !='' and name !=null">
+            	and name = #{name}
+            </if>
+            <if test="fileName !='' and fileName !=null">
+            	and file_name = #{fileName}
+            </if>
+            <if test="newfileName !='' and newfileName !=null">
+            	and newfile_name = #{newfileName}
+            </if>
+            <if test="effectiveNode !='' and effectiveNode !=null">
+            	and effective_node = #{effectiveNode}
+            </if>
+            <if test="fileSize !='' and fileSize !=null">
+            	and file_size = #{fileSize}
+            </if>
+            <if test="filePath !='' and filePath !=null">
+            	and file_path = #{filePath}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier != null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime != null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="state != null">		
+	    		state = #{state},		
+	    	</if>
+	    	<if test="isDelete != null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="name != null">		
+	    		name = #{name},		
+	    	</if>
+	    	<if test="fileName != null">		
+	    		file_name = #{fileName},		
+	    	</if>
+	    	<if test="newfileName != null">		
+	    		newfile_name = #{newfileName},		
+	    	</if>
+	    	<if test="effectiveNode != null">		
+	    		effective_node = #{effectiveNode},		
+	    	</if>
+	    	<if test="fileSize != null">		
+	    		file_size = #{fileSize},		
+	    	</if>
+	    	<if test="filePath != null">		
+	    		file_path = #{filePath},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubContractAttachment">
+		insert into pub_contract_attachment(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	state,
+        	is_delete,
+        	name,
+        	file_name,
+        	newfile_name,
+        	effective_node,
+        	file_size,
+        	file_path			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{state},
+        	#{isDelete},
+        	#{name},
+        	#{fileName},
+        	#{newfileName},
+        	#{effectiveNode},
+        	#{fileSize},
+        	#{filePath}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubContractAttachment">
+        update pub_contract_attachment
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubContractAttachmentResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_contract_attachment
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubContractAttachmentResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_contract_attachment
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubContractAttachmentResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_contract_attachment
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_contract_attachment
+        where
+        id  = #{id}
+    </delete>
+</mapper>

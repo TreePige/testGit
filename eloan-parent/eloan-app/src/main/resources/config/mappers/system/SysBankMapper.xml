@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--感谢ibatis持久层框架 2014-10 by wu-->
+<mapper namespace="com.rongdu.eloan.modules.system.dao.SysBankDao">
+	<!--返回MAP-->		
+	<resultMap id="sysBankResult" type="sysBank">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="update_time" property="updateTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="bank_code" property="bankCode" />
+		<result column="bank_name" property="bankName" />
+		<result column="open_net" property="openNet" />
+		<result column="open_name" property="openName" />
+		<result column="account" property="account" />
+		<result column="is_loan" property="isLoan" />
+		<result column="is_repayment" property="isRepayment" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			update_time,
+			is_delete,
+			bank_code,
+			bank_name,
+			open_net,
+			open_name,
+			account,
+			is_loan,
+			is_repayment,
+			remark
+	</sql>
+	
+	<!--基本的sql查询条件公共引用...-->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+	    	<if test="id!=null and id!='' ">
+				id = #{id}
+			</if>
+			<if test="creator!=null and creator!='' ">
+			    and creator = #{creator}
+			</if>
+			<if test="createTime!=null and createTime!='' ">
+			    and create_time = #{createTime}
+			</if>
+			<if test="modifier!=null and modifier!='' ">
+			    and modifier = #{modifier}
+			</if>
+			<if test="updateTime!=null and updateTime!='' ">
+			    and update_time = #{updateTime}
+			</if>
+			<if test="isDelete!=null and isDelete!='' ">
+			    and is_delete = #{isDelete}
+			</if>
+			<if test="bankCode!=null and bankCode!='' ">
+			    and bank_code = #{bankCode}
+			</if>
+			<if test="bankName!=null and bankName!='' ">
+			    and bank_name = #{bankName}
+			</if>
+			<if test="openNet!=null and openNet!='' ">
+			    and open_net = #{openNet}
+			</if>
+			<if test="openName!=null and openName!='' ">
+			    and open_name = #{openName}
+			</if>
+			<if test="account!=null and account!='' ">
+			    and account = #{account}
+			</if>
+			<if test="isLoan!=null and isLoan!='' ">
+			    and is_loan = #{isLoan}
+			</if>
+			<if test="isRepayment!=null and isRepayment!='' ">
+			    and is_repayment = #{isRepayment}
+			</if>
+			<if test="remark!=null and remark!='' ">
+			    and remark = #{remark}
+			</if>
+		</trim>
+	</sql>
+	
+	<sql id="updateByPo">
+		<trim prefix="set" suffixOverrides=",">
+			<if test="modifier!=null and modifier!='' ">
+			    update_time = #{updateTime},
+			</if>
+			<if test="modifier!=null and modifier!='' ">
+			    modifier = #{modifier},
+			</if>
+			<if test="isDelete!=null and isDelete!='' ">
+			    is_delete = #{isDelete},
+			</if>
+			<if test="bankCode!=null and bankCode!='' ">
+			    bank_code = #{bankCode},
+			</if>
+			<if test="bankName!=null and bankName!='' ">
+			    bank_name = #{bankName},
+			</if>
+			<if test="openNet!=null and openNet!='' ">
+			    open_net = #{openNet},
+			</if>
+			<if test="openName!=null and openName!='' ">
+			    open_name = #{openName},
+			</if>
+			<if test="account!=null and account!='' ">
+			    account = #{account},
+			</if>
+			<if test="isLoan!=null and isLoan!='' ">
+			    is_loan = #{isLoan},
+			</if>
+			<if test="isRepayment!=null and isRepayment!='' ">
+			    is_repayment = #{isRepayment},
+			</if>
+			<if test="remark!=null and remark!='' ">
+			    remark = #{remark},
+			</if>
+		</trim>
+	</sql>
+	
+	<!--增加-->
+	<insert id="insert" parameterType="sysBank">
+		insert into sys_bank(
+			id,
+			creator,
+			create_time,
+			modifier,
+			update_time,
+			is_delete,
+			bank_code,
+			bank_name,
+			open_net,
+			open_name,
+			account,
+			is_loan,
+			is_repayment,
+			remark				
+		)
+		values (
+			#{id},
+			#{creator},
+			#{createTime},
+			#{modifier},
+			#{updateTime},
+			0,
+			#{bankCode},
+			#{bankName},
+			#{openNet},
+			#{openName},
+			#{account},
+			#{isLoan},
+			#{isRepayment},
+			#{remark}
+		)
+		<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+	
+	<!--更新字段-->
+	<update id="update" parameterType="sysBank">
+		update sys_bank
+		<include refid="updateByPo" />			
+		where
+			id = #{id}
+	</update>
+ 	
+ 	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="sysBankResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql" />		
+	    from sys_bank
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+  
+    <!--分页记录数-->
+	<select id="getPageCountByMap" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+		select count(*)		
+	    from sys_bank
+		<include refid="searchByPo"/>
+	</select>
+	
+	<!--根据ID删除-->
+	<delete id="deleteById" parameterType = "long">
+		delete from sys_bank
+		where id = #{id}
+ 	</delete>
+</mapper>

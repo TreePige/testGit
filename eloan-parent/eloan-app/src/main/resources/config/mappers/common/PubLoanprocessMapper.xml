@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_loanprocess表:审批历史模块 -->
+<mapper namespace="com.rongdu.eloan.modules.common.dao.PubLoanprocessDao">
+	<!--返回MAP-->		
+	<resultMap id="PubLoanprocessResult" type="PubLoanprocess">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="office_id" property="officeId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="consult_id" property="consultId" />
+		<result column="customer_id" property="customerId" />
+		<result column="receive_type" property="receiveType" />
+		<result column="type" property="type" />
+		<result column="process_state" property="processState" />
+		<result column="category" property="category" />
+		<result column="remark" property="remark" />
+		<result column="product_id" property="productId" />
+		<result column="amount" property="amount" />
+		<result column="task_id" property="taskId" />
+		<result column="new_task_id" property="newTaskId" />
+		<result column="project_id" property="projectId" />
+		<result column="housing_value_faster" property="housingValueFaster" />
+		<result column="manual_assignee" property="manualAssignee" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			is_delete,
+			office_id,
+			process_Instance_Id,
+			consult_id,
+			customer_id,
+			receive_type,
+			type,
+			process_state,
+			category,
+			remark,
+			product_id,
+			amount,
+			task_id,
+			new_task_id,
+			project_id,
+			housing_value_faster,
+			manual_assignee			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="officeId !='' and officeId !=null">
+            	and office_id = #{officeId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="customerId !='' and customerId !=null">
+            	and customer_id = #{customerId}
+            </if>
+            <if test="receiveType !='' and receiveType !=null">
+            	and receive_type = #{receiveType}
+            </if>
+            <if test="type !='' and type !=null">
+            	and type = #{type}
+            </if>
+            <if test="processState !='' and processState !=null">
+            	and process_state = #{processState}
+            </if>
+            <if test="category !='' and category !=null">
+            	and category = #{category}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="productId !='' and productId !=null">
+            	and product_id = #{productId}
+            </if>
+            <if test="amount !='' and amount !=null">
+            	and amount = #{amount}
+            </if>
+            <if test="taskId !='' and taskId !=null">
+            	and task_id = #{taskId}
+            </if>
+            <if test="newTaskId !='' and newTaskId !=null">
+            	and new_task_id = #{newTaskId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="housingValueFaster !='' and housingValueFaster !=null">
+            	and housing_value_faster = #{housingValueFaster}
+            </if>
+            <if test="manualAssignee !='' and manualAssignee !=null">
+            	and manual_assignee = #{manualAssignee}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="officeId!= null">		
+	    		office_id = #{officeId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="customerId!= null">		
+	    		customer_id = #{customerId},		
+	    	</if>
+	    	<if test="receiveType!= null">		
+	    		receive_type = #{receiveType},		
+	    	</if>
+	    	<if test="type!= null">		
+	    		type = #{type},		
+	    	</if>
+	    	<if test="processState!= null">		
+	    		process_state = #{processState},		
+	    	</if>
+	    	<if test="category!= null">		
+	    		category = #{category},		
+	    	</if>
+	    	<if test="remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="productId!= null">		
+	    		product_id = #{productId},		
+	    	</if>
+	    	<if test="amount!= null">		
+	    		amount = #{amount},		
+	    	</if>
+	    	<if test="taskId!= null">		
+	    		task_id = #{taskId},		
+	    	</if>
+	    	<if test="newTaskId!= null">		
+	    		new_task_id = #{newTaskId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="housingValueFaster null">		
+	    		housing_value_faster = #{housingValueFaster},		
+	    	</if>
+	    	<if test="manualAssignee !='' and manualAssignee !=null">
+            	and manual_assignee = #{manualAssignee}
+            </if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubLoanprocess">
+		insert into pub_loanprocess(
+        	creator,
+        	create_time,
+        	is_delete,
+        	office_id,
+        	process_instance_id,
+        	consult_id,
+        	customer_id,
+        	receive_type,
+        	type,
+        	process_state,
+        	category,
+        	remark,
+        	product_id,
+        	amount,
+        	task_id,
+        	new_task_id,
+        	project_id,
+        	housing_value_faster,
+        	manual_assignee			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{isDelete},
+        	#{officeId},
+        	#{processInstanceId},
+        	#{consultId},
+        	#{customerId},
+        	#{receiveType},
+        	#{type},
+        	#{processState},
+        	#{category},
+        	#{remark},
+        	#{productId},
+        	#{amount},
+        	#{taskId},
+        	#{newTaskId},
+        	#{projectId},
+        	#{housingValueFaster},
+        	#{manualAssignee}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubLoanprocess">
+        update pub_loanprocess
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+    
+    <!--分页记录数 -->
+	<select id="getPubLoanprocessCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+		SELECT
+            count(1)
+        FROM
+            pub_loanprocess l
+        INNER JOIN sys_dict_detail pro_state_dict ON pro_state_dict.item_code = l.process_state
+        INNER JOIN sys_dict_detail operation_dict on operation_dict.item_code = l.type
+        LEFT JOIN pl_product p ON p.id = l.product_id
+		where
+		pro_state_dict.parent_id = 23
+		AND operation_dict.parent_id = 254
+		<if test="processInstanceId != null and processInstanceId != ''">
+			and l.process_Instance_Id = #{processInstanceId}
+		</if>
+		<if test="projectId != null and projectId != ''">
+			and l.project_id = #{projectId}
+		</if>
+	</select>
+	
+	<select id="getOne" resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+		select
+			receive_type as receiveType,
+			amount as receivableAccount
+		from pub_loanprocess
+		<include refid="searchByPo"/>	
+	</select>
+
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubLoanprocessResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_loanprocess
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_loanprocess
+        where
+        id  = #{id}
+    </delete>
+    
+    <!--分页列表查询 -->
+	<select id="queryAllHistoricLoanProcessListToCustomerByProjectId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT
+            pro_state_dict.item_value AS processState,
+            l.type,
+            l.receive_type as receiveType,
+            operation_dict.item_value AS comment,
+            p.`name` AS productName,
+            l.amount,
+            IFNULL(l.feedback_customer,l.remark)  as remark,
+            queryLoanProcessCategory(l.type,l.category) category,
+            l.create_time AS createTime,
+            l.process_Instance_Id AS processInstanceId
+        FROM
+            pub_loanprocess l
+        INNER JOIN sys_dict_detail pro_state_dict ON pro_state_dict.item_code = l.process_state
+        INNER JOIN sys_dict_detail operation_dict on operation_dict.item_code = l.type
+        LEFT JOIN pl_product p ON p.id = l.product_id
+		where
+		pro_state_dict.parent_id = 23
+		AND operation_dict.parent_id = 40
+		<if test="processInstanceId != null and processInstanceId != ''">
+			and l.process_Instance_Id = #{processInstanceId}
+		</if>
+		<if test="projectId != null and projectId != ''">
+			and l.project_id = #{projectId}
+		</if>
+		order by l.id asc
+	</select>
+	
+	<!--分页列表查询 -->
+	<select id="queryAllHistoricLoanProcessListByProjectId" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT
+            pro_state_dict.item_value AS processState,
+            l.type,
+            l.receive_type as receiveType,
+            operation_dict.item_value AS comment,
+            p.`name` AS productName,
+            l.amount,
+            l.remark,
+            queryLoanProcessCategory(l.type,l.category) category,
+            l.create_time AS createTime,
+            l.process_Instance_Id AS processInstanceId,
+            l.id
+        FROM
+            pub_loanprocess l
+        INNER JOIN sys_dict_detail pro_state_dict ON pro_state_dict.item_code = l.process_state
+        INNER JOIN sys_dict_detail operation_dict on operation_dict.item_code = l.type
+        LEFT JOIN pl_product p ON p.id = l.product_id
+		where
+		pro_state_dict.parent_id = 23
+		AND operation_dict.parent_id = 40
+		<if test="processInstanceId != null and processInstanceId != ''">
+			and l.process_Instance_Id = #{processInstanceId}
+		</if>
+		<if test="projectId != null and projectId != ''">
+			and l.project_id = #{projectId}
+		</if>
+		order by l.id asc
+	</select>
+</mapper>

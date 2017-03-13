@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rongdu.eloan.modules.system.dao.SysOfficeDao">
+	<resultMap type="sysOffice" id="sysOfficeResult">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="parent_id" property="parentId" />
+		<result column="area" property="area" />
+		<result column="type" property="type" />
+		<result column="grade" property="grade" />
+		<result column="address" property="address" />
+		<result column="zip_code" property="zipCode" />
+		<result column="master" property="master" />
+		<result column="phone" property="phone" />
+		<result column="fax" property="fax" />
+		<result column="email" property="email" />
+		<result column="add_time" property="addTime" />
+		<result column="add_user" property="addUser" />
+		<result column="update_time" property="updateTime" />
+		<result column="update_user" property="updateUser" />
+		<result column="remark" property="remark" />
+		<result column="is_delete" property="isDelete" />
+		<result column="city" property="city" />
+		<result column="province" property="province" />
+		<result column="sort" property="sort"/>
+		<result column="office_number" property="officeNumber"/>
+		<result column="office_bank" property="officeBank"/>
+		<result column="office_bank_card" property="officeBankCard"/>
+		<result column="office_card" property="officeCard"/>
+	</resultMap>
+	
+	<resultMap type="java.util.HashMap" id="officeMap">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="parentId" property="parentId" />
+        <result column="parent_text" property="parent_text" />
+        <result column="area" property="area" />
+        <result column="type" property="type" />
+        <result column="grade" property="grade" />
+        <result column="address" property="address" />
+        <result column="zipCode" property="zipCode" />
+        <result column="master" property="master" />
+        <result column="phone" property="phone" />
+        <result column="fax" property="fax" />
+        <result column="email" property="email" />
+        <result column="addTime" property="addTime" />
+        <result column="addUser" property="addUser" />
+        <result column="updateTime" property="updateTime" />
+        <result column="updateUser" property="updateUser" />
+        <result column="remark" property="remark" />
+        <result column="isDelete" property="isDelete" />
+        <result column="city" property="city" />
+        <result column="province" property="province" />
+        <result column="sort" property="sort" />
+        <result column="officeNumber" property="officeNumber" />
+        <result column="officeBank" property="officeBank" />
+        <result column="officeBankCard" property="officeBankCard" />
+        <result column="officeCard" property="officeCard" />
+    </resultMap>
+	
+	<sql id="searchByPo">
+		<if test="name!=null and name!='' ">
+			and name like concat('',#{name}, '%')
+		</if>
+		<if test="parentId!=null and parentId!='' ">
+			and parent_id = #{parentId}
+		</if>
+		<if test="area!=null and area!='' ">
+			and area =#{area}
+		</if>
+		<if test="type!=null and type!='' ">
+			and type = #{type}
+		</if>
+		<if test="grade!=null and grade!='' ">
+			and grade = #{grade}
+		</if>
+		<if test="address!=null and address!='' ">
+			and address = #{address}
+		</if>
+		<if test="zipCode!=null and zipCode!='' ">
+			and zip_code = #{zipCode}
+		</if>
+		<if test="master!=null and master!='' ">
+			and master = #{master}
+		</if>
+		<if test="fax!=null and fax!='' ">
+			and fax = #fax#
+		</if>
+		<if test="email!=null and email!='' ">
+			and email = #{email}
+		</if>
+		<if test="addTime!=null and addTime!='' ">
+			and add_time = #{addTime}
+		</if>
+		<if test="addUser!=null and addUser!='' ">
+			and add_user = #{addUser}
+		</if>
+		<if test="updateTime!=null and updateTime!='' ">
+			and update_time = #{updateTime}
+		</if>
+		<if test="updateUser!=null and updateUser!='' ">
+			and update_user = #{updateUser}
+		</if>
+		<if test="remark!=null and remark!='' ">
+			and remark = #{remark}
+		</if>
+		<if test="isDelete!=null and isDelete!='' ">
+			and is_delete = #{isDelete}
+		</if>
+		<if test="city!=null and city!='' ">
+			and city = #{city}
+		</if>
+		<if test="province!=null and province!='' ">
+			and province = #{province}
+		</if>
+		<if test="sort!=null and sort!='' ">
+			and sort = #{sort}
+		</if>
+		<if test="officeNumber!=null and officeNumber!='' ">
+			and office_number = #{officeNumber}
+		</if>
+		<if test="officeBank!=null and officeBank!='' ">
+			and office_bank = #{officeBank}
+		</if>
+		<if test="officeBankCard!=null and officeBankCard!='' ">
+			and office_bank_card = #{officeBankCard}
+		</if>
+		<if test="officeCard!=null and officeCard!='' ">
+			and office_card = #{officeCard}
+		</if>
+	</sql>
+	
+	<sql id="pageEnd">
+		where rownum &lt;= #{end}) where rnum &gt;#{startRow}
+	</sql>
+
+	<sql id="pageStart">
+		select * from (select rownum rnum,a.* from (
+	</sql>
+	
+	<insert id="insert" parameterType="sysOffice">
+		<!-- <selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey> -->
+		insert into sys_office(
+			id,
+			name,
+			parent_id,
+			area,
+			type,
+			grade,
+			address,
+			zip_code,
+			master,
+			phone,
+			fax,
+			email,
+			add_time,
+			add_user,
+			remark,
+			is_delete,
+			city,
+			province,
+			sort,
+			office_number,
+			office_bank,
+			office_bank_card,
+			office_card			
+		)
+		values (
+			#{id},
+			#{name},
+			#{parentId},
+			#{area},
+			#{type},
+			#{grade},
+			#{address},
+			#{zipCode},
+			#{master},
+			#{phone},
+			#{fax},
+			#{email},
+			#{addTime},
+			#{addUser},
+			#{remark},
+			#{isDelete},
+			#{city},
+			#{province},
+			#{sort},
+			#{officeNumber},
+			#{officeBank},
+			#{officeBankCard},
+			#{officeCard}		
+		)
+	</insert>
+	
+	<update id="update" parameterType="sysOffice">
+		update sys_office
+		set
+			name=#{name},
+			parent_id=#{parentId},
+			area=#{area},
+			type=#{type},
+			grade=#{grade},
+			address=#{address},
+			zip_code=#{zipCode},
+			master=#{master},
+			phone=#{phone},
+			fax=#{fax},
+			email=#{email},
+			update_time= now(),
+			update_user=#{updateUser},
+			remark=#{remark},
+			is_delete=#{isDelete},
+			city=#{city},
+			province=#{province},
+			sort=#{sort},
+			office_number=#{officeNumber},
+			office_bank=#{officeBank},
+			office_bank_card=#{officeBankCard},
+			office_card=#{officeCard}		
+		where
+			id = #{id}
+	</update>
+	
+	<!-- 根据条件获取组织机构列表 -->
+ 	<select id="getListByMap" resultMap="sysOfficeResult" parameterType="java.util.Map" >
+        select 
+        	id,
+        	name,
+        	parent_id,
+        	area,
+        	type,
+        	grade,
+        	address,
+        	zip_code,
+        	master,
+        	phone,
+        	fax,
+        	email,
+        	add_time,
+        	add_user,
+        	update_time,
+        	update_user,
+        	remark,
+        	is_delete,
+        	city,
+        	province,
+        	sort,	
+        	office_number,
+			office_bank,
+			office_bank_card,
+			office_card      
+        from sys_office 
+        where is_delete = 0 
+		<include refid="searchByPo"></include>
+        ORDER BY id,sort ASC
+    </select>
+    <!--查询所有组织机构-->
+    <select id = "getOfficeTreeList" resultType="java.util.Map">
+    	SELECT
+			id as "value",
+			id as "key",
+			parent_id as "parent_id",
+			name as "label",
+			remark as "remark",
+			sort as "sort",
+			is_delete as "is_delete"
+		FROM
+			sys_office
+		WHERE
+			is_delete = 0
+		ORDER BY
+			sort,
+			name
+    </select>
+    <!--根据id查询-->
+    <select id ="getOfficeById" resultMap="sysOfficeResult" parameterType="java.lang.Long">
+    	select
+            id,
+            name,
+            parent_id,
+            area,
+            type,
+            grade,
+            address,
+            zip_code,
+            master,
+            phone,
+            fax,
+            email,
+            add_time,
+            add_user,
+            update_time,
+            update_user,
+            remark,
+            is_delete,
+            city,
+            province,
+            sort,
+            office_number,
+			office_bank,
+			office_bank_card,
+			office_card
+        from sys_office
+        where id = #{id} 
+    </select>
+    <!--根据id查询-->
+    <select id="getOfficeInfoById" parameterType="long" resultMap="officeMap">
+		select
+			s.id,
+			s.name,
+			s.parent_id		parentId,
+			so.name		parent_text,
+			s.area,
+			s.type,
+			s.grade,
+			s.address,
+			s.zip_code		zipCode,
+			s.master,
+			s.phone,
+			s.fax,
+			s.email,
+			s.add_time		addTime,
+			s.add_user		addUser,
+			s.update_time	updateTime,
+			s.update_user	updateUser,
+			s.remark,
+			s.is_delete		isDelete,
+			s.city,
+			s.province,
+			s.sort,
+			s.office_number		officeNumber,
+			s.office_bank		officeBank,
+			s.office_bank_card	officeBankCard,
+			s.office_card		officeCard				
+		from sys_office s
+		join sys_office so on so.id = s.parent_id
+		where 
+			s.is_delete = 0 and s.id = #{id}
+	</select>
+	
+	<select id="getIdByParentId" parameterType="String" resultType="String">
+ 		select (id+1) as id from sys_office where parent_id=#{parentId} ORDER BY ID DESC LIMIT 1
+ 	</select>
+ 	
+ 	<!--<insert id="insert" parameterType="sysOffice">
+		insert into sys_office(
+		    id,
+			name,
+			parent_id,
+			area,
+			type,
+			grade,
+			address,
+			zip_code,
+			master,
+			phone,
+			fax,
+			email,
+			add_time,
+			add_user,
+			remark,
+			is_delete,
+			city,
+			province,
+			sort,
+			office_number,
+			office_bank,
+			office_bank_card,
+			office_card			
+		)
+		values (
+		    #{id},
+			#{name},
+			#{parentId},
+			#{area},
+			#{type},
+			#{grade},
+			#{address},
+			#{zipCode},
+			#{master},
+			#{phone},
+			#{fax},
+			#{email},
+			now(),
+			#{addUser},
+			#{remark},
+			#{isDelete},
+			#{city},
+			#{province},
+			#{sort},
+			#{officeNumber},
+			#{officeBank},
+			#{officeBankCard},
+			#{officeCard}		
+		)
+    </insert>-->
+    
+    <!--通过ID更新会员，更新不影响其它字段值 added by wgc-->
+	<update id="updateSysOfficeById" parameterType="java.util.HashMap">
+		update sys_office
+		<set>
+		    <if test="name != null and name != '' ">name = #{name},</if>
+		    <if test="parentId != null and parentId != '' ">parent_id = #{parentId},</if>
+		    <if test="area != null and area != '' ">area = #{area},</if>
+		    <if test="type != null and type != '' ">type = #{type},</if>
+		    <if test="grade != null and grade != '' ">grade = #{grade},</if>
+		    <if test="address != null and address != '' ">address = #{address},</if>
+		    <if test="zipCode != null and zipCode != '' ">zip_code = #{zipCode},</if>
+		    <if test="master != null and master != '' ">master = #{master},</if>
+		    <if test="phone != null and phone != '' ">phone = #{phone},</if>
+		    <if test="fax != null and fax != '' ">fax = #{fax},</if>
+		    <if test="email != null and email != '' ">email = #{email},</if>
+		    <if test="addTime != null">add_time = #{addTime},</if>
+		    <if test="addUser != null and addUser != '' ">add_user = #{addUser},</if>
+		    <if test="updateTime != null ">update_time = #{updateTime},</if>
+		    <if test="updateUser != null and updateUser != '' ">update_user = #{updateUser},</if>
+		    <if test="remark != null and remark != '' ">remark = #{remark},</if>
+		    <if test="isDelete != null and isDelete != '' ">is_delete = #{isDelete},</if>
+		    <if test="city != null and city != '' ">city = #{city},</if>
+		    <if test="sort != null and sort != '' ">sort = #{sort},</if>
+		    <if test="province != null and province != '' ">province = #{province},</if>
+		    <if test="officeNumber != null and officeNumber != '' ">office_number=#{officeNumber},</if>
+		    <if test="officeBank != null and officeBank != '' ">office_bank=#{officeBank},</if>
+		    <if test="officeBankCard != null and officeBankCard != '' ">office_bank_card=#{officeBankCard},</if>
+		    <if test="officeCard != null and officeCard != '' ">office_card=#{officeCard},</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<!-- 根据机构ID获取下属组织机构列表 -->
+ 	<select id="getListByOfficeId" resultMap="sysOfficeResult" parameterType="java.util.HashMap" >
+        select id,name,parent_id,area,type,grade,address,zip_code,master,phone,fax,email,add_time,add_user,update_time,update_user,remark,is_delete,city,province,sort,	office_number,
+			office_bank,
+			office_bank_card,
+			office_card      
+        from sys_office
+         where is_delete = 0  
+		    <if test="id != null and id !='' ">
+		         and id like concat('',#{id}, '%')
+		    </if> 
+		    <include refid="searchByPo"></include>
+        ORDER BY id,sort ASC
+    </select>
+    <select id="getProjectBelongInfo" parameterType="long"  resultType="java.util.HashMap">
+    SELECT
+		off.name institutionName
+	FROM
+		sys_office off
+	WHERE
+		id = (
+			SELECT
+				office_id
+			FROM
+				sys_user
+			WHERE
+				id = #{useId}
+		)
+    </select>
+</mapper>

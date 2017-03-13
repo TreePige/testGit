@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_borrow表:借款信息模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PlBorrowDao">
+	<!--返回MAP-->		
+	<resultMap id="PlBorrowResult" type="PlBorrow">
+		<id column="id" property="id" />
+		<result column="repayment_yes_account" property="repaymentYesAccount" />
+		<result column="repayment_yes_interest" property="repaymentYesInterest" />
+		<result column="repayment_rate" property="repaymentRate" />
+		<result column="time_limit" property="timeLimit" />
+		<result column="create_time" property="createTime" />
+		<result column="creator" property="creator" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="modifier" property="modifier" />
+		<result column="is_delete" property="isDelete" />
+		<result column="account" property="account" />
+		<result column="consult_id" property="consultId" />
+		<result column="repayment_type" property="repaymentType" />
+		<result column="loan_time" property="loanTime" />
+		<result column="repayment_day" property="repaymentDay" />
+		<result column="product_id" property="productId" />
+		<result column="overdue_penalty_rate" property="overduePenaltyRate" />
+		<result column="overdue_repayment_rate" property="overdueRepaymentRate" />
+		<result column="repayment_default" property="repaymentDefault" />
+		<result column="remark" property="remark" />
+		<result column="status" property="status" />
+		<result column="lenders" property="lenders" />
+		<result column="lenders_office" property="lendersOffice" />
+		<result column="loan_user" property="loanUser" />
+		<result column="expect_time" property="expectTime" />
+		<result column="repayment_status" property="repaymentStatus" />
+		<result column="project_id" property="projectId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="loan_office" property="loanOffice" />
+		<result column="requirement_id" property="requirementId" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			repayment_yes_account,
+			repayment_yes_interest,
+			repayment_rate,
+			time_limit,
+			create_time,
+			creator,
+			modify_time,
+			modifier,
+			is_delete,
+			account,
+			consult_id,
+			repayment_type,
+			loan_time,
+			repayment_day,
+			product_id,
+			overdue_penalty_rate,
+			overdue_repayment_rate,
+			repayment_default,
+			remark,
+			status,
+			lenders,
+			lenders_office,
+			loan_user,
+			expect_time,
+			repayment_status,
+			project_id,
+			process_instance_id,
+			loan_office,
+			requirement_id			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="repaymentYesAccount !='' and repaymentYesAccount !=null">
+            	and repayment_yes_account = #{repaymentYesAccount}
+            </if>
+            <if test="repaymentYesInterest !='' and repaymentYesInterest !=null">
+            	and repayment_yes_interest = #{repaymentYesInterest}
+            </if>
+            <if test="repaymentRate !='' and repaymentRate !=null">
+            	and repayment_rate = #{repaymentRate}
+            </if>
+            <if test="timeLimit !='' and timeLimit !=null">
+            	and time_limit = #{timeLimit}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="account !='' and account !=null">
+            	and account = #{account}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="repaymentType !='' and repaymentType !=null">
+            	and repayment_type = #{repaymentType}
+            </if>
+            <if test="loanTime !='' and loanTime !=null">
+            	and loan_time = #{loanTime}
+            </if>
+            <if test="repaymentDay !='' and repaymentDay !=null">
+            	and repayment_day = #{repaymentDay}
+            </if>
+            <if test="productId !='' and productId !=null">
+            	and product_id = #{productId}
+            </if>
+            <if test="overduePenaltyRate !='' and overduePenaltyRate !=null">
+            	and overdue_penalty_rate = #{overduePenaltyRate}
+            </if>
+            <if test="overdueRepaymentRate !='' and overdueRepaymentRate !=null">
+            	and overdue_repayment_rate = #{overdueRepaymentRate}
+            </if>
+            <if test="repaymentDefault !='' and repaymentDefault !=null">
+            	and repayment_default = #{repaymentDefault}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="status !='' and status !=null">
+            	and status = #{status}
+            </if>
+            <if test="lenders !='' and lenders !=null">
+            	and lenders = #{lenders}
+            </if>
+            <if test="lendersOffice !='' and lendersOffice !=null">
+            	and lenders_office = #{lendersOffice}
+            </if>
+            <if test="loanUser !='' and loanUser !=null">
+            	and loan_user = #{loanUser}
+            </if>
+            <if test="expectTime !='' and expectTime !=null">
+            	and expect_time = #{expectTime}
+            </if>
+            <if test="repaymentStatus !='' and repaymentStatus !=null">
+            	and repayment_status = #{repaymentStatus}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="loanOffice !='' and loanOffice !=null">
+            	and loan_office = #{loanOffice}
+            </if>
+            <if test="requirementId !='' and requirementId !=null">
+            	and requirement_id = #{requirementId}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="repaymentYesAccount != null">		
+	    		repayment_yes_account = #{repaymentYesAccount},		
+	    	</if>
+	    	<if test="repaymentYesInterest != null">		
+	    		repayment_yes_interest = #{repaymentYesInterest},		
+	    	</if>
+	    	<if test="repaymentRate != null">		
+	    		repayment_rate = #{repaymentRate},		
+	    	</if>
+	    	<if test="timeLimit != null">		
+	    		time_limit = #{timeLimit},		
+	    	</if>
+	    	<if test="modifyTime != null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="modifier != null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="isDelete != null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="account != null">		
+	    		account = #{account},		
+	    	</if>
+	    	<if test="consultId != null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="repaymentType != null">		
+	    		repayment_type = #{repaymentType},		
+	    	</if>
+	    	<if test="loanTime != null">		
+	    		loan_time = #{loanTime},		
+	    	</if>
+	    	<if test="repaymentDay != null">		
+	    		repayment_day = #{repaymentDay},		
+	    	</if>
+	    	<if test="productId != null">		
+	    		product_id = #{productId},		
+	    	</if>
+	    	<if test="overduePenaltyRate != null">		
+	    		overdue_penalty_rate = #{overduePenaltyRate},		
+	    	</if>
+	    	<if test="overdueRepaymentRate != null">		
+	    		overdue_repayment_rate = #{overdueRepaymentRate},		
+	    	</if>
+	    	<if test="repaymentDefault != null">		
+	    		repayment_default = #{repaymentDefault},		
+	    	</if>
+	    	<if test="remark != null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="status != null">		
+	    		status = #{status},		
+	    	</if>
+	    	<if test="lenders != null">		
+	    		lenders = #{lenders},		
+	    	</if>
+	    	<if test="lendersOffice != null">		
+	    		lenders_office = #{lendersOffice},		
+	    	</if>
+	    	<if test="loanUser != null">		
+	    		loan_user = #{loanUser},		
+	    	</if>
+	    	<if test="expectTime != null">		
+	    		expect_time = #{expectTime},		
+	    	</if>
+	    	<if test="repaymentStatus != null">		
+	    		repayment_status = #{repaymentStatus},		
+	    	</if>
+	    	<if test="projectId != null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="processInstanceId != null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="loanOffice != null">		
+	    		loan_office = #{loanOffice},		
+	    	</if>
+	    	<if test="requirementId != null">		
+	    		requirement_id = #{requirementId},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlBorrow">
+		insert into pl_borrow(
+        	repayment_yes_account,
+        	repayment_yes_interest,
+        	repayment_rate,
+        	time_limit,
+        	create_time,
+        	creator,
+        	modify_time,
+        	modifier,
+        	is_delete,
+        	account,
+        	consult_id,
+        	repayment_type,
+        	loan_time,
+        	repayment_day,
+        	product_id,
+        	overdue_penalty_rate,
+        	overdue_repayment_rate,
+        	repayment_default,
+        	remark,
+        	status,
+        	lenders,
+        	lenders_office,
+        	loan_user,
+        	expect_time,
+        	repayment_status,
+        	project_id,
+        	process_instance_id,
+        	loan_office,
+        	requirement_id			
+        )values(
+        	#{repaymentYesAccount},
+        	#{repaymentYesInterest},
+        	#{repaymentRate},
+        	#{timeLimit},
+        	#{createTime},
+        	#{creator},
+        	#{modifyTime},
+        	#{modifier},
+        	#{isDelete},
+        	#{account},
+        	#{consultId},
+        	#{repaymentType},
+        	#{loanTime},
+        	#{repaymentDay},
+        	#{productId},
+        	#{overduePenaltyRate},
+        	#{overdueRepaymentRate},
+        	#{repaymentDefault},
+        	#{remark},
+        	#{status},
+        	#{lenders},
+        	#{lendersOffice},
+        	#{loanUser},
+        	#{expectTime},
+        	#{repaymentStatus},
+        	#{projectId},
+        	#{processInstanceId},
+        	#{loanOffice},
+        	#{requirementId}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="updatePlBorrowById" parameterType="java.util.HashMap">
+        update pl_borrow
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+    
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlBorrow">
+        update pl_borrow
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoByMap" resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+		SELECT 
+		       pl_b.id as id,
+		       pl_b.process_instance_id as processInstanceId,
+		       pl_c.name as customerName, 
+		       pl_c.idcard as idcard, 
+			   pl_b.account as account,
+		       feeinfo.time_limit as timeLimit,
+		       feeinfo.repayment_type as repaymentType,
+		       pl_b.repayment_day as repaymentDay,
+		       feeinfo.repayment_rate as repaymentRate,
+		       hous.residential_address_id as areaId,
+		       requirement.borrow_use as borrowUse,
+		       pl_b.product_id as productId,
+		       pl_b.project_id as projectId,
+		       pl_b.consult_id as consultId,
+		       hous.residential_address  as address,
+		       pl_b.requirement_id as requirementId
+		FROM pl_borrow pl_b
+		LEFT JOIN hous_borrowing_basics hous ON pl_b.process_instance_id = hous.process_instance_id
+		LEFT JOIN pl_feeinfo feeinfo ON pl_b.process_instance_id = feeinfo.process_instance_id
+		LEFT JOIN pl_consult pl_c ON pl_b.process_instance_id = pl_c.process_instance_id
+		LEFT JOIN pl_borrow_requirement requirement ON pl_b.process_instance_id = requirement.process_instance_id
+		WHERE pl_b.process_instance_id = #{processInstanceId}
+	</select>
+	
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlBorrowResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_borrow
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PlBorrowResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_borrow
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlBorrowResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_borrow
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_borrow
+        where
+        id  = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_mortgage_registration表:押品登记表模块 -->
+<mapper namespace="com.rongdu.eloan.modules.collateral.dao.CollateralManageDao">
+    <!--xml内部引用别名-->
+	
+	<!--返回MAP-->		
+	<resultMap id="HousMortgageRegistrationMap" type="HousMortgageRegistration">
+			<id column="id" property="id" />
+			<result column="creator" property="creator" />
+			<result column="create_time" property="createTime" />
+			<result column="modifier" property="modifier" />
+			<result column="modify_time" property="modifyTime" />
+			<result column="is_delete" property="isDelete" />
+			<result column="consult_id" property="consultId" />
+			<result column="process_instance_id" property="processInstanceId" />
+			<result column="project_id" property="projectId" />
+			<result column="mortgage" property="mortgage" />
+			<result column="seizure" property="seizure" />
+			<result column="business_occupancy" property="businessOccupancy" />
+			<result column="net_signed_occupancy" property="netSignedOccupancy" />
+			<result column="credit_card_number" property="creditCardNumber" />
+			<result column="bank_account" property="bankAccount" />
+			<result column="account_opening" property="accountOpening" />
+			<result column="charge_number" property="chargeNumber" />
+			<result column="his_right_certificate" property="hisRightCertificate" />
+			<result column="mortgage_right" property="mortgageRight" />
+			<result column="client" property="client" />
+			<result column="collection_time" property="collectionTime" />
+			<result column="registered_person" property="registeredPerson" />
+			<result column="outbound_collection_time" property="outboundCollectionTime" />
+			<result column="outbound_person" property="outboundPerson" />
+			<result column="remark" property="remark" />
+	</resultMap>
+	
+	<!-- 动态查询 -->
+	<sql id="Select">
+		<trim prefix="where" prefixOverrides="and|or">
+					<if test="id !='' and id !=null">
+                        id in (${id})
+                    </if>
+		            <if test="creator !='' and creator !=null">
+		            	and creator = #{creator}
+		            </if>
+		            <if test="createTime !=null">
+		            	and create_time = #{createTime}
+		            </if>
+		            <if test="modifier !='' and modifier !=null">
+		            	and modifier = #{modifier}
+		            </if>
+		            <if test="modifyTime !=null">
+		            	and modify_time = #{modifyTime}
+		            </if>
+		            <if test="isDelete !='' and isDelete !=null">
+		            	and is_delete = #{isDelete}
+		            </if>
+		            <if test="consultId !='' and consultId !=null">
+		            	and consult_id = #{consultId}
+		            </if>
+		            <if test="processInstanceId !='' and processInstanceId !=null">
+		            	and process_instance_id = #{processInstanceId}
+		            </if>
+		            <if test="projectId !='' and projectId !=null">
+		            	and project_id = #{projectId}
+		            </if>
+		            <if test="mortgage !='' and mortgage !=null">
+		            	and mortgage = #{mortgage}
+		            </if>
+		            <if test="seizure !='' and seizure !=null">
+		            	and seizure = #{seizure}
+		            </if>
+		            <if test="businessOccupancy !='' and businessOccupancy !=null">
+		            	and business_occupancy = #{businessOccupancy}
+		            </if>
+		            <if test="netSignedOccupancy !='' and netSignedOccupancy !=null">
+		            	and net_signed_occupancy = #{netSignedOccupancy}
+		            </if>
+		            <if test="creditCardNumber !='' and creditCardNumber !=null">
+		            	and credit_card_number = #{creditCardNumber}
+		            </if>
+		            <if test="bankAccount !='' and bankAccount !=null">
+		            	and bank_account = #{bankAccount}
+		            </if>
+		            <if test="accountOpening !='' and accountOpening !=null">
+		            	and account_opening = #{accountOpening}
+		            </if>
+		            <if test="chargeNumber !='' and chargeNumber !=null">
+		            	and charge_number = #{chargeNumber}
+		            </if>
+		            <if test="hisRightCertificate !='' and hisRightCertificate !=null">
+		            	and his_right_certificate = #{hisRightCertificate}
+		            </if>
+		            <if test="mortgageRight !='' and mortgageRight !=null">
+		            	and mortgage_right = #{mortgageRight}
+		            </if>
+		            <if test="client !='' and client !=null">
+		            	and client = #{client}
+		            </if>
+		            <if test="collectionTime !=null">
+		            	and collection_time = #{collectionTime}
+		            </if>
+		            <if test="registeredPerson !='' and registeredPerson !=null">
+		            	and registered_person = #{registeredPerson}
+		            </if>
+		            <if test="outboundCollectionTime !=null">
+		            	and outbound_collection_time = #{outboundCollectionTime}
+		            </if>
+		            <if test="outboundPerson !='' and outboundPerson !=null">
+		            	and outbound_person = #{outboundPerson}
+		            </if>
+		            <if test="remark !='' and remark !=null">
+		            	and remark = #{remark}
+		            </if>
+		</trim>
+	</sql>
+	
+    <!-- 动态插入键 -->
+    <sql id="InsertKey">
+                   <if test="creator !='' and creator != null">		creator		</if>
+                   <if test="createTime != null">		,create_time		</if>
+                   <if test="modifier !='' and modifier != null">		,modifier		</if>
+                   <if test="modifyTime != null">		,modify_time		</if>
+                   <if test="isDelete !='' and isDelete != null">		,is_delete		</if>
+                   <if test="consultId !='' and consultId != null">		,consult_id		</if>
+                   <if test="processInstanceId !='' and processInstanceId != null">		,process_instance_id		</if>
+                   <if test="projectId !='' and projectId != null">		,project_id		</if>
+                   <if test="mortgage !='' and mortgage != null">		,mortgage		</if>
+                   <if test="seizure !='' and seizure != null">		,seizure		</if>
+                   <if test="businessOccupancy !='' and businessOccupancy != null">		,business_occupancy		</if>
+                   <if test="netSignedOccupancy !='' and netSignedOccupancy != null">		,net_signed_occupancy		</if>
+                   <if test="creditCardNumber !='' and creditCardNumber != null">		,credit_card_number		</if>
+                   <if test="bankAccount !='' and bankAccount != null">		,bank_account		</if>
+                   <if test="accountOpening !='' and accountOpening != null">		,account_opening		</if>
+                   <if test="chargeNumber !='' and chargeNumber != null">		,charge_number		</if>
+                   <if test="hisRightCertificate !='' and hisRightCertificate != null">		,his_right_certificate		</if>
+                   <if test="mortgageRight !='' and mortgageRight != null">		,mortgage_right		</if>
+                   <if test="client !='' and client != null">		,client		</if>
+                   <if test="collectionTime != null">		,collection_time		</if>
+                   <if test="registeredPerson !='' and registeredPerson != null">		,registered_person		</if>
+                   <if test="outboundCollectionTime != null">		,outbound_collection_time		</if>
+                   <if test="outboundPerson !='' and outboundPerson != null">		,outbound_person		</if>
+                   <if test="remark !='' and remark != null">		,remark		</if>
+    </sql>
+    
+    <!-- 动态插入值 -->
+    <sql id="InsertValue">
+                   <if test="creator !='' and creator != null" >		#{creator}		</if>
+                   <if test="createTime != null" >		,#{createTime}		</if>
+                   <if test="modifier !='' and modifier != null" >		,#{modifier}		</if>
+                   <if test="modifyTime != null" >		,#{modifyTime}		</if>
+                   <if test="isDelete !='' and isDelete != null" >		,#{isDelete}		</if>
+                   <if test="consultId !='' and consultId != null" >		,#{consultId}		</if>
+                   <if test="processInstanceId !='' and processInstanceId != null" >		,#{processInstanceId}		</if>
+                   <if test="projectId !='' and projectId != null" >		,#{projectId}		</if>
+                   <if test="mortgage !='' and mortgage != null" >		,#{mortgage}		</if>
+                   <if test="seizure !='' and seizure != null" >		,#{seizure}		</if>
+                   <if test="businessOccupancy !='' and businessOccupancy != null" >		,#{businessOccupancy}		</if>
+                   <if test="netSignedOccupancy !='' and netSignedOccupancy != null" >		,#{netSignedOccupancy}		</if>
+                   <if test="creditCardNumber !='' and creditCardNumber != null" >		,#{creditCardNumber}		</if>
+                   <if test="bankAccount !='' and bankAccount != null" >		,#{bankAccount}		</if>
+                   <if test="accountOpening !='' and accountOpening != null" >		,#{accountOpening}		</if>
+                   <if test="chargeNumber !='' and chargeNumber != null" >		,#{chargeNumber}		</if>
+                   <if test="hisRightCertificate !='' and hisRightCertificate != null" >		,#{hisRightCertificate}		</if>
+                   <if test="mortgageRight !='' and mortgageRight != null" >		,#{mortgageRight}		</if>
+                   <if test="client !='' and client != null" >		,#{client}		</if>
+                   <if test="collectionTime != null" >		,#{collectionTime}		</if>
+                   <if test="registeredPerson !='' and registeredPerson != null" >		,#{registeredPerson}		</if>
+                   <if test="outboundCollectionTime != null" >		,#{outboundCollectionTime}		</if>
+                   <if test="outboundPerson !='' and outboundPerson != null" >		,#{outboundPerson}		</if>
+                   <if test="remark !='' and remark != null" >		,#{remark}		</if>
+    </sql>
+    
+    <!-- 动态更新 -->
+    <sql id="Update">
+       <trim prefix="set" suffixOverrides=",">
+				<if test="id != '' and id!= null">		 id=#{id}		</if>
+            	<if test="creator != '' and creator!= null">		,creator=#{creator}		</if>
+            	<if test="createTime!= null">		,create_time=#{createTime}		</if>
+            	<if test="modifier != '' and modifier!= null">		,modifier=#{modifier}		</if>
+            	<if test="modifyTime!= null">		,modify_time=#{modifyTime}		</if>
+            	<if test="isDelete != '' and isDelete!= null">		,is_delete=#{isDelete}		</if>
+            	<if test="consultId != '' and consultId!= null">		,consult_id=#{consultId}		</if>
+            	<if test="processInstanceId != '' and processInstanceId!= null">		,process_instance_id=#{processInstanceId}		</if>
+            	<if test="projectId != '' and projectId!= null">		,project_id=#{projectId}		</if>
+            	<if test="mortgage != '' and mortgage!= null">		,mortgage=#{mortgage}		</if>
+            	<if test="seizure != '' and seizure!= null">		,seizure=#{seizure}		</if>
+            	<if test="businessOccupancy != '' and businessOccupancy!= null">		,business_occupancy=#{businessOccupancy}		</if>
+            	<if test="netSignedOccupancy != '' and netSignedOccupancy!= null">		,net_signed_occupancy=#{netSignedOccupancy}		</if>
+            	<if test="creditCardNumber != '' and creditCardNumber!= null">		,credit_card_number=#{creditCardNumber}		</if>
+            	<if test="bankAccount != '' and bankAccount!= null">		,bank_account=#{bankAccount}		</if>
+            	<if test="accountOpening != '' and accountOpening!= null">		,account_opening=#{accountOpening}		</if>
+            	<if test="chargeNumber != '' and chargeNumber!= null">		,charge_number=#{chargeNumber}		</if>
+            	<if test="hisRightCertificate != '' and hisRightCertificate!= null">		,his_right_certificate=#{hisRightCertificate}		</if>
+            	<if test="mortgageRight != '' and mortgageRight!= null">		,mortgage_right=#{mortgageRight}		</if>
+            	<if test="client != '' and client!= null">		,client=#{client}		</if>
+            	<if test="collectionTime!= null">		,collection_time=#{collectionTime}		</if>
+            	<if test="registeredPerson != '' and registeredPerson!= null">		,registered_person=#{registeredPerson}		</if>
+            	<if test="outboundCollectionTime!= null">		,outbound_collection_time=#{outboundCollectionTime}		</if>
+            	<if test="outboundPerson != '' and outboundPerson!= null">		,outbound_person=#{outboundPerson}		</if>
+            	<if test="remark != '' and remark!= null">		,remark=#{remark}		</if>
+       </trim>
+    </sql>
+    
+    <!-- 动态排序 -->
+    <sql id="Sort">
+        <if  test="fields != '' and fields != null">
+            order by ${fields}
+        </if >
+        <if test="rule != '' and rule != null">
+            ${rule}
+        </if>
+    </sql>
+    
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousMortgageRegistration">
+		insert into hous_mortgage_registration
+        (
+        <include refid="InsertKey"/>
+        )values(
+        <include refid="InsertValue"/>
+        )
+
+     <!-- 重新返回给实体类,插入的id值 -->
+      	<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+	</insert>
+
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousMortgageRegistration">
+        update hous_mortgage_registration
+        <include refid="Update"/>
+        where id = #{id}
+    </update>
+
+    <!-- 动态查询 -->
+    <select id="select" parameterType="java.util.HashMap" resultMap="HousMortgageRegistrationMap">
+        select * from hous_mortgage_registration 
+        <include refid="Select"/>
+        <include refid="Sort"/>
+    </select>
+    <!-- 返回总数 -->
+    <select id="total" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from hous_mortgage_registration 
+        <include refid="Select"/>
+        <include refid="Sort"/>
+    </select>
+
+    <!--根据ID删除-->
+    <delete id="delete">
+        delete from hous_mortgage_registration
+        where
+        id  = #{id}
+    </delete>
+    
+    <select id="getHousMortgageRegistrationsByInstanceId" parameterType="java.lang.String" resultMap="HousMortgageRegistrationMap">
+    select *  from hous_mortgage_registration
+    where process_instance_id = #{processInstanceId}	
+    </select>
+    
+    <!-- 查询押品登记数据 -->
+	<select id="getCollateralRegistDataByInstanceId" parameterType="java.lang.String" resultType="java.util.HashMap">
+	select 
+	ppp.project_id projectId,
+	ppp.process_instance_id processInstanceId,
+	pc.id consultId,
+	pc.name customerName,
+	pb.account,
+	pb.time_limit timeLimit,
+	hmr.mortgage,
+	hmr.seizure,
+	hmr.business_occupancy businessOccupancy,
+	hmr.net_signed_occupancy netSignedOccupancy,
+	hmr.credit_card_number creditCardNumber,
+	hmr.bank_account bankAccount,
+	hmr.account_opening accountOpening,
+	hmr.charge_number chargeNumber,
+	hmr.his_right_certificate hisRightCertificate,
+	hmr.mortgage_right mortgageRight,
+	hmr.client ,
+	hmr.collection_time collectionTime,
+	hmr.registered_person registeredPerson,
+	hmr.remark,
+	
+	hmr.outbound_collection_time outboundCollectionTime,
+	hmr.outbound_person outboundPerson
+	
+	from pub_project_process ppp
+	inner join pl_consult pc on ppp.project_id=pc.project_id
+	inner join pl_borrow pb on pb.project_id=pc.project_id
+	left join hous_mortgage_registration hmr on hmr.process_instance_id=ppp.process_instance_id
+	
+	where ppp.process_instance_id=#{processInstanceId}
+	</select>
+    
+    
+</mapper> 

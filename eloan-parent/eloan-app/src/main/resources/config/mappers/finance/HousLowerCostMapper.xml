@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_lower_cost表:下户费表模块 -->
+<mapper namespace="com.rongdu.eloan.modules.finance.dao.HousLowerCostDao">
+	<!--返回MAP-->		
+	<resultMap id="HousLowerCostResult" type="HousLowerCost">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="finance_specialist" property="financeSpecialist" />
+		<result column="receivable_account" property="receivableAccount" />
+		<result column="actual_fee" property="actualFee" />
+		<result column="collection_form" property="collectionForm" />
+		<result column="refund_operator" property="refundOperator" />
+		<result column="apply_refund_time" property="applyRefundTime" />
+		<result column="apply_refund_amount" property="applyRefundAmount" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			consult_id,
+			process_instance_id,
+			project_id,
+			finance_specialist,
+			receivable_account,
+			actual_fee,
+			collection_form,
+			refund_operator,
+			apply_refund_time,
+			apply_refund_amount			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="financeSpecialist !='' and financeSpecialist !=null">
+            	and finance_specialist = #{financeSpecialist}
+            </if>
+            <if test="receivableAccount !='' and receivableAccount !=null">
+            	and receivable_account = #{receivableAccount}
+            </if>
+            <if test="actualFee !='' and actualFee !=null">
+            	and actual_fee = #{actualFee}
+            </if>
+            <if test="collectionForm !='' and collectionForm !=null">
+            	and collection_form = #{collectionForm}
+            </if>
+            <if test="refundOperator !='' and refundOperator !=null">
+            	and refund_operator = #{refundOperator}
+            </if>
+            <if test="applyRefundTime !='' and applyRefundTime !=null">
+            	and apply_refund_time = #{applyRefundTime}
+            </if>
+            <if test="applyRefundAmount !='' and applyRefundAmount !=null">
+            	and apply_refund_amount = #{applyRefundAmount}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="financeSpecialist!= null">		
+	    		finance_specialist = #{financeSpecialist},		
+	    	</if>
+	    	<if test="receivableAccount!= null">		
+	    		receivable_account = #{receivableAccount},		
+	    	</if>
+	    	<if test="actualFee!= null">		
+	    		actual_fee = #{actualFee},		
+	    	</if>
+	    	<if test="collectionForm!= null">		
+	    		collection_form = #{collectionForm},		
+	    	</if>
+	    	<if test="refundOperator!= null">		
+	    		refund_operator = #{refundOperator},		
+	    	</if>
+	    	<if test="applyRefundTime!= null">		
+	    		apply_refund_time = #{applyRefundTime},		
+	    	</if>
+	    	<if test="applyRefundAmount!= null">		
+	    		apply_refund_amount = #{applyRefundAmount},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousLowerCost">
+		insert into hous_lower_cost(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	finance_specialist,
+        	receivable_account,
+        	actual_fee,
+        	collection_form,
+        	refund_operator,
+        	apply_refund_time,
+        	apply_refund_amount			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{financeSpecialist},
+        	#{receivableAccount},
+        	#{actualFee},
+        	#{collectionForm},
+        	#{refundOperator},
+        	#{applyRefundTime},
+        	#{applyRefundAmount}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousLowerCost">
+        update hous_lower_cost
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousLowerCostResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_lower_cost
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousLowerCostResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_lower_cost
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousLowerCostResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_lower_cost
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+	
+	<!--查询下户费收取基本信息-->
+	<select id="getHousLowerCostBasicInfo" parameterType="long" resultType="java.util.HashMap" >
+		SELECT
+			pbr.account as account,
+			pbr.time_limit as timeLimit, 
+			pp.project_name as projectName,
+			pp.`code` as projectCode ,
+			hbb.`name` customerName,
+			pp.id
+		FROM
+			pl_borrow_requirement pbr
+		INNER JOIN hous_borrowing_basics hbb ON hbb.project_id = pbr.project_id
+		INNER JOIN pub_project pp ON pp.id = pbr.project_id
+		WHERE pp.id = #{projectId}
+	</select>
+	
+	<!--查询下户费收取信息-->
+	<select id="getHousLowerCostInfo" parameterType="long" resultType="java.util.HashMap" >
+		SELECT
+			id,
+			collection_form as collectionForm,
+			finance_specialist as financeSpecialist,
+			receivable_account as receivableAccount,
+			actual_fee actualFee
+		FROM
+			hous_lower_cost
+		WHERE process_instance_id = #{processInstanceId}
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_lower_cost
+        where
+        id  = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 引擎默认名称为default，ProcessEngines.getDefaultProcessEngine()查询时会先检索main/resources，然后再检索test/resources的 
+		activiti.cfg.xml和activiti-context.xml文件，所以当main/resources监测不到指定文件时就会导致该引擎被当做web应用的引擎对象，这样会导致有两个引擎 
+		所以把引擎的名称改为非默认的“default” -->
+
+	<!-- 创建一个流程引擎的配置对象 -->
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionManager" ref="transactionManager" />
+		<!-- 设置数据库schema的更新方式 -->
+		<property name="databaseSchemaUpdate" value="true" />
+		<!-- 是否启动jobExecutor -->
+		<property name="jobExecutorActivate" value="false" />
+		<property name="history" value="full" />
+		<property name="processDefinitionCacheLimit" value="10" />
+
+		<!-- 生成流程图的字体 -->
+		<property name="activityFontName" value="宋体" />
+		<property name="labelFontName" value="宋体" />
+
+		<!-- 自动部署 -->
+		<property name="deploymentResources">
+			<list>
+                <value>classpath:config/bpm/eloan.house.version.bpmn20.xml</value>
+                <value>classpath:config/bpm/eloan.returnCommission.version.bpmn20.xml</value>
+                <value>classpath:config/bpm/eloan.relieveHouse.version.bpmn20.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 创建一个流程引擎bean -->
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<!-- 创建activiti提供的各种服务 -->
+	<!-- 工作流仓储服务 -->
+	<bean id="repositoryService" factory-bean="processEngine"
+		factory-method="getRepositoryService" />
+	<!-- 工作流运行服务 -->
+	<bean id="runtimeService" factory-bean="processEngine"
+		factory-method="getRuntimeService" />
+	<!-- 工作流任务服务 -->
+	<bean id="taskService" factory-bean="processEngine"
+		factory-method="getTaskService" />
+	<!-- 工作流历史数据服务 -->
+	<bean id="historyService" factory-bean="processEngine"
+		factory-method="getHistoryService" />
+	<!-- 工作流管理服务 -->
+	<bean id="managementService" factory-bean="processEngine"
+		factory-method="getManagementService" />
+	<!-- 工作流唯一服务 -->
+	<bean id="identityService" factory-bean="processEngine"
+		factory-method="getIdentityService" />
+
+</beans>

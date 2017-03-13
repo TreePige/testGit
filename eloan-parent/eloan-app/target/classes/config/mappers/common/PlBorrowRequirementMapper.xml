@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_borrow_requirement表:借款需求信息模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PlBorrowRequirementDao">
+	<!--返回MAP-->		
+	<resultMap id="PlBorrowRequirementResult" type="PlBorrowRequirement">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="consult_id" property="consultId" />
+		<result column="customer_id" property="customerId" />
+		<result column="account" property="account" />
+		<result column="borrowing_time" property="borrowingTime" />
+		<result column="product_id" property="productId" />
+		<result column="repayment_type" property="repaymentType" />
+		<result column="repayment_rate" property="repaymentRate" />
+		<result column="time_limit" property="timeLimit" />
+		<result column="single_rate" property="singleRate" />
+		<result column="project_belongs" property="projectBelongs" />
+		<result column="financial_advisers" property="financialAdvisers" />
+		<result column="institution_name" property="institutionName" />
+		<result column="salesman" property="salesman" />
+		<result column="borrow_use" property="borrowUse" />
+		<result column="repayment_source" property="repaymentSource" />
+		<result column="remark" property="remark" />
+		<result column="phone_number" property="phoneNumber" />
+		<result column="mobile" property="mobile" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	process_instance_id,
+        	project_id,
+        	consult_id,
+        	customer_id,
+        	account,
+        	borrowing_time,
+        	product_id,
+        	repayment_type,
+        	repayment_rate,
+        	time_limit,
+        	single_rate,
+        	project_belongs,
+        	financial_advisers,
+        	institution_name,
+        	salesman,
+        	borrow_use,
+        	repayment_source,
+        	remark,
+        	phone_number,
+        	mobile			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="customerId !='' and customerId !=null">
+            	and customer_id = #{customerId}
+            </if>
+            <if test="account !='' and account !=null">
+            	and account = #{account}
+            </if>
+            <if test="borrowingTime !='' and borrowingTime !=null">
+            	and borrowing_time = #{borrowingTime}
+            </if>
+            <if test="productId !='' and productId !=null">
+            	and product_id = #{productId}
+            </if>
+            <if test="repaymentType !='' and repaymentType !=null">
+            	and repayment_type = #{repaymentType}
+            </if>
+            <if test="repaymentRate !='' and repaymentRate !=null">
+            	and repayment_rate = #{repaymentRate}
+            </if>
+            <if test="timeLimit !='' and timeLimit !=null">
+            	and time_limit = #{timeLimit}
+            </if>
+            <if test="singleRate !='' and singleRate !=null">
+            	and single_rate = #{singleRate}
+            </if>
+            <if test="projectBelongs !='' and projectBelongs !=null">
+            	and project_belongs = #{projectBelongs}
+            </if>
+            <if test="financialAdvisers !='' and financialAdvisers !=null">
+            	and financial_advisers = #{financialAdvisers}
+            </if>
+            <if test="institutionName !='' and institutionName !=null">
+            	and institution_name = #{institutionName}
+            </if>
+            <if test="salesman !='' and salesman !=null">
+            	and salesman = #{salesman}
+            </if>
+            <if test="borrowUse !='' and borrowUse !=null">
+            	and borrow_use = #{borrowUse}
+            </if>
+            <if test="repaymentSource !='' and repaymentSource !=null">
+            	and repayment_source = #{repaymentSource}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="phoneNumber !='' and phoneNumber !=null">
+            	and phone_number = #{phoneNumber}
+            </if>
+            <if test="mobile !='' and mobile !=null">
+            	and mobile = #{mobile}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="customerId!= null">		
+	    		customer_id = #{customerId},		
+	    	</if>
+	    	<if test="account!= null">		
+	    		account = #{account},		
+	    	</if>
+	    	<if test="borrowingTime!= null">		
+	    		borrowing_time = #{borrowingTime},		
+	    	</if>
+	    	<if test="productId!= null">		
+	    		product_id = #{productId},		
+	    	</if>
+	    	<if test="repaymentType!= null">		
+	    		repayment_type = #{repaymentType},		
+	    	</if>
+	    	<if test="repaymentRate!= null">		
+	    		repayment_rate = #{repaymentRate},		
+	    	</if>
+	    	<if test="timeLimit!= null">		
+	    		time_limit = #{timeLimit},		
+	    	</if>
+	    	<if test="singleRate!= null">		
+	    		single_rate = #{singleRate},		
+	    	</if>
+	    	<if test="projectBelongs!= null">		
+	    		project_belongs = #{projectBelongs},		
+	    	</if>
+	    	<if test="financialAdvisers!= null">		
+	    		financial_advisers = #{financialAdvisers},		
+	    	</if>
+	    	<if test="institutionName!= null">		
+	    		institution_name = #{institutionName},		
+	    	</if>
+	    	<if test="salesman!= null">		
+	    		salesman = #{salesman},		
+	    	</if>
+	    	<if test="borrowUse!= null">		
+	    		borrow_use = #{borrowUse},		
+	    	</if>
+	    	<if test="repaymentSource!= null">		
+	    		repayment_source = #{repaymentSource},		
+	    	</if>
+	    	<if test="remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="phoneNumber !=null">
+            	phone_number = #{phoneNumber},
+            </if>
+	    	<if test="mobile !=null">
+            	mobile = #{mobile},
+            </if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlBorrowRequirement">
+		insert into pl_borrow_requirement(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	process_instance_id,
+        	project_id,
+        	consult_id,
+        	customer_id,
+        	account,
+        	borrowing_time,
+        	product_id,
+        	repayment_type,
+        	repayment_rate,
+        	time_limit,
+        	single_rate,
+        	project_belongs,
+        	financial_advisers,
+        	institution_name,
+        	salesman,
+        	borrow_use,
+        	repayment_source,
+        	remark,
+        	phone_number,
+        	mobile			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{consultId},
+        	#{customerId},
+        	#{account},
+        	#{borrowingTime},
+        	#{productId},
+        	#{repaymentType},
+        	#{repaymentRate},
+        	#{timeLimit},
+        	#{singleRate},
+        	#{projectBelongs},
+        	#{financialAdvisers},
+        	#{institutionName},
+        	#{salesman},
+        	#{borrowUse},
+        	#{repaymentSource},
+        	#{remark},
+        	#{phoneNumber},
+        	#{mobile}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlBorrowRequirement">
+        update pl_borrow_requirement
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlBorrowRequirementResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_borrow_requirement
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getInfoByProcessInstanceId" resultMap="PlBorrowRequirementResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_borrow_requirement
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultType="java.util.HashMap" parameterType="java.lang.String" >
+		select 
+			requirement.id as id,
+        	requirement.process_instance_id as processInstanceId,
+        	requirement.project_id as projectId,
+        	requirement.consult_id as consultId,
+        	requirement.account as account,
+        	requirement.borrowing_time as borrowingTime,
+        	requirement.institution_name as institutionName,
+        	requirement.product_id as productId,
+        	pl_f.repayment_type as repaymentType,
+        	pl_f.time_limit as timeLimit,
+        	requirement.single_rate as singleRate,
+        	requirement.project_belongs as projectBelongs,
+        	requirement.financial_advisers as financialAdvisers,
+        	requirement.institution_name as institutionName,
+        	requirement.salesman as salesman,
+        	requirement.borrow_use as borrowUse,
+        	requirement.repayment_source as repaymentSource,
+        	requirement.remark as remark,
+        	requirement.phone_number as phoneNumber,
+        	requirement.mobile as mobile,
+        	pl_f.repayment_rate as repaymentRate
+		from pl_borrow_requirement requirement
+		INNER JOIN pl_feeinfo as pl_f on pl_f.process_instance_id = requirement.process_instance_id
+		where requirement.process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlBorrowRequirementResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_borrow_requirement
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_borrow_requirement
+        where
+        id  = #{id}
+    </delete>
+</mapper>

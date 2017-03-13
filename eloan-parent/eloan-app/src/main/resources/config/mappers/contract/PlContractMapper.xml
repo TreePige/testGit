@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_contract表:合同信息模块 -->
+<mapper namespace="com.rongdu.eloan.modules.contract.dao.PlContractDao">
+	<!--返回MAP-->		
+	<resultMap id="PlContractResult" type="PlContract">
+		<id column="id" property="id" />
+		<result column="consult_id" property="consultId" />
+		<result column="project_id" property="projectId" />
+		<result column="contract_no" property="contractNo" />
+		<result column="qdhtdata" property="qdhtdata" />
+		<result column="create_time" property="createTime" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="signature_time" property="signatureTime" />
+		<result column="borrow_start" property="borrowStart" />
+		<result column="borrow_end" property="borrowEnd" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="creator" property="creator" />
+		<result column="modifier" property="modifier" />
+		<result column="signature_address" property="signatureAddress" />
+		<result column="contract_account" property="contractAccount" />
+		<result column="service_fee" property="serviceFee" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			consult_id,
+			project_id,
+			contract_no,
+			qdhtdata,
+			create_time,
+			modify_time,
+			signature_time,
+			borrow_start,
+			borrow_end,
+			process_instance_id,
+			creator,
+			modifier,
+			signature_address,
+			contract_account,
+			service_fee,
+			status			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="contractNo !='' and contractNo !=null">
+            	and contract_no = #{contractNo}
+            </if>
+            <if test="qdhtdata !='' and qdhtdata !=null">
+            	and qdhtdata = #{qdhtdata}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time like concat('%', #createTime#, '%')
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="signatureTime !='' and signatureTime !=null">
+            	and signature_time = #{signatureTime}
+            </if>
+            <if test="borrowStart !='' and borrowStart !=null">
+            	and borrow_start = #{borrowStart}
+            </if>
+            <if test="borrowEnd !='' and borrowEnd !=null">
+            	and borrow_end = #{borrowEnd}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="signatureAddress !='' and signatureAddress !=null">
+            	and signature_address = #{signatureAddress}
+            </if>
+            <if test="contractAccount !='' and contractAccount !=null">
+            	and contract_account = #{contractAccount}
+            </if>
+            <if test="serviceFee !='' and serviceFee !=null">
+            	and service_fee = #{serviceFee}
+            </if>
+            <if test="status !='' and status !=null">
+            	and status = #{status}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="consultId != null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="projectId != null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="contractNo != null">		
+	    		contract_no = #{contractNo},		
+	    	</if>
+	    	<if test="qdhtdata != null">		
+	    		qdhtdata = #{qdhtdata},		
+	    	</if>
+	    	<if test="modifyTime != null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="signatureTime != null">		
+	    		signature_time = #{signatureTime},		
+	    	</if>
+	    	<if test="borrowStart != null">		
+	    		borrow_start = #{borrowStart},		
+	    	</if>
+	    	<if test="borrowEnd != null">		
+	    		borrow_end = #{borrowEnd},		
+	    	</if>
+	    	<if test="processInstanceId != null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="modifier != null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="signatureAddress != null">		
+	    		signature_address = #{signatureAddress},		
+	    	</if>
+	    	<if test="contractAccount != null">		
+	    		contract_account = #{contractAccount},		
+	    	</if>
+	    	<if test="serviceFee != null">		
+	    		service_fee = #{serviceFee},		
+	    	</if>
+	    	<if test="status != null">		
+	    		status = #{status},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlContract">
+		insert into pl_contract(
+        	consult_id,
+        	project_id,
+        	contract_no,
+        	qdhtdata,
+        	create_time,
+        	modify_time,
+        	signature_time,
+        	borrow_start,
+        	borrow_end,
+        	process_instance_id,
+        	creator,
+        	modifier,
+        	signature_address,
+        	contract_account,
+        	service_fee,
+        	status			
+        )values(
+        	#{consultId},
+        	#{projectId},
+        	#{contractNo},
+        	#{qdhtdata},
+        	#{createTime},
+        	#{modifyTime},
+        	#{signatureTime},
+        	#{borrowStart},
+        	#{borrowEnd},
+        	#{processInstanceId},
+        	#{creator},
+        	#{modifier},
+        	#{signatureAddress},
+        	#{contractAccount},
+        	#{serviceFee},
+        	#{status}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+    
+    <!-- 动态更新 -->
+    <update id="updateByMap" parameterType="java.util.HashMap">
+        update pl_contract
+        <include refid="updateByPo"/>
+        where process_instance_id = #{processInstanceId}
+    </update>
+    
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlContract">
+        update pl_contract
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlContractResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_contract
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PlContractResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_contract
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--查询-->
+	<select id="getItemByMap" resultMap="PlContractResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_contract
+		<include refid="searchByPo"/>	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlContractResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_contract
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_contract
+        where
+        id  = #{id}
+    </delete>
+</mapper>

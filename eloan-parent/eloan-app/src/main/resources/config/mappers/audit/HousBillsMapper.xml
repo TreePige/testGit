@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_bills表:放款单/打款单模块 -->
+<mapper namespace="com.rongdu.eloan.modules.audit.dao.HousBillsDao">
+	<!--返回MAP-->		
+	<resultMap id="HousBillsResult" type="HousBills">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="account_holder_name" property="accountHolderName" />
+		<result column="cardid" property="cardid" />
+		<result column="bank_flag" property="bankFlag" />
+		<result column="account" property="account" />
+		<result column="process_instance_id" property="processInstanceId"/>
+		<result column="type" property="type" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			account_holder_name,
+			cardid,
+			bank_flag,
+			account,
+			process_instance_id,
+			type			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="accountHolderName !='' and accountHolderName !=null">
+            	and account_holder_name = #{accountHolderName}
+            </if>
+            <if test="cardid !='' and cardid !=null">
+            	and cardid = #{cardid}
+            </if>
+            <if test="bankFlag !='' and bankFlag !=null">
+            	and bank_flag = #{bankFlag}
+            </if>
+            <if test="account !='' and account !=null">
+            	and account = #{account}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="type !='' and type !=null">
+            	and type = #{type}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="accountHolderName!= null">		
+	    		account_holder_name = #{accountHolderName},		
+	    	</if>
+	    	<if test="cardid!= null">		
+	    		cardid = #{cardid},		
+	    	</if>
+	    	<if test="bankFlag!= null">		
+	    		bank_flag = #{bankFlag},		
+	    	</if>
+	    	<if test="account!= null">		
+	    		account = #{account},		
+	    	</if>
+	    	<if test="processInstanceId != null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="type!= null">		
+	    		type = #{type},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousBills">
+		insert into hous_bills(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	account_holder_name,
+        	cardid,
+        	bank_flag,
+        	account,
+        	process_instance_id,
+        	type			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{accountHolderName},
+        	#{cardid},
+        	#{bankFlag},
+        	#{account},
+        	#{processInstanceId},
+        	#{type}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousBills">
+        update hous_bills
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousBillsResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_bills
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousBillsResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_bills
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousBillsResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_bills
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+	
+	<select id="getHousBillBasicInfo" resultType="java.util.HashMap" parameterType="string">
+		SELECT
+			pp.`code` as projectCode,
+			pc.`name` as customerName,
+			pb.account,
+			pb.time_limit as timeLimit,
+			hlc.receivable_account as receivableAccount,
+			hlc.collection_form as collectionForm,
+			pbr.single_rate as singleRate,
+			pro.repayment_rate as repaymentRate,
+			pbr.financial_advisers as financialAdvisers,
+			pbr.salesman,
+			pbr.institution_name as institutionName,
+			pbr.project_belongs as projectBelongs
+		FROM
+			pub_project pp
+		INNER JOIN pl_consult pc ON pc.project_id = pp.id
+		INNER JOIN pl_borrow pb ON pb.project_id = pp.id
+		INNER JOIN hous_lower_cost hlc ON hlc.project_id = pp.id
+		INNER JOIN pl_borrow_requirement pbr ON pbr.project_id = pp.id
+		INNER JOIN pl_product pro ON pro.id = pbr.product_id
+		where pc.process_instance_id = #{processInstanceId}
+	</select>
+	
+	<select id="getLoanInfo" resultType="java.util.HashMap" parameterType="string">
+		SELECT
+			pp.`code` AS projectCode,
+			pc.`name` AS customerName,
+			pp.project_name AS projectName,
+			hb.account AS lendAccount,
+			hb.cardId,
+			hb.bank_flag AS bankFlag,
+			hb.process_instance_id as processInstanceId
+		FROM
+			pub_project pp
+		INNER JOIN pl_consult pc ON pc.project_id = pp.id
+		INNER JOIN pl_borrow pb ON pb.project_id = pp.id
+		INNER JOIN hous_bills hb ON hb.process_instance_id = pb.process_instance_id
+		AND hb.type = 'lend'
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_bills
+        where
+        id  = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_feeinfo表:费用信息模块 -->
+<mapper namespace="com.rongdu.eloan.modules.common.dao.PlFeeinfoDao">
+	<!--返回MAP-->		
+	<resultMap id="PlFeeinfoResult" type="PlFeeinfo">
+		<id column="id" property="id" />
+		<result column="project_id" property="projectId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="consult_id" property="consultId" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="repayment_rate" property="repaymentRate" />
+		<result column="time_limit" property="timeLimit" />
+		<result column="repayment_type" property="repaymentType" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			project_id,
+			process_instance_id,
+			consult_id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			repayment_rate,
+			time_limit,
+			repayment_type			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="repaymentRate !='' and repaymentRate !=null">
+            	and repayment_rate = #{repaymentRate}
+            </if>
+            <if test="timeLimit !='' and timeLimit !=null">
+            	and time_limit = #{timeLimit}
+            </if>
+            <if test="repaymentType !='' and repaymentType !=null">
+            	and repayment_type = #{repaymentType}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="projectId != null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="processInstanceId != null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="consultId != null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="modifier != null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime != null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="repaymentRate != null">		
+	    		repayment_rate = #{repaymentRate},		
+	    	</if>
+	    	<if test="timeLimit != null">		
+	    		time_limit = #{timeLimit},		
+	    	</if>
+	    	<if test="repaymentType != null">		
+	    		repayment_type = #{repaymentType},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlFeeinfo">
+		insert into pl_feeinfo(
+        	project_id,
+        	process_instance_id,
+        	consult_id,
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	repayment_rate,
+        	time_limit,
+        	repayment_type			
+        )values(
+        	#{projectId},
+        	#{processInstanceId},
+        	#{consultId},
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{repaymentRate},
+        	#{timeLimit},
+        	#{repaymentType}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlFeeinfo">
+        update pl_feeinfo
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlFeeinfoResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_feeinfo
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PlFeeinfoResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_feeinfo
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlFeeinfoResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_feeinfo
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+	
+	<!--根据实例id查map-->
+	<select id="getItemMapByProcInsId" resultType="java.util.HashMap" parameterType="String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_feeinfo
+		where process_instance_id = #{processInstanceId}	
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_feeinfo
+        where
+        id  = #{id}
+    </delete>
+</mapper>

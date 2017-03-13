@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_product表:产品信息模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PlProductDao">
+	<!--返回MAP-->		
+	<resultMap id="PlProductResult" type="PlProduct">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="ptype" property="ptype" />
+		<result column="maxmlimit" property="maxmlimit" />
+		<result column="maxtlimit" property="maxtlimit" />
+		<result column="prepayment" property="prepayment" />
+		<result column="tminmlimit" property="tminmlimit" />
+		<result column="tmaxmlimit" property="tmaxmlimit" />
+		<result column="opendate" property="opendate" />
+		<result column="createtime" property="createtime" />
+		<result column="overdue_penalty_rate" property="overduePenaltyRate" />
+		<result column="repayment_rate" property="repaymentRate" />
+		<result column="repayment_default" property="repaymentDefault" />
+		<result column="isopen" property="isopen" />
+		<result column="is_delete" property="isDelete" />
+		<result column="office_ids" property="officeIds" />
+		<result column="overdue_period" property="overduePeriod" />
+		<result column="overdue_rate" property="overdueRate" />
+		<result column="remark" property="remark" />
+		<result column="period" property="period" />
+		<result column="three_prepayment" property="threePrepayment" />
+		<result column="six_prepayment" property="sixPrepayment" />
+		<result column="product_type" property="productType" />
+		<result column="margin_fee" property="marginFee" />
+		<result column="one_prepayment" property="onePrepayment" />
+		<result column="two_prepayment" property="twoPrepayment" />
+		<result column="four_prepayment" property="fourPrepayment" />
+		<result column="five_prepayment" property="fivePrepayment" />
+		<result column="repayment_type" property="repaymentType" />
+		<result column="delay" property="delay" />
+		<result column="carloan_type" property="carloanType" />
+		<result column="minmlimit" property="minmlimit" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			name,
+			ptype,
+			maxmlimit,
+			maxtlimit,
+			prepayment,
+			tminmlimit,
+			tmaxmlimit,
+			opendate,
+			createtime,
+			overdue_penalty_rate,
+			repayment_rate,
+			repayment_default,
+			isopen,
+			is_delete,
+			office_ids,
+			overdue_period,
+			overdue_rate,
+			remark,
+			period,
+			three_prepayment,
+			six_prepayment,
+			product_type,
+			margin_fee,
+			one_prepayment,
+			two_prepayment,
+			four_prepayment,
+			five_prepayment,
+			repayment_type,
+			delay,
+			carloan_type,
+			minmlimit			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="name !='' and name !=null">
+            	and name = #{name}
+            </if>
+            <if test="ptype !='' and ptype !=null">
+            	and ptype = #{ptype}
+            </if>
+            <if test="maxmlimit !='' and maxmlimit !=null">
+            	and maxmlimit = #{maxmlimit}
+            </if>
+            <if test="maxtlimit !='' and maxtlimit !=null">
+            	and maxtlimit = #{maxtlimit}
+            </if>
+            <if test="prepayment !='' and prepayment !=null">
+            	and prepayment = #{prepayment}
+            </if>
+            <if test="tminmlimit !='' and tminmlimit !=null">
+            	and tminmlimit = #{tminmlimit}
+            </if>
+            <if test="tmaxmlimit !='' and tmaxmlimit !=null">
+            	and tmaxmlimit = #{tmaxmlimit}
+            </if>
+            <if test="opendate !='' and opendate !=null">
+            	and opendate = #{opendate}
+            </if>
+            <if test="createtime !='' and createtime !=null">
+            	and createtime = #{createtime}
+            </if>
+            <if test="overduePenaltyRate !='' and overduePenaltyRate !=null">
+            	and overdue_penalty_rate = #{overduePenaltyRate}
+            </if>
+            <if test="repaymentRate !='' and repaymentRate !=null">
+            	and repayment_rate = #{repaymentRate}
+            </if>
+            <if test="repaymentDefault !='' and repaymentDefault !=null">
+            	and repayment_default = #{repaymentDefault}
+            </if>
+            <if test="isopen !='' and isopen !=null">
+            	and isopen = #{isopen}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="officeIds !='' and officeIds !=null">
+            	and office_ids = #{officeIds}
+            </if>
+            <if test="overduePeriod !='' and overduePeriod !=null">
+            	and overdue_period = #{overduePeriod}
+            </if>
+            <if test="overdueRate !='' and overdueRate !=null">
+            	and overdue_rate = #{overdueRate}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="period !='' and period !=null">
+            	and period = #{period}
+            </if>
+            <if test="threePrepayment !='' and threePrepayment !=null">
+            	and three_prepayment = #{threePrepayment}
+            </if>
+            <if test="sixPrepayment !='' and sixPrepayment !=null">
+            	and six_prepayment = #{sixPrepayment}
+            </if>
+            <if test="productType !='' and productType !=null">
+            	and product_type = #{productType}
+            </if>
+            <if test="marginFee !='' and marginFee !=null">
+            	and margin_fee = #{marginFee}
+            </if>
+            <if test="onePrepayment !='' and onePrepayment !=null">
+            	and one_prepayment = #{onePrepayment}
+            </if>
+            <if test="twoPrepayment !='' and twoPrepayment !=null">
+            	and two_prepayment = #{twoPrepayment}
+            </if>
+            <if test="fourPrepayment !='' and fourPrepayment !=null">
+            	and four_prepayment = #{fourPrepayment}
+            </if>
+            <if test="fivePrepayment !='' and fivePrepayment !=null">
+            	and five_prepayment = #{fivePrepayment}
+            </if>
+            <if test="repaymentType !='' and repaymentType !=null">
+            	and repayment_type = #{repaymentType}
+            </if>
+            <if test="delay !='' and delay !=null">
+            	and delay = #{delay}
+            </if>
+            <if test="carloanType !='' and carloanType !=null">
+            	and carloan_type = #{carloanType}
+            </if>
+            <if test="minmlimit !='' and minmlimit !=null">
+            	and minmlimit = #{minmlimit}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="name != null">		
+	    		name = #{name},		
+	    	</if>
+	    	<if test="ptype != null">		
+	    		ptype = #{ptype},		
+	    	</if>
+	    	<if test="maxmlimit != null">		
+	    		maxmlimit = #{maxmlimit},		
+	    	</if>
+	    	<if test="maxtlimit != null">		
+	    		maxtlimit = #{maxtlimit},		
+	    	</if>
+	    	<if test="prepayment != null">		
+	    		prepayment = #{prepayment},		
+	    	</if>
+	    	<if test="tminmlimit != null">		
+	    		tminmlimit = #{tminmlimit},		
+	    	</if>
+	    	<if test="tmaxmlimit != null">		
+	    		tmaxmlimit = #{tmaxmlimit},		
+	    	</if>
+	    	<if test="opendate != null">		
+	    		opendate = #{opendate},		
+	    	</if>
+	    	<if test="createtime != null">		
+	    		createtime = #{createtime},		
+	    	</if>
+	    	<if test="overduePenaltyRate != null">		
+	    		overdue_penalty_rate = #{overduePenaltyRate},		
+	    	</if>
+	    	<if test="repaymentRate != null">		
+	    		repayment_rate = #{repaymentRate},		
+	    	</if>
+	    	<if test="repaymentDefault != null">		
+	    		repayment_default = #{repaymentDefault},		
+	    	</if>
+	    	<if test="isopen != null">		
+	    		isopen = #{isopen},		
+	    	</if>
+	    	<if test="isDelete != null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="officeIds != null">		
+	    		office_ids = #{officeIds},		
+	    	</if>
+	    	<if test="overduePeriod != null">		
+	    		overdue_period = #{overduePeriod},		
+	    	</if>
+	    	<if test="overdueRate != null">		
+	    		overdue_rate = #{overdueRate},		
+	    	</if>
+	    	<if test="remark != null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="period != null">		
+	    		period = #{period},		
+	    	</if>
+	    	<if test="threePrepayment != null">		
+	    		three_prepayment = #{threePrepayment},		
+	    	</if>
+	    	<if test="sixPrepayment != null">		
+	    		six_prepayment = #{sixPrepayment},		
+	    	</if>
+	    	<if test="productType != null">		
+	    		product_type = #{productType},		
+	    	</if>
+	    	<if test="marginFee != null">		
+	    		margin_fee = #{marginFee},		
+	    	</if>
+	    	<if test="onePrepayment != null">		
+	    		one_prepayment = #{onePrepayment},		
+	    	</if>
+	    	<if test="twoPrepayment != null">		
+	    		two_prepayment = #{twoPrepayment},		
+	    	</if>
+	    	<if test="fourPrepayment != null">		
+	    		four_prepayment = #{fourPrepayment},		
+	    	</if>
+	    	<if test="fivePrepayment != null">		
+	    		five_prepayment = #{fivePrepayment},		
+	    	</if>
+	    	<if test="repaymentType != null">		
+	    		repayment_type = #{repaymentType},		
+	    	</if>
+	    	<if test="delay != null">		
+	    		delay = #{delay},		
+	    	</if>
+	    	<if test="carloanType != null">		
+	    		carloan_type = #{carloanType},		
+	    	</if>
+	    	<if test="minmlimit != null">		
+	    		minmlimit = #{minmlimit},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlProduct">
+		insert into pl_product(
+        	name,
+        	ptype,
+        	maxmlimit,
+        	maxtlimit,
+        	prepayment,
+        	tminmlimit,
+        	tmaxmlimit,
+        	opendate,
+        	createtime,
+        	overdue_penalty_rate,
+        	repayment_rate,
+        	repayment_default,
+        	isopen,
+        	is_delete,
+        	office_ids,
+        	overdue_period,
+        	overdue_rate,
+        	remark,
+        	period,
+        	three_prepayment,
+        	six_prepayment,
+        	product_type,
+        	margin_fee,
+        	one_prepayment,
+        	two_prepayment,
+        	four_prepayment,
+        	five_prepayment,
+        	repayment_type,
+        	delay,
+        	carloan_type,
+        	minmlimit			
+        )values(
+        	#{name},
+        	#{ptype},
+        	#{maxmlimit},
+        	#{maxtlimit},
+        	#{prepayment},
+        	#{tminmlimit},
+        	#{tmaxmlimit},
+        	#{opendate},
+        	#{createtime},
+        	#{overduePenaltyRate},
+        	#{repaymentRate},
+        	#{repaymentDefault},
+        	#{isopen},
+        	#{isDelete},
+        	#{officeIds},
+        	#{overduePeriod},
+        	#{overdueRate},
+        	#{remark},
+        	#{period},
+        	#{threePrepayment},
+        	#{sixPrepayment},
+        	#{productType},
+        	#{marginFee},
+        	#{onePrepayment},
+        	#{twoPrepayment},
+        	#{fourPrepayment},
+        	#{fivePrepayment},
+        	#{repaymentType},
+        	#{delay},
+        	#{carloanType},
+        	#{minmlimit}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlProduct">
+        update pl_product
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlProductResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_product
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PlProductResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_product
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--根据ID查询单条记录, 返回map-->
+	<select id="getItemMapById" parameterType="long" resultType="java.util.HashMap">
+        select
+        <include refid="searchSql" />
+        from pl_product
+        where
+            id = #{id}
+    </select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlProductResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_product
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_product
+        where
+        id  = #{id}
+    </delete>
+</mapper>

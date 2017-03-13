@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- PUB_ATTACHMENT表:附件模块 -->
+<mapper namespace="com.rongdu.eloan.modules.common.dao.PubAttachmentDao">
+	<!--返回MAP-->		
+	<resultMap id="PubAttachmentMap" type="pubAttachment">
+        <id column="id" property="id" />
+        <result column="state" property="state" />
+        <result column="create_time" property="createTime" />
+        <result column="file_name" property="fileName" />
+        <result column="newfile_name" property="newfileName" />
+        <result column="file_size" property="fileSize" />
+        <result column="file_path" property="filePath" />
+        <result column="signcod" property="signcod" />
+        <result column="operator_id" property="operatorId" />
+        <result column="btype" property="btype" />
+        <result column="atype" property="atype" />
+        <result column="consult_id" property="consultId" />
+        <result column="process_instance_id" property="processInstanceId" />
+        <result column="project_id" property="projectId" />
+	</resultMap>
+	
+	<!-- 动态查询 -->
+	<sql id="selectWhere">
+		<trim prefix="where" prefixOverrides="and|or">
+            <if test="id !='' and id !=null">
+                id = #{id}
+            </if>
+            <if test="state !='' and state !=null">
+                and state = #{state}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+                and create_time = #{createTime}
+            </if>
+            <if test="fileName !='' and fileName !=null">
+                and file_name like concat('',#{fileName}, '%')
+            </if>
+            <if test="newfileName !='' and newfileName !=null">
+                and newfile_name like concat('',#{newfileName}, '%')
+            </if>
+            <if test="fileSize !='' and fileSize !=null">
+                and file_size = #{fileSize}
+            </if>
+            <if test="filePath !='' and filePath !=null">
+                and file_path like concat('',#{filePath}, '%')
+            </if>
+            <if test="signcod !='' and signcod !=null">
+                and signcod = #{signcod}
+            </if>
+            <if test="operatorId !='' and operatorId !=null">
+                and operator_id = #{operatorId}
+            </if>
+            <if test="btype !='' and btype !=null">
+                and btype = #{btype}
+            </if>
+            <if test="atype !='' and atype !=null">
+                and atype = #{atype}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+                and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+                and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+                and project_id = #{projectId}
+            </if>
+		</trim>
+	</sql>
+	
+    <!-- 动态插入键 -->
+    <sql id="insertKey">
+        <trim suffixOverrides=",">
+            <if test="createTime !='' and createTime != null">		create_time,		</if>
+            <if test="state !='' and state != null">		state,		</if>
+            <if test="fileName !='' and fileName != null">		file_name,		</if>
+            <if test="newfileName !='' and newfileName != null">		newfile_name,		</if>
+            <if test="fileSize !='' and fileSize != null">		file_size,		</if>
+            <if test="filePath !='' and filePath != null">		file_path,		</if>
+            <if test="signcod !='' and signcod != null">		signcod,	</if>
+            <if test="operatorId !='' and operatorId != null">		operator_id,		</if>
+            <if test="btype !='' and btype != null">		btype,		</if>
+            <if test="atype !='' and atype != null">		atype,		</if>
+            <if test="consultId !='' and consultId != null">		consult_id,		</if>
+            <if test="processInstanceId !='' and processInstanceId != null">		process_instance_id,		</if>
+            <if test="projectId !='' and projectId != null">		project_id,		</if>
+        </trim> 
+    </sql>
+
+    <!-- 动态插入值 -->
+    <sql id="insertValue">
+        <trim suffixOverrides=",">
+            <if test="createTime !='' and createTime != null" >		#{createTime},		</if>
+            <if test="state !='' and state != null" >		#{state},		</if>
+            <if test="fileName !='' and fileName != null" >		#{fileName},		</if>
+            <if test="newfileName !='' and newfileName != null" >		#{newfileName},		</if>
+            <if test="fileSize !='' and fileSize != null" >		#{fileSize},		</if>
+            <if test="filePath !='' and filePath != null" >		#{filePath},		</if>
+            <if test="signcod !='' and signcod != null" >		#{signcod},		</if>
+            <if test="operatorId !='' and operatorId != null" >		#{operatorId},		</if>
+            <if test="btype !='' and btype != null" >		#{btype},		</if>
+            <if test="atype !='' and atype != null" >		#{atype},		</if>
+            <if test="consultId !='' and consultId != null" >		#{consultId},		</if>
+            <if test="processInstanceId !='' and processInstanceId != null" >		#{processInstanceId},		</if>
+            <if test="projectId !='' and projectId != null" >		#{projectId},		</if>
+        </trim>
+    </sql>
+    
+    <!-- 动态更新 -->
+    <sql id="update">
+       <trim prefix="set" suffixOverrides=",">
+            <if test="id != '' and id!= null">		id=#{id},		</if>
+            <if test="state != '' and state!= null">		state=#{state},		</if>
+            <if test="createTime != '' and createTime!= null">		create_time=#{createTime},		</if>
+            <if test="fileName != '' and fileName!= null">		file_name=#{fileName},		</if>
+            <if test="newfileName != '' and newfileName!= null">		newfile_name=#{newfileName},		</if>
+            <if test="fileSize != '' and fileSize!= null">		file_size=#{fileSize},		</if>
+            <if test="filePath != '' and filePath!= null">		file_path=#{filePath},		</if>
+            <if test="signcod != '' and signcod!= null">		signcod=#{signcod},		</if>
+            <if test="operatorId != '' and operatorId!= null">		operator_id=#{operatorId},		</if>
+            <if test="btype != '' and btype!= null">		btype=#{btype},		</if>
+            <if test="atype != '' and atype!= null">		atype=#{atype},		</if>
+            <if test="consultId != '' and consultId!= null">		consult_id=#{consultId},		</if>
+            <if test="processInstanceId != '' and processInstanceId!= null">		process_instance_id=#{processInstanceId},		</if>
+            <if test="projectId != '' and projectId!= null">		project_id=#{projectId},		</if>
+       </trim>
+    </sql>
+    
+    <!-- 动态排序 -->
+    <sql id="sort">
+        <if  test="sort != '' and sort != null">
+            order by ${sort}
+        </if >
+        <if test="rule != '' and rule != null">
+            ${rule}
+        </if>
+    </sql>
+    
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="pubAttachment">
+	    <!-- 重新返回给实体类,插入的id值 -->
+        <selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		insert into pub_attachment
+        (
+        <include refid="insertKey"/>
+        )values(
+        <include refid="insertValue"/>
+        )
+	</insert>
+
+    <!-- 动态更新 -->
+    <update id="update" parameterType="pubAttachment">
+        update pub_attachment
+        <include refid="update"/>
+        where id = #{id}
+    </update>
+
+    <!-- 动态查询 -->
+    <select id="select" parameterType="java.util.HashMap" resultMap="PubAttachmentMap">
+        select * from pub_attachment 
+        <include refid="selectWhere"/>
+        <include refid="sort"/>
+    </select>
+    <!-- 返回总数 -->
+    <select id="total" parameterType="pubAttachment" resultType="java.lang.Integer">
+        select count(*) from pub_attachment 
+        <include refid="selectWhere"/>
+        <include refid="sort"/>
+    </select>
+
+    <!--根据ID删除-->
+    <delete id="delete">
+        delete from pub_attachment
+        where
+        id  = #{id}
+    </delete>
+    
+    <select id="getByPrimary" resultMap="PubAttachmentMap">
+        SELECT * FROM pub_attachment WHERE id = #{id}
+    </select>
+</mapper> 

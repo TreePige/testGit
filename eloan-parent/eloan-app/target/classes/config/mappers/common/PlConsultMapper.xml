@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_consult表:咨询信息模块 -->
+<mapper namespace="com.rongdu.eloan.modules.common.dao.PlConsultDao">
+	<!--返回MAP-->		
+	<resultMap id="PlConsultResult" type="PlConsult">
+		<id column="id" property="id" />
+		<result column="product_id" property="productId" />
+		<result column="name" property="name" />
+		<result column="mobile" property="mobile" />
+		<result column="idcard" property="idcard" />
+		<result column="creator" property="creator" />
+		<result column="curuserid" property="curuserid" />
+		<result column="customer_manager" property="customerManager" />
+		<result column="create_time" property="createTime" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="status" property="status" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="project_id" property="projectId" />
+		<result column="remark" property="remark" />
+		<result column="extension_time" property="extensionTime" />
+		<result column="business_origin" property="businessOrigin" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			product_id,
+        	name,
+        	mobile,
+        	idcard,
+        	creator,
+        	curuserid,
+        	customer_manager,
+        	create_time,
+        	process_instance_id,
+        	status,
+        	modifier,
+        	modify_time,
+        	project_id,
+        	remark,
+        	extension_time,
+        	business_origin			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="productId !='' and productId !=null">
+            	and product_id = #{productId}
+            </if>
+            <if test="name !='' and name !=null">
+            	and name = #{name}
+            </if>
+            <if test="mobile !='' and mobile !=null">
+            	and mobile = #{mobile}
+            </if>
+            <if test="idcard !='' and idcard !=null">
+            	and idcard = #{idcard}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="curuserid !='' and curuserid !=null">
+            	and curuserid = #{curuserid}
+            </if>
+            <if test="customerManager !='' and customerManager !=null">
+            	and customer_manager = #{customerManager}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="status !='' and status !=null">
+            	and status = #{status}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="extensionTime !='' and extensionTime !=null">
+            	and extension_time = #{extensionTime}
+            </if>
+            <if test="businessOrigin !='' and businessOrigin !=null">
+            	and business_origin = #{businessOrigin}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="productId!= null">		
+	    		product_id = #{productId},		
+	    	</if>
+	    	<if test="name!= null">		
+	    		name = #{name},		
+	    	</if>
+	    	<if test="mobile!= null">		
+	    		mobile = #{mobile},		
+	    	</if>
+	    	<if test="idcard!= null">		
+	    		idcard = #{idcard},		
+	    	</if>
+	    	<if test="curuserid!= null">		
+	    		curuserid = #{curuserid},		
+	    	</if>
+	    	<if test="customerManager!= null">		
+	    		customer_manager = #{customerManager},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="status!= null">		
+	    		status = #{status},		
+	    	</if>
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="extensionTime!= null">		
+	    		extension_time = #{extensionTime},		
+	    	</if>
+	    	<if test="businessOrigin!= null">		
+	    		business_origin = #{businessOrigin},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlConsult">
+		insert into pl_consult(
+        	product_id,
+        	name,
+        	mobile,
+        	idcard,
+        	creator,
+        	curuserid,
+        	customer_manager,
+        	create_time,
+        	process_instance_id,
+        	status,
+        	modifier,
+        	modify_time,
+        	project_id,
+        	remark,
+        	extension_time,
+        	business_origin			
+        )values(
+        	#{productId},
+        	#{name},
+        	#{mobile},
+        	#{idcard},
+        	#{creator},
+        	#{curuserid},
+        	#{customerManager},
+        	#{createTime},
+        	#{processInstanceId},
+        	#{status},
+        	#{modifier},
+        	#{modifyTime},
+        	#{projectId},
+        	#{remark},
+        	#{extensionTime},
+        	#{businessOrigin}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlConsult">
+        update pl_consult
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlConsultResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_consult
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PlConsultResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_consult
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--根据projectId查询-->
+	<select id="getPlConsultByProjectId" resultMap="PlConsultResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_consult
+		where project_id = #{projectId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlConsultResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_consult
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_consult
+        where
+        id  = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.eloan.modules.common.dao.ApprovalCommentsDao">
+	<select id="getApprovalComment" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  		SELECT
+			pub_process.remark AS remarkComment,
+			pub_process.process_Instance_Id AS processInstanceId,
+			pub_process.creator AS creator,
+			pub_process.type AS type,
+			pub_process.receive_type AS receiveType,
+			pub_process.process_state AS processState,
+			pub_process.amount AS amountComment,
+			dict.item_value AS nextStep,
+			pub_process.type AS nextStepValue,
+			pub_process.product_id AS productIdComment,
+			pub_process.category AS rejectionCategoryComment,
+			reject.item_value AS rejectionCategoryCommentText,
+			su.`name` AS operatory,
+			pub_process.housing_value_faster as housingValueFaster,
+			pub_process.manual_assignee as manualAssignee
+		FROM pub_loanprocess AS pub_process
+		LEFT JOIN sys_dict_detail AS dict ON dict.parent_id = 40 AND pub_process.type = dict.item_code
+		LEFT JOIN sys_dict_detail AS reject ON pub_process.category = reject.id
+		LEFT JOIN ACT_HI_TASKINST aht ON aht.ID_ = pub_process.task_id
+		LEFT JOIN sys_user su ON su.user_name = aht.ASSIGNEE_
+		where  pub_process.id = (select max(process.id) as id from pub_loanprocess as process where 1 = 1
+ 		<if test="processInstanceId != null and processInstanceId != ''">
+			and process.process_Instance_Id = #{processInstanceId}
+		</if>
+ 		<if test="processState != null and processState != ''">
+			and process.process_state = #{processState}
+		</if>
+ 		<if test="taskId != null and taskId != ''">
+			and process.task_id = #{taskId}
+		</if>
+			)
+  	</select>
+</mapper>

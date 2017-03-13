@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_process_branching表:贷后信息模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PubProcessBranchingDao">
+	<!--返回MAP-->		
+	<resultMap id="PubProcessBranchingResult" type="PubProcessBranching">
+		<id column="id" property="id" />
+		<result column="branching_process_id" property="branchingProcessId" />
+		<result column="branching_process_type" property="branchingProcessType" />
+		<result column="processing_opinion" property="processingOpinion" />
+		<result column="task_id" property="taskId" />
+		<result column="processinstanceid" property="processinstanceid" />
+		<result column="default_situation" property="defaultSituation" />
+		<result column="remark1" property="remark1" />
+		<result column="remark2" property="remark2" />
+		<result column="make_repayment_time" property="makeRepaymentTime" />
+		<result column="repayment_process" property="repaymentProcess" />
+		<result column="process_period" property="processPeriod" />
+		<result column="other_amount" property="otherAmount" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="project_id" property="projectId" />
+		<result column="is_active" property="isActive" />
+		<result column="process_status" property="processStatus" />
+		<result column="capital_sum" property="capitalSum" />
+		<result column="interest_sum" property="interestSum" />
+		<result column="penalty_sum" property="penaltySum" />
+		<result column="defaultinterest_sum" property="defaultinterestSum" />
+		<result column="parkingfee_sum" property="parkingfeeSum" />
+		<result column="gpsusingfee_sum" property="gpsusingfeeSum" />
+		<result column="platformfee_sum" property="platformfeeSum" />
+		<result column="violations_total_amount" property="violationsTotalAmount" />
+		<result column="period" property="period" />
+		<result column="repay_capital_amount" property="repayCapitalAmount" />
+		<result column="extension_count" property="extensionCount" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			branching_process_id,
+			branching_process_type,
+			processing_opinion,
+			task_id,
+			processinstanceid,
+			default_situation,
+			remark1,
+			remark2,
+			make_repayment_time,
+			repayment_process,
+			process_period,
+			other_amount,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			project_id,
+			is_active,
+			process_status,
+			capital_sum,
+			interest_sum,
+			penalty_sum,
+			defaultinterest_sum,
+			parkingfee_sum,
+			gpsusingfee_sum,
+			platformfee_sum,
+			violations_total_amount,
+			period,
+			repay_capital_amount,
+			extension_count			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="branchingProcessId !='' and branchingProcessId !=null">
+            	and branching_process_id = #{branchingProcessId}
+            </if>
+            <if test="branchingProcessType !='' and branchingProcessType !=null">
+            	and branching_process_type = #{branchingProcessType}
+            </if>
+            <if test="processingOpinion !='' and processingOpinion !=null">
+            	and processing_opinion = #{processingOpinion}
+            </if>
+            <if test="taskId !='' and taskId !=null">
+            	and task_id = #{taskId}
+            </if>
+            <if test="processinstanceid !='' and processinstanceid !=null">
+            	and processinstanceid = #{processinstanceid}
+            </if>
+            <if test="defaultSituation !='' and defaultSituation !=null">
+            	and default_situation = #{defaultSituation}
+            </if>
+            <if test="remark1 !='' and remark1 !=null">
+            	and remark1 = #{remark1}
+            </if>
+            <if test="remark2 !='' and remark2 !=null">
+            	and remark2 = #{remark2}
+            </if>
+            <if test="makeRepaymentTime !='' and makeRepaymentTime !=null">
+            	and make_repayment_time = #{makeRepaymentTime}
+            </if>
+            <if test="repaymentProcess !='' and repaymentProcess !=null">
+            	and repayment_process = #{repaymentProcess}
+            </if>
+            <if test="processPeriod !='' and processPeriod !=null">
+            	and process_period = #{processPeriod}
+            </if>
+            <if test="otherAmount !='' and otherAmount !=null">
+            	and other_amount = #{otherAmount}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="isActive !='' and isActive !=null">
+            	and is_active = #{isActive}
+            </if>
+            <if test="processStatus !='' and processStatus !=null">
+            	and process_status = #{processStatus}
+            </if>
+            <if test="capitalSum !='' and capitalSum !=null">
+            	and capital_sum = #{capitalSum}
+            </if>
+            <if test="interestSum !='' and interestSum !=null">
+            	and interest_sum = #{interestSum}
+            </if>
+            <if test="penaltySum !='' and penaltySum !=null">
+            	and penalty_sum = #{penaltySum}
+            </if>
+            <if test="defaultinterestSum !='' and defaultinterestSum !=null">
+            	and defaultinterest_sum = #{defaultinterestSum}
+            </if>
+            <if test="parkingfeeSum !='' and parkingfeeSum !=null">
+            	and parkingfee_sum = #{parkingfeeSum}
+            </if>
+            <if test="gpsusingfeeSum !='' and gpsusingfeeSum !=null">
+            	and gpsusingfee_sum = #{gpsusingfeeSum}
+            </if>
+            <if test="platformfeeSum !='' and platformfeeSum !=null">
+            	and platformfee_sum = #{platformfeeSum}
+            </if>
+            <if test="violationsTotalAmount !='' and violationsTotalAmount !=null">
+            	and violations_total_amount = #{violationsTotalAmount}
+            </if>
+            <if test="period !='' and period !=null">
+            	and period = #{period}
+            </if>
+            <if test="repayCapitalAmount !='' and repayCapitalAmount !=null">
+            	and repay_capital_amount = #{repayCapitalAmount}
+            </if>
+            <if test="extensionCount !='' and extensionCount !=null">
+            	and extension_count = #{extensionCount}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="branchingProcessId!= null">		
+	    		branching_process_id = #{branchingProcessId},		
+	    	</if>
+	    	<if test="branchingProcessType!= null">		
+	    		branching_process_type = #{branchingProcessType},		
+	    	</if>
+	    	<if test="processingOpinion!= null">		
+	    		processing_opinion = #{processingOpinion},		
+	    	</if>
+	    	<if test="taskId!= null">		
+	    		task_id = #{taskId},		
+	    	</if>
+	    	<if test="processinstanceid!= null">		
+	    		processinstanceid = #{processinstanceid},		
+	    	</if>
+	    	<if test="defaultSituation!= null">		
+	    		default_situation = #{defaultSituation},		
+	    	</if>
+	    	<if test="remark1!= null">		
+	    		remark1 = #{remark1},		
+	    	</if>
+	    	<if test="remark2!= null">		
+	    		remark2 = #{remark2},		
+	    	</if>
+	    	<if test="makeRepaymentTime!= null">		
+	    		make_repayment_time = #{makeRepaymentTime},		
+	    	</if>
+	    	<if test="repaymentProcess!= null">		
+	    		repayment_process = #{repaymentProcess},		
+	    	</if>
+	    	<if test="processPeriod!= null">		
+	    		process_period = #{processPeriod},		
+	    	</if>
+	    	<if test="otherAmount!= null">		
+	    		other_amount = #{otherAmount},		
+	    	</if>
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="isActive!= null">		
+	    		is_active = #{isActive},		
+	    	</if>
+	    	<if test="processStatus!= null">		
+	    		process_status = #{processStatus},		
+	    	</if>
+	    	<if test="capitalSum!= null">		
+	    		capital_sum = #{capitalSum},		
+	    	</if>
+	    	<if test="interestSum!= null">		
+	    		interest_sum = #{interestSum},		
+	    	</if>
+	    	<if test="penaltySum!= null">		
+	    		penalty_sum = #{penaltySum},		
+	    	</if>
+	    	<if test="defaultinterestSum!= null">		
+	    		defaultinterest_sum = #{defaultinterestSum},		
+	    	</if>
+	    	<if test="parkingfeeSum!= null">		
+	    		parkingfee_sum = #{parkingfeeSum},		
+	    	</if>
+	    	<if test="gpsusingfeeSum!= null">		
+	    		gpsusingfee_sum = #{gpsusingfeeSum},		
+	    	</if>
+	    	<if test="platformfeeSum!= null">		
+	    		platformfee_sum = #{platformfeeSum},		
+	    	</if>
+	    	<if test="violationsTotalAmount!= null">		
+	    		violations_total_amount = #{violationsTotalAmount},		
+	    	</if>
+	    	<if test="period!= null">		
+	    		period = #{period},		
+	    	</if>
+	    	<if test="repayCapitalAmount!= null">		
+	    		repay_capital_amount = #{repayCapitalAmount},		
+	    	</if>
+	    	<if test="extensionCount!= null">		
+	    		extension_count = #{extensionCount},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubProcessBranching">
+		insert into pub_process_branching(
+        	branching_process_id,
+        	branching_process_type,
+        	processing_opinion,
+        	task_id,
+        	processinstanceid,
+        	default_situation,
+        	remark1,
+        	remark2,
+        	make_repayment_time,
+        	repayment_process,
+        	process_period,
+        	other_amount,
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	project_id,
+        	is_active,
+        	process_status,
+        	capital_sum,
+        	interest_sum,
+        	penalty_sum,
+        	defaultinterest_sum,
+        	parkingfee_sum,
+        	gpsusingfee_sum,
+        	platformfee_sum,
+        	violations_total_amount,
+        	period,
+        	repay_capital_amount,
+        	extension_count			
+        )values(
+        	#{branchingProcessId},
+        	#{branchingProcessType},
+        	#{processingOpinion},
+        	#{taskId},
+        	#{processinstanceid},
+        	#{defaultSituation},
+        	#{remark1},
+        	#{remark2},
+        	#{makeRepaymentTime},
+        	#{repaymentProcess},
+        	#{processPeriod},
+        	#{otherAmount},
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{projectId},
+        	#{isActive},
+        	#{processStatus},
+        	#{capitalSum},
+        	#{interestSum},
+        	#{penaltySum},
+        	#{defaultinterestSum},
+        	#{parkingfeeSum},
+        	#{gpsusingfeeSum},
+        	#{platformfeeSum},
+        	#{violationsTotalAmount},
+        	#{period},
+        	#{repayCapitalAmount},
+        	#{extensionCount}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="updatePubProcessBranchingById" parameterType="java.util.HashMap">
+        update pub_process_branching
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+    
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubProcessBranching">
+        update pub_process_branching
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubProcessBranchingResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_process_branching
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubProcessBranchingResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_process_branching
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--根据条件查询-->
+	<select id="getItemByMap" resultMap="PubProcessBranchingResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_process_branching
+		<include refid="searchByPo"/>	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubProcessBranchingResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_process_branching
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_process_branching
+        where
+        id  = #{id}
+    </delete>
+</mapper>

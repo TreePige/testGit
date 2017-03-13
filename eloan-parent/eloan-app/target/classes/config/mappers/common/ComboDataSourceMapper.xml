@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.eloan.modules.common.dao.ComboDataSourceDao">
+	
+	<select id="queryDic" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+		dicDetail.item_code		value,
+		dicDetail.item_value	text
+		from
+		sys_dict_detail dicDetail
+		join sys_dict dic on dic.id=dicDetail.parent_id
+		<if test="typeCode != null and typeCode != ''">
+			and dic.type_code = #{typeCode}
+		</if>
+	</select>
+	
+	<select id="getAllProductSimpleInfos" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			name 	text,
+			id		value
+		from pl_product product
+		where
+		is_delete=0 and isopen=1
+		<if test="officeId != null and officeId != ''">
+			and find_in_set(#{officeId},office_ids)
+		</if>
+		<if test="ptype != null and ptype != ''">
+			and product.ptype = #{ptype}
+		</if>
+	</select>
+	
+	<select id="queryProductAbout" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+			p.name				name,
+			p.period			timeLimit,
+			p.repayment_rate 	repaymentRate,
+			dd.item_code		repaymentTypeValue,
+			dd.item_code      	repaymentType,
+			dd.item_value		repaymentTypeText
+		from pl_product p
+		LEFT JOIN (sys_dict d,sys_dict_detail dd) ON (dd.parent_id = d.id AND dd.item_code = p.repayment_type)
+		where
+		p.is_delete = 0 and d.type_code = 'REPAYMENT_TYPE'
+		<if test="productId != null and productId != ''">
+			and p.id = #{productId}
+		</if>
+	</select>
+</mapper>

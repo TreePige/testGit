@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pl_bankcard表:放款银行信息模块 -->
+<mapper namespace="com.rongdu.eloan.modules.contract.dao.PlBankcardDao">
+	<!--返回MAP-->		
+	<resultMap id="PlBankcardResult" type="PlBankcard">
+		<id column="id" property="id" />
+		<result column="bank_flag" property="bankFlag" />
+		<result column="bank_card_id" property="bankCardId" />
+		<result column="bank_area" property="bankArea" />
+		<result column="status" property="status" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="account_name" property="accountName" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			bank_flag,
+			bank_card_id,
+			bank_area,
+			status,
+			process_instance_id,
+			account_name			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="bankFlag !='' and bankFlag !=null">
+            	and bank_flag = #{bankFlag}
+            </if>
+            <if test="bankCardId !='' and bankCardId !=null">
+            	and bank_card_id = #{bankCardId}
+            </if>
+            <if test="bankArea !='' and bankArea !=null">
+            	and bank_area = #{bankArea}
+            </if>
+            <if test="status !='' and status !=null">
+            	and status = #{status}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="accountName !='' and accountName !=null">
+            	and account_name = #{accountName}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="bankFlag != null">		
+	    		bank_flag = #{bankFlag},		
+	    	</if>
+	    	<if test="bankCardId != null">		
+	    		bank_card_id = #{bankCardId},		
+	    	</if>
+	    	<if test="bankArea != null">		
+	    		bank_area = #{bankArea},		
+	    	</if>
+	    	<if test="status != null">		
+	    		status = #{status},		
+	    	</if>
+	    	<if test="processInstanceId != null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="accountName != null">		
+	    		account_name = #{accountName},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PlBankcard">
+		insert into pl_bankcard(
+        	bank_flag,
+        	bank_card_id,
+        	bank_area,
+        	status,
+        	process_instance_id,
+        	account_name			
+        )values(
+        	#{bankFlag},
+        	#{bankCardId},
+        	#{bankArea},
+        	#{status},
+        	#{processInstanceId},
+        	#{accountName}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="updateByMap" parameterType="java.util.HashMap">
+        update pl_bankcard
+        <include refid="updateByPo"/>
+        where process_instance_id = #{processInstanceId}
+    </update>
+    
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PlBankcard">
+        update pl_bankcard
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PlBankcardResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pl_bankcard
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PlBankcardResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pl_bankcard
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--查询-->
+	<select id="getItemByMap" resultMap="PlBankcardResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_bankcard
+		<include refid="searchByPo"/>	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PlBankcardResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pl_bankcard
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pl_bankcard
+        where
+        id  = #{id}
+    </delete>
+</mapper>

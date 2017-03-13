@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_face_trial表:面审信息表模块 -->
+<mapper namespace="com.rongdu.eloan.modules.audit.dao.HousFaceTrialDao">
+	<!--返回MAP-->		
+	<resultMap id="HousFaceTrialResult" type="HousFaceTrial">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="property_address_id" property="propertyAddressId" />
+		<result column="property_address" property="propertyAddress" />
+		<result column="property_certificate" property="propertyCertificate" />
+		<result column="property_properties" property="propertyProperties" />
+		<result column="affordable_room_time" property="affordableRoomTime" />
+		<result column="purchase_invoices_time" property="purchaseInvoicesTime" />
+		<result column="property_listed_proof" property="propertyListedProof" />
+		<result column="planning_purposes" property="planningPurposes" />
+		<result column="key_disk_query" property="keyDiskQuery" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			consult_id,
+			process_instance_id,
+			project_id,
+			property_address_id,
+			property_address,
+			property_certificate,
+			property_properties,
+			affordable_room_time,
+			purchase_invoices_time,
+			property_listed_proof,
+			planning_purposes,
+			key_disk_query			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="propertyAddressId !='' and propertyAddressId !=null">
+            	and property_address_id = #{propertyAddressId}
+            </if>
+            <if test="propertyAddress !='' and propertyAddress !=null">
+            	and property_address = #{propertyAddress}
+            </if>
+            <if test="propertyCertificate !='' and propertyCertificate !=null">
+            	and property_certificate = #{propertyCertificate}
+            </if>
+            <if test="propertyProperties !='' and propertyProperties !=null">
+            	and property_properties = #{propertyProperties}
+            </if>
+            <if test="affordableRoomTime !='' and affordableRoomTime !=null">
+            	and affordable_room_time = #{affordableRoomTime}
+            </if>
+            <if test="purchaseInvoicesTime !='' and purchaseInvoicesTime !=null">
+            	and purchase_invoices_time = #{purchaseInvoicesTime}
+            </if>
+            <if test="propertyListedProof !='' and propertyListedProof !=null">
+            	and property_listed_proof = #{propertyListedProof}
+            </if>
+            <if test="planningPurposes !='' and planningPurposes !=null">
+            	and planning_purposes = #{planningPurposes}
+            </if>
+            <if test="keyDiskQuery !='' and keyDiskQuery !=null">
+            	and key_disk_query = #{keyDiskQuery}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="propertyAddressId!= null">		
+	    		property_address_id = #{propertyAddressId},		
+	    	</if>
+	    	<if test="propertyAddress!= null">		
+	    		property_address = #{propertyAddress},		
+	    	</if>
+	    	<if test="propertyCertificate!= null">		
+	    		property_certificate = #{propertyCertificate},		
+	    	</if>
+	    	<if test="propertyProperties!= null">		
+	    		property_properties = #{propertyProperties},		
+	    	</if>
+	    	<if test="affordableRoomTime!= null">		
+	    		affordable_room_time = #{affordableRoomTime},		
+	    	</if>
+	    	<if test="purchaseInvoicesTime!= null">		
+	    		purchase_invoices_time = #{purchaseInvoicesTime},		
+	    	</if>
+	    	<if test="propertyListedProof!= null">		
+	    		property_listed_proof = #{propertyListedProof},		
+	    	</if>
+	    	<if test="planningPurposes!= null">		
+	    		planning_purposes = #{planningPurposes},		
+	    	</if>
+	    	<if test="keyDiskQuery!= null">		
+	    		key_disk_query = #{keyDiskQuery},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousFaceTrial">
+		insert into hous_face_trial(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	property_address_id,
+        	property_address,
+        	property_certificate,
+        	property_properties,
+        	affordable_room_time,
+        	purchase_invoices_time,
+        	property_listed_proof,
+        	planning_purposes,
+        	key_disk_query			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{propertyAddressId},
+        	#{propertyAddress},
+        	#{propertyCertificate},
+        	#{propertyProperties},
+        	#{affordableRoomTime},
+        	#{purchaseInvoicesTime},
+        	#{propertyListedProof},
+        	#{planningPurposes},
+        	#{keyDiskQuery}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousFaceTrial">
+        update hous_face_trial
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousFaceTrialResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_face_trial
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousFaceTrialResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_face_trial
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousFaceTrialResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_face_trial
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_face_trial
+        where
+        id  = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_notarization_registration表:公证登记模块 -->
+<mapper namespace="com.rongdu.eloan.modules.notary.workflow.dao.NotaryTaskDao">
+
+
+<!-- 查询公证登记信息 -->
+	<sql id="notaryRegistSelectSql">
+	task.ID_ as taskId,
+	task.TASK_DEF_KEY_ as processStateCode,
+	task.PROC_INST_ID_  processInstanceId,
+	pp.id projectId,
+	pp.code projectCode,
+	pp.project_name as projectName,
+	pc.name as customerName,
+	pb.account,
+	pb.time_limit as timeLimit,
+	pc.id consultId,
+	pc.customer_manager as customerManager,
+	task.ASSIGNEE_ as assignee
+	</sql>
+	
+	<sql id="notaryRegistJoinSql">
+	INNER JOIN pub_project_process ppp on task.PROC_INST_ID_=ppp.process_instance_id
+	INNER JOIN pub_project pp on ppp.project_id=pp.id
+	INNER JOIN pl_consult pc on pc.project_id=ppp.project_id
+	INNER JOIN pl_borrow pb  on  ppp.project_id=pb.project_id
+	INNER JOIN sys_role sr on sr.nid = task.DESCRIPTION_
+	INNER JOIN sys_user su ON su.user_name = task.ASSIGNEE_
+	INNER JOIN sys_dict_detail as sdd on sdd.item_code = pc.status
+	</sql>
+	
+	<sql id="notaryRegistWhereSql">
+					<if test="projectCode !='' and projectCode!=null">
+                        pp.code  like CONCAT('%','${projectCode}','%') 
+                    </if>
+                    <if test="projectName !='' and projectName !=null">
+                    and    pp.project_name like CONCAT('%','${projectName}','%') 
+                    </if>
+                    <if test="customerName !='' and customerName !=null">
+                     and   pc.name like  CONCAT('%','${customerName}','%') 
+                    </if>
+                    <if test="customerManager!='' and customerManager !=null">
+                     and   pc.customer_manager  like CONCAT('%','${customerManager}','%') 
+                    </if>
+                    <if test="flowStatus !='' and flowStatus !=null">
+	                AND pc.status = #{flowStatus}
+	        		</if>
+	
+	</sql>
+	
+	<sql id="baseRoleAndOfficeSql">
+       <if test="userName !=null or roleId !=null or coverdOffices != null" >
+	         and ((
+		        <if test="userName !='' and userName !=null">
+		                 task.ASSIGNEE_ = #{userName}
+		        </if>
+		        <if test="roleId !='' and roleId !=null">
+		                AND sr.id = #{roleId}
+		        </if>
+	        	)
+	            or su.office_id IN
+		        <foreach item="item" index="index" collection="coverdOffices"
+			      open="(" separator="," close=")">
+			        #{item}
+			 	</foreach>
+		 	)
+		 </if>
+		 <if test="taskDefinition != '' and taskDefinition != null">
+           and task.TASK_DEF_KEY_ = #{taskDefinition}
+       </if>
+         <if test="isCompleted == true ">
+	                AND task.END_TIME_ is not null
+	     </if>
+    </sql>
+	
+	<!-- 查询公证登记信息 -->
+	 <select id="getUnDoneRegistListByMap" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+	select 
+	<include refid="notaryRegistSelectSql" />
+	,task.CREATE_TIME_ as createTime
+	from  ACT_RU_TASK task 
+	<include refid="notaryRegistJoinSql" />
+	<trim prefix="where" prefixOverrides="and|or">
+	<include refid="notaryRegistWhereSql" />
+	<include refid="baseRoleAndOfficeSql"/>
+	 </trim>
+	order by task.CREATE_TIME_
+    </select>
+    
+	 <select id="getDoneRegistListByMap" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+	select 
+	<include refid="notaryRegistSelectSql" />
+	,task.START_TIME_ as startTime
+	,task.END_TIME_ as endTime
+	from  ACT_HI_TASKINST task 
+	<include refid="notaryRegistJoinSql" />
+	<trim prefix="where" prefixOverrides="and|or">
+	<include refid="notaryRegistWhereSql" />
+	 <if test="processStatus!='' and processStatus !=null">
+                    and  pc.status=#{processStatus}
+                    </if>
+      <include refid="baseRoleAndOfficeSql"/>              
+     </trim>
+     order by task.END_TIME_ desc               
+    </select>
+</mapper>

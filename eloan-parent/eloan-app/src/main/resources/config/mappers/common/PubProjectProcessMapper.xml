@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_project_process表:项目流程关联模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PubProjectProcessDao">
+	<!--返回MAP-->		
+	<resultMap id="PubProjectProcessResult" type="PubProjectProcess">
+		<id column="id" property="id" />
+		<result column="project_id" property="projectId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="extension_number" property="extensionNumber" />
+		<result column="process_type" property="processType" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			project_id,
+        	process_instance_id,
+        	extension_number,
+        	process_type			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="extensionNumber !='' and extensionNumber !=null">
+            	and extension_number = #{extensionNumber}
+            </if>
+            <if test="processType !='' and processType !=null">
+            	and process_type = #{processType}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="extensionNumber!= null">		
+	    		extension_number = #{extensionNumber},		
+	    	</if>
+	    	<if test="processType!= null">		
+	    		process_type = #{processType},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubProjectProcess">
+		insert into pub_project_process(
+        	project_id,
+        	process_instance_id,
+        	extension_number,
+        	process_type			
+        )values(
+        	#{projectId},
+        	#{processInstanceId},
+        	#{extensionNumber},
+        	#{processType}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubProjectProcess">
+        update pub_project_process
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubProjectProcessResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_project_process
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubProjectProcessResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_project_process
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubProjectProcessResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_project_process
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_project_process
+        where
+        id  = #{id}
+    </delete>
+    
+   <!--根据流程ID查询记录 added by wu-->
+ 	<select id="getItemByProcessInstanceId" parameterType="long" resultMap="PubProjectProcessResult">
+		select
+        <include refid="searchSql"/>
+		from pub_project_process
+		where
+			process_instance_id = #{processInstanceId}
+	</select>
+	<!-- 根据项目id查询流程信息-用于分支流程 -->
+	<select id="getProjectProcessByProjectId" parameterType="long" resultMap="PubProjectProcessResult">
+		select
+        	id,
+			project_id,
+			process_instance_id,
+			process_type,
+			MAX(extension_number) as extension_number	
+		from pub_project_process ppp 
+		where
+			ppp.project_id = #{projectId}
+		GROUP BY ppp.project_id
+	</select>
+</mapper>

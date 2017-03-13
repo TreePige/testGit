@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_rebate表:返佣模块 -->
+<mapper namespace="com.rongdu.eloan.modules.rebate.dao.RebateManageDao">
+	<!--返回MAP-->		
+	<resultMap id="HousRebateResult" type="HousRebate">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="rebate_points" property="rebatePoints" />
+		<result column="rebate_amount" property="rebateAmount" />
+		<result column="rebate_deadline" property="rebateDeadline" />
+		<result column="rebate_card" property="rebateCard" />
+		<result column="bank_name" property="bankName" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			consult_id,
+			process_instance_id,
+			project_id,
+			rebate_points,
+			rebate_amount,
+			rebate_deadline,
+			rebate_card,
+			bank_name			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="rebatePoints !='' and rebatePoints !=null">
+            	and rebate_points = #{rebatePoints}
+            </if>
+            <if test="rebateAmount !='' and rebateAmount !=null">
+            	and rebate_amount = #{rebateAmount}
+            </if>
+            <if test="rebateDeadline !='' and rebateDeadline !=null">
+            	and rebate_deadline = #{rebateDeadline}
+            </if>
+            <if test="rebateCard !='' and rebateCard !=null">
+            	and rebate_card = #{rebateCard}
+            </if>
+            <if test="bankName !='' and bankName !=null">
+            	and bank_name = #{bankName}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier != null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime != null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete != null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId != null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId != null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId != null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="rebatePoints != null">		
+	    		rebate_points = #{rebatePoints},		
+	    	</if>
+	    	<if test="rebateAmount != null">		
+	    		rebate_amount = #{rebateAmount},		
+	    	</if>
+	    	<if test="rebateDeadline != null">		
+	    		rebate_deadline = #{rebateDeadline},		
+	    	</if>
+	    	<if test="rebateCard != null">		
+	    		rebate_card = #{rebateCard},		
+	    	</if>
+	    	<if test="bankName != null">		
+	    		bank_name = #{bankName},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousRebate">
+		insert into hous_rebate(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	rebate_points,
+        	rebate_amount,
+        	rebate_deadline,
+        	rebate_card,
+        	bank_name			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{rebatePoints},
+        	#{rebateAmount},
+        	#{rebateDeadline},
+        	#{rebateCard},
+        	#{bankName}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousRebate">
+        update hous_rebate
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousRebateResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_rebate
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getHousRebateByInstanceId" resultMap="HousRebateResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_rebate
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousRebateResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_rebate
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_rebate
+        where
+        id  = #{id}
+    </delete>
+    
+    <!-- 基本信息 -->
+    <select id="getAuditBasicDataByInstanceId" parameterType="java.lang.String" resultType="java.util.HashMap">
+    SELECT
+    pp.code,
+	pp.project_name as projectName,
+	pc.id consultId,
+	pc.name customerName,
+	pb.account,
+	pb.time_limit as timeLimit,
+	pr.period,
+	pr.repayment_time  repaymentTime,
+	pr.realpayment_time realpaymentTime,
+	pr.account needAccount,
+	pr.real_account realAccount
+	
+	FROM  pl_borrow pb
+	INNER JOIN	pub_repaymentdetail pr ON pb.id=pr.borrow_id
+	INNER JOIN pub_project pp ON pp.id=pb.project_id
+	INNER JOIN pl_consult pc ON pc.project_id=pp.id
+	
+	WHERE (pr.real_account !=NULL or pr.real_account !='0')
+	AND processInstanceId=#{processInstanceId}
+    
+    </select>
+    <!-- 返佣审核信息 -->
+     <select id="getRebateAuditDataByInstanceId" parameterType="java.lang.String" resultType="java.util.HashMap">
+     SELECT
+	pc.business_origin  businessOrigin,
+	pbr.financial_advisers financialAdvisers,
+	pbr.institution_name  institutionName,
+	pbr.salesman,
+	hr.rebate_points rebatePoints,
+	hr.rebate_amount rebateAmount,
+	hr.rebate_deadline rebateDeadline,
+	hr.rebate_card rebateCard,
+	hr.bank_name  bankName
+	
+	FROM  pl_borrow_requirement pbr
+	INNER JOIN pub_project pp on pp.id=pbr.project_id
+	INNER JOIN pub_project_process ppp on pbr.project_id=ppp.project_id
+	INNER JOIN pl_consult pc ON pc.project_id=pp.id
+	LEFT JOIN hous_rebate hr  on  hr.project_id=pp.id
+	WHERE  ppp.process_instance_id=#{processInstanceId}
+    </select>
+    
+    
+</mapper>

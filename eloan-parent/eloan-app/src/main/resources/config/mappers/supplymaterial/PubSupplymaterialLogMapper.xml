@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_supplymaterial_log表:补充资料模块 -->
+<mapper namespace="com.rongdu.eloan.modules.supplymaterial.dao.PubSupplymaterialLogDao">
+	<!--返回MAP-->		
+	<resultMap id="PubSupplymaterialLogResult" type="PubSupplymaterialLog">
+		<id column="id" property="id" />
+		<result column="supplymaterial_id" property="supplymaterialId" />
+		<result column="operator_id" property="operatorId" />
+		<result column="create_time" property="createTime" />
+		<result column="operate_type" property="operateType" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			supplymaterial_id,
+			operator_id,
+			create_time,
+			operate_type			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="supplymaterialId !='' and supplymaterialId !=null">
+            	and supplymaterial_id = #{supplymaterialId}
+            </if>
+            <if test="operatorId !='' and operatorId !=null">
+            	and operator_id = #{operatorId}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="operateType !='' and operateType !=null">
+            	and operate_type = #{operateType}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="supplymaterialId!= null">		
+	    		supplymaterial_id = #{supplymaterialId},		
+	    	</if>
+	    	<if test="operatorId!= null">		
+	    		operator_id = #{operatorId},		
+	    	</if>
+	    	<if test="operateType!= null">		
+	    		operate_type = #{operateType},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubSupplymaterialLog">
+		insert into pub_supplymaterial_log(
+        	supplymaterial_id,
+        	operator_id,
+        	create_time,
+        	operate_type			
+        )values(
+        	#{supplymaterialId},
+        	#{operatorId},
+        	#{createTime},
+        	#{operateType}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubSupplymaterialLog">
+        update pub_supplymaterial_log
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubSupplymaterialLogResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_supplymaterial_log
+		where id = #{id}	
+	</select>
+	
+	<select id="getItemList" resultType="PubSupplymaterialLog" parameterType="java.util.HashMap" >
+		select 
+			id,
+			supplymaterial_id as supplymaterialId,
+			operator_id as operatorId,
+			suser.name as operatorName,
+			create_time as createTime,
+			operate_type as operateType
+		from pub_supplymaterial_log smlog
+		left join sys_user suser on smlog.operator_id = suser.id
+		where supplymaterialId = #{supplymaterialId}
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubSupplymaterialLogResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_supplymaterial_log
+		where process_instance_id = #{processInstanceId}
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubSupplymaterialLogResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_supplymaterial_log
+		<include refid="searchByPo"/>
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_supplymaterial_log
+        where
+        id  = #{id}
+    </delete>
+</mapper>

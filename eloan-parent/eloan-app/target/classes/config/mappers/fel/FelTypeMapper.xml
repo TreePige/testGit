@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fel_type表:公式配置,类型模块模块 -->
+<mapper namespace="com.rongdu.eloan.modules.fel.dao.FelTypeDao">
+	<!--返回MAP-->		
+	<resultMap id="felTypeResult" type="felType">
+		<id column="id" property="id" />
+		<result column="chinese_name" property="chineseName" />
+		<result column="english_name" property="englishName" />
+		<result column="create_date" property="createDate" />
+		<result column="create_name" property="createName" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="modify_name" property="modifyName" />
+		<result column="state" property="state" />
+		<result column="delete_state" property="deleteState" />
+	</resultMap>
+
+	<sql id="searchSql">
+     	id,
+		chinese_name,
+		english_name,
+		create_date,
+		create_name,
+		modify_date,
+		modify_name,
+		state,
+		delete_state
+	</sql>
+	
+	<!-- 动态查询 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+             <if test="id!=null and id!='' ">
+                 id = #{id}
+             </if>
+             <if test="chineseName!=null and chineseName!='' ">
+             	and chinese_name = #{chineseName}
+             </if>
+             <if test="englishName!=null and englishName!='' ">
+             	and english_name = #{englishName}
+             </if>
+             <if test="createDate!=null and createDate!='' ">
+             	and create_date = #{createDate}
+             </if>
+             <if test="createName!=null and createName!='' ">
+             	and create_name = #{createName}
+             </if>
+             <if test="modifyDate!=null and modifyDate!='' ">
+             	and modify_date = #{modifyDate}
+             </if>
+             <if test="modifyName!=null and modifyName!='' ">
+             	and modify_name = #{modifyName}
+             </if>
+             <if test="state!=null and state!='' ">
+             	and state = #{state}
+             </if>
+             <if test="deleteState!=null and deleteState!='' ">
+             	and delete_state = #{deleteState}
+             </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+        <trim prefix="set" suffixOverrides=",">
+            <if test="modifyDate!=null and modifyDate!='' ">
+            	modify_date = #{modifyDate},
+            </if>
+            <if test="chineseName!=null and chineseName!='' ">
+            	chinese_name = #{chineseName},
+            </if>
+            <if test="englishName!=null and englishName!='' ">
+            	english_name = #{englishName},
+            </if>
+            <if test="modifyName!=null and modifyName!='' ">
+            	modify_name = #{modifyName},
+            </if>
+            <if test="state!=null and state!='' ">
+            	state = #{state},
+            </if>
+            <if test="deleteState!=null and deleteState!='' ">
+            	delete_state = #{deleteState},
+            </if>
+        </trim>
+    </sql>
+
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="felType">
+		insert into fel_type(
+	        id,
+			chinese_name,
+			english_name,
+			create_date,
+			create_name,
+			modify_date,
+			modify_name,
+			state,
+			delete_state
+        )values(
+        	#{id},
+			#{chineseName},
+			#{englishName},
+			#{createDate},
+			#{createName},
+			#{modifyDate},
+			#{modifyName},
+			#{state},
+			#{deleteState}
+        )
+        <selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+    <!-- 动态更新 -->
+    <update id="update" parameterType="Feltype">
+        update fel_type
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+    
+    <!-- 动态查询 -->
+    <select id="getListByMap" parameterType="java.util.HashMap" resultMap="felTypeResult">
+        select * from fel_type 
+        <include refid="searchByPo"/>
+        order by id asc
+    </select>
+    
+    <!-- 动态查询 -->
+    <select id="getPageListByMap" parameterType="java.util.HashMap" resultMap="felTypeResult">
+        select * from fel_type 
+        <include refid="searchByPo"/>
+        order by id asc
+    </select>
+    
+    <!-- 返回总数 -->
+    <select id="getPageCountByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from fel_type 
+        <include refid="searchByPo"/>
+    </select>
+
+    <!--根据ID删除-->
+    <delete id="delete" parameterType="int">
+        delete from fel_type
+        where
+        id  = #{id}
+    </delete>
+    
+    <!-- 查询公式类型-->
+    <select id="SelectFeltype" parameterType="felType" resultMap="felTypeResult">
+    	select * from fel_type 
+        <include refid="searchByPo"/>
+    </select>
+    
+    <select id="selectByEnName" parameterType="String" resultMap="felTypeResult">
+   		 select * from fel_type 
+        where english_name = #{enName}
+    </select>
+</mapper>

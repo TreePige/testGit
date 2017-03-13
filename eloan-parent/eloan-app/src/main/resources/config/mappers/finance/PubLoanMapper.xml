@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_loan表:放款模块 -->
+<mapper namespace="com.rongdu.eloan.modules.finance.dao.PubLoanDao">
+	<!--返回MAP-->		
+	<resultMap id="PubLoanResult" type="PubLoan">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="account" property="account" />
+		<result column="bank_flag" property="bankFlag" />
+		<result column="bank_account" property="bankAccount" />
+		<result column="operator" property="operator" />
+		<result column="remark" property="remark" />
+		<result column="processinstanceid" property="processinstanceid" />
+		<result column="loan_time" property="loanTime" />
+		<result column="project_id" property="projectId" />
+		<result column="customer_name" property="customerName" />
+		<result column="customer_bank_card" property="customerBankCard" />
+		<result column="customer_id" property="customerId" />
+		<result column="customer_bank" property="customerBank" />
+		<result column="customer_obank" property="customerObank" />
+		<result column="type" property="type" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			account,
+			bank_flag,
+			bank_account,
+			operator,
+			remark,
+			processinstanceid,
+			loan_time,
+			project_id,
+			customer_name,
+			customer_bank_card,
+			customer_id,
+			customer_bank,
+			customer_obank,
+			type			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="account !='' and account !=null">
+            	and account = #{account}
+            </if>
+            <if test="bankFlag !='' and bankFlag !=null">
+            	and bank_flag = #{bankFlag}
+            </if>
+            <if test="bankAccount !='' and bankAccount !=null">
+            	and bank_account = #{bankAccount}
+            </if>
+            <if test="operator !='' and operator !=null">
+            	and operator = #{operator}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+            <if test="processinstanceid !='' and processinstanceid !=null">
+            	and processinstanceid = #{processinstanceid}
+            </if>
+            <if test="loanTime !='' and loanTime !=null">
+            	and loan_time = #{loanTime}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="customerName !='' and customerName !=null">
+            	and customer_name = #{customerName}
+            </if>
+            <if test="customerBankCard !='' and customerBankCard !=null">
+            	and customer_bank_card = #{customerBankCard}
+            </if>
+            <if test="customerId !='' and customerId !=null">
+            	and customer_id = #{customerId}
+            </if>
+            <if test="customerBank !='' and customerBank !=null">
+            	and customer_bank = #{customerBank}
+            </if>
+            <if test="customerObank !='' and customerObank !=null">
+            	and customer_obank = #{customerObank}
+            </if>
+            <if test="type !='' and type !=null">
+            	and type = #{type}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="account!= null">		
+	    		account = #{account},		
+	    	</if>
+	    	<if test="bankFlag!= null">		
+	    		bank_flag = #{bankFlag},		
+	    	</if>
+	    	<if test="bankAccount!= null">		
+	    		bank_account = #{bankAccount},		
+	    	</if>
+	    	<if test="operator!= null">		
+	    		operator = #{operator},		
+	    	</if>
+	    	<if test="remark!= null">		
+	    		remark = #{remark},		
+	    	</if>
+	    	<if test="processinstanceid!= null">		
+	    		processinstanceid = #{processinstanceid},		
+	    	</if>
+	    	<if test="loanTime!= null">		
+	    		loan_time = #{loanTime},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="customerName!= null">		
+	    		customer_name = #{customerName},		
+	    	</if>
+	    	<if test="customerBankCard!= null">		
+	    		customer_bank_card = #{customerBankCard},		
+	    	</if>
+	    	<if test="customerId!= null">		
+	    		customer_id = #{customerId},		
+	    	</if>
+	    	<if test="customerBank!= null">		
+	    		customer_bank = #{customerBank},		
+	    	</if>
+	    	<if test="customerObank!= null">		
+	    		customer_obank = #{customerObank},		
+	    	</if>
+	    	<if test="type!= null">		
+	    		type = #{type},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubLoan">
+		insert into pub_loan(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	account,
+        	bank_flag,
+        	bank_account,
+        	operator,
+        	remark,
+        	processinstanceid,
+        	loan_time,
+        	project_id,
+        	customer_name,
+        	customer_bank_card,
+        	customer_id,
+        	customer_bank,
+        	customer_obank,
+        	type			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{account},
+        	#{bankFlag},
+        	#{bankAccount},
+        	#{operator},
+        	#{remark},
+        	#{processinstanceid},
+        	#{loanTime},
+        	#{projectId},
+        	#{customerName},
+        	#{customerBankCard},
+        	#{customerId},
+        	#{customerBank},
+        	#{customerObank},
+        	#{type}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubLoan">
+        update pub_loan
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubLoanResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_loan
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubLoanResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_loan
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubLoanResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_loan
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_loan
+        where
+        id  = #{id}
+    </delete>
+</mapper>

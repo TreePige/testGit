@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.eloan.modules.workflow.dao.RDZZTaskDao">
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="baseContractTaskSelectSql">
+		task.ID_ as taskId,
+		pl_cc.id as consultId,
+		project.id as projectId,
+		project.`code` as projectCode,
+		project.project_name AS projectName,
+		pl_b.account as account,
+		pl_b.time_limit as timeLimit,
+		process.process_instance_id as processInstanceId, 
+		task.TASK_DEF_KEY_ as processStateCode,
+		sdd.item_value as currentProcessStateCode,
+		pl_cc.name as customerName,
+  		assignee.name as executor,
+  		pl_cc.business_origin as businessOrigin,
+		manager.name as customerManager
+	</sql>
+	
+	<sql id="baseContractJoinSql">
+		INNER JOIN pub_project_process as process on process.process_instance_id=task.PROC_INST_ID_ and process.process_type='0'
+		INNER JOIN pub_project as project on project.id=process.project_id
+		INNER JOIN pl_consult as pl_cc ON pl_cc.process_instance_id=process.process_instance_id
+		INNER JOIN pl_borrow as pl_b ON pl_b.process_instance_id=process.process_instance_id
+		INNER JOIN sys_role r on r.nid = task.DESCRIPTION_
+		INNER JOIN sys_dict_detail as sdd on sdd.item_code = pl_cc.`status`
+		INNER JOIN sys_user as assignee ON assignee.user_name = task.ASSIGNEE_
+		INNER JOIN sys_user as manager ON manager.id = pl_cc.customer_manager
+	</sql>
+	
+	<!-- 待处理 基本的sql查询字段-->
+	<sql id="undoneBaseContractSelectSql">
+		<include refid="baseContractTaskSelectSql" />
+		,task.CREATE_TIME_ as startTime
+	</sql>
+	
+	<!-- 已处理 基本的sql查询字段-->
+	<sql id="doneBaseContractSelectSql">
+		<include refid="baseContractTaskSelectSql" />
+		,task.START_TIME_ as startTime
+		,task.END_TIME_ as endTime
+	</sql>
+	
+	<!--基本的动态过滤sql-->
+	<sql id="baseContractDynamicQuerySql">
+		<where>
+			<if test="projectCode !='' and projectCode !=null">
+				and project.code = #{projectCode} 
+	        </if>
+	        <if test="projectName !='' and projectName !=null">
+	            and project.project_name like concat('',#{projectName}, '%')
+	        </if>
+	        <if test="customerName !='' and customerName !=null">
+	            and pl_cc.name like concat('',#{customerName}, '%')
+	        </if>
+	        <if test="customerManager !='' and customerManager !=null">
+	            and manager.name like concat('',#{customerManager}, '%')
+	        </if>
+	        <if test="currentProcessStateCode !='' and currentProcessStateCode !=null">
+	            and pl_cc.`STATUS` = #{currentProcessStateCode}
+	        </if>
+	        <if test="taskDefinition != '' and taskDefinition != null">
+	           and task.TASK_DEF_KEY_ = #{taskDefinition}
+	        </if>
+	        <if test="userName !=null or roleId !=null or coverdOffices != null" >
+		         and ((
+			        <if test="userName !='' and userName !=null">
+			                 task.ASSIGNEE_ = #{userName}
+			        </if>
+			        <if test="roleId !='' and roleId !=null">
+			                AND r.id = #{roleId}
+			        </if>
+		        	)
+		            or assignee.office_id IN
+			        <foreach item="coverdOffices" collection="coverdOffices" open="(" separator="," close=")">
+				        ${coverdOffices}
+				 	</foreach>
+			 	)
+			 </if>
+		</where>
+	</sql>
+	
+	<select id="queryUndoContractTasks" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+			<include refid="undoneBaseContractSelectSql"/>
+		from
+			ACT_RU_TASK task
+		<include refid="baseContractJoinSql"/>
+		<include refid="baseContractDynamicQuerySql"/>
+		order by task.CREATE_TIME_
+	</select>
+	
+	<select id="queryDoneContractTasks" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+			<include refid="doneBaseContractSelectSql"/>
+		from
+			ACT_HI_TASKINST task
+		<include refid="baseContractJoinSql"/>
+		<include refid="baseContractDynamicQuerySql"/>
+		order by task.END_TIME_ desc
+	</select>
+
+</mapper>

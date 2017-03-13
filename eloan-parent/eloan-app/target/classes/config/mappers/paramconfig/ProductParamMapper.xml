@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- PRODUCT_PARAM表:产品类型表模块 -->
+<mapper namespace="com.rongdu.eloan.modules.paramconfig.dao.ProductParamDao">
+    <!--xml内部引用别名-->
+	<!--返回MAP-->		
+	<!--返回MAP-->		
+	<resultMap id="ProductParamMap" type="ProductParam">
+			<id column="id" property="id" />
+			<result column="name" property="name" />
+			<result column="product_type" property="productType" />
+			<result column="ptype" property="ptype" />
+			<result column="repayment_type" property="repaymentType" />
+			<result column="delay" property="delay" />
+			<result column="ahead_repay_rate" property="aheadRepayRate" />
+			<result column="overdue_day_rate" property="overdueDayRate" />
+			<result column="bottom_month_rate" property="bottomMonthRate" />
+			<result column="office_ids" property="officeIds" />
+			<result column="creator" property="creator" />
+			<result column="create_date" property="createDate" />
+			<result column="modifier" property="modifier" />
+			<result column="modify_date" property="modifyDate" />
+			<result column="is_delete" property="isDelete" />
+			<result column="remark" property="remark" />
+			<result column="is_run" property="isRun" />
+	</resultMap>
+	
+	<!-- 动态查询 -->
+	<sql id="Select">
+		<trim prefix="where" prefixOverrides="and|or">
+					<if test="id !='' and id !=null">
+                        id in (${id})
+                    </if>
+		            <if test="name !='' and name !=null">
+		            	and NAME like CONCAT('%','${name}','%')  
+		            </if>
+		            <if test="productType !='' and productType !=null">
+		            	and PRODUCT_TYPE = #{productType}
+		            </if>
+		            <if test="ptype !='' and ptype !=null">
+		            	and PTYPE = #{ptype}
+		            </if>
+		            <if test="repaymentType !='' and repaymentType !=null">
+		            	and repayment_type = #{repaymentType}
+		            </if>
+		            <if test="delay !='' and delay !=null">
+		            	and delay = #{delay}
+		            </if>
+		            <if test="aheadRepayRate !='' and aheadRepayRate !=null">
+		            	and ahead_repay_rate = #{aheadRepayRate}
+		            </if>
+		            <if test="overdueDayRate !='' and overdueDayRate !=null">
+		            	and overdue_day_rate = #{overdueDayRate}
+		            </if>
+		            <if test="bottomMonthRate !='' and bottomMonthRate !=null">
+		            	and bottom_month_rate = #{bottomMonthRate}
+		            </if>
+		            <if test="officeIds !='' and officeIds !=null">
+		            	and office_ids like CONCAT('%','${officeIds}','%')  
+		            </if>
+		            <if test="creator !='' and creator !=null">
+		            	and creator = #{creator}
+		            </if>
+		            <if test="createDate !=null">
+		            	and create_date = #{createDate}
+		            </if>
+		            <if test="modifier !='' and modifier !=null">
+		            	and modifier = #{modifier}
+		            </if>
+		            <if test="modifyDate !=null">
+		            	and modify_date = #{modifyDate}
+		            </if>
+		            <if test="isDelete !='' and isDelete !=null">
+		            	and is_delete = #{isDelete}
+		            </if>
+		            <if test="remark !='' and remark !=null">
+		            	and remark = #{remark}
+		            </if>
+		            <if test="isRun !='' and isRun !=null">
+		            	and is_run = #{isRun}
+		            </if>
+		</trim>
+	</sql>
+	
+    <!-- 动态插入键 -->
+     <!-- 动态插入键 -->
+    <sql id="InsertKey">
+                   <if test="name !='' and name != null">		name		</if>
+                   <if test="productType !='' and productType != null">		,product_type		</if>
+                   <if test="ptype !='' and ptype != null">		,ptype		</if>
+                   <if test="repaymentType !='' and repaymentType != null">		,repayment_type		</if>
+                   <if test="delay !='' and delay != null">		,delay		</if>
+                   <if test="aheadRepayRate !='' and aheadRepayRate != null">		,ahead_repay_rate		</if>
+                   <if test="overdueDayRate !='' and overdueDayRate != null">		,overdue_day_rate		</if>
+                   <if test="bottomMonthRate !='' and bottomMonthRate != null">		,bottom_month_rate		</if>
+                   <if test="officeIds !='' and officeIds != null">		,office_ids		</if>
+                   <if test="creator !='' and creator != null">		,creator		</if>
+                   <if test="createDate != null">		,create_date		</if>
+                   <if test="modifier !='' and modifier != null">		,modifier		</if>
+                   <if test="modifyDate != null">		,modify_date		</if>
+                   <if test="isDelete !='' and isDelete != null">		,is_delete		</if>
+                   <if test="remark !='' and remark != null">		,remark		</if>
+                   <if test="isRun !='' and isRun != null">		,is_run		</if>
+    </sql>
+    
+    <!-- 动态插入值 -->
+    <sql id="InsertValue">
+                   <if test="name !='' and name != null" >		#{name}		</if>
+                   <if test="productType !='' and productType != null" >		,#{productType}		</if>
+                   <if test="ptype !='' and ptype != null" >		,#{ptype}		</if>
+                   <if test="repaymentType !='' and repaymentType != null" >		,#{repaymentType}		</if>
+                   <if test="delay !='' and delay != null" >		,#{delay}		</if>
+                   <if test="aheadRepayRate !='' and aheadRepayRate != null" >		,#{aheadRepayRate}		</if>
+                   <if test="overdueDayRate !='' and overdueDayRate != null" >		,#{overdueDayRate}		</if>
+                   <if test="bottomMonthRate !='' and bottomMonthRate != null" >		,#{bottomMonthRate}		</if>
+                   <if test="officeIds !='' and officeIds != null" >		,#{officeIds}		</if>
+                   <if test="creator !='' and creator != null" >		,#{creator}		</if>
+                   <if test="createDate != null" >		,#{createDate}		</if>
+                   <if test="modifier !='' and modifier != null" >		,#{modifier}		</if>
+                   <if test="modifyDate != null" >		,#{modifyDate}		</if>
+                   <if test="isDelete !='' and isDelete != null" >		,#{isDelete}		</if>
+                   <if test="remark !='' and remark != null" >		,#{remark}		</if>
+                   <if test="isRun !='' and isRun != null" >		,#{isRun}		</if>
+    </sql>
+    
+    <!-- 动态更新 -->
+    <sql id="Update">
+       <trim prefix="set" suffixOverrides=",">
+				<if test="id != '' and id!= null">		 id=#{id}		</if>
+            	<if test="name != '' and name!= null">		,name=#{name}		</if>
+            	<if test="productType != '' and productType!= null">		,product_type=#{productType}		</if>
+            	<if test="ptype != '' and ptype!= null">		,ptype=#{ptype}		</if>
+            	<if test="repaymentType != '' and repaymentType!= null">		,repayment_type=#{repaymentType}		</if>
+            	<if test="delay != '' and delay!= null">		,delay=#{delay}		</if>
+            	<if test="aheadRepayRate != '' and aheadRepayRate!= null">		,ahead_repay_rate=#{aheadRepayRate}		</if>
+            	<if test="overdueDayRate != '' and overdueDayRate!= null">		,overdue_day_rate=#{overdueDayRate}		</if>
+            	<if test="bottomMonthRate != '' and bottomMonthRate!= null">		,bottom_month_rate=#{bottomMonthRate}		</if>
+            	<if test="officeIds != '' and officeIds!= null">		,office_ids=#{officeIds}		</if>
+            	<if test="creator != '' and creator!= null">		,creator=#{creator}		</if>
+            	<if test="createDate!= null">		,create_date=#{createDate}		</if>
+            	<if test="modifier != '' and modifier!= null">		,modifier=#{modifier}		</if>
+            	<if test="modifyDate!= null">		,modify_date=#{modifyDate}		</if>
+            	<if test="isDelete != '' and isDelete!= null">		,is_delete=#{isDelete}		</if>
+            	<if test="remark != '' and remark!= null">		,remark=#{remark}		</if>
+            	<if test="isRun != '' and isRun!= null">		,is_run=#{isRun}		</if>
+       </trim>
+    </sql>
+    
+    <!-- 动态排序 -->
+    <sql id="Sort">
+        <if  test="fields != '' and fields != null">
+            order by ${fields}
+        </if >
+        <if test="rule != '' and rule != null">
+            ${rule}
+        </if>
+    </sql>
+    
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="ProductParam">
+		insert into product_param
+        (
+        <include refid="InsertKey"/>
+        )values(
+        <include refid="InsertValue"/>
+        )
+
+     <!-- 重新返回给实体类,插入的id值 -->
+    	<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+	</insert>
+
+    <!-- 动态更新 -->
+    <update id="update" parameterType="ProductParam">
+        update product_param
+        <include refid="Update"/>
+        where id = #{id}
+    </update>
+
+    <!-- 动态查询 -->
+    <select id="select" parameterType="java.util.HashMap" resultMap="ProductParamMap">
+        select * from product_param 
+        <include refid="Select"/>
+        <include refid="Sort"/>
+    </select>
+    <!-- 返回总数 -->
+    <select id="total" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from product_param 
+        <include refid="Select"/>
+        <include refid="Sort"/>
+    </select>
+
+    <!--根据ID删除-->
+    <delete id="delete">
+        delete from product_param
+        where
+        id  = #{id}
+    </delete>
+    
+    <select id="getProductById" parameterType="long" resultMap="ProductParamMap">
+     select * from product_param
+     where id=#{id}
+     
+    </select>
+    <select id="getOfficeCombo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    
+    select id as value ,name as text
+    from sys_office where is_delete='0'
+    
+    </select>
+</mapper> 

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_control_information表:风控信息表(面审)模块 -->
+<mapper namespace="com.rongdu.eloan.modules.audit.dao.HousControlInformationDao">
+	<!--返回MAP-->		
+	<resultMap id="HousControlInformationResult" type="HousControlInformation">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="name_identification_consistent" property="nameIdentificationConsistent" />
+		<result column="affiliates_number" property="affiliatesNumber" />
+		<result column="follow_enterprises_category" property="followEnterprisesCategory" />
+		<result column="is_executed" property="isExecuted" />
+		<result column="items" property="items" />
+		<result column="money" property="money" />
+		<result column="concluded" property="concluded" />
+		<result column="occupied_channel" property="occupiedChannel" />
+		<result column="maximum_mortgage" property="maximumMortgage" />
+		<result column="judicial_inquiry" property="judicialInquiry" />
+		<result column="arrived_nature" property="arrivedNature" />
+		<result column="against_bank_name" property="againstBankName" />
+		<result column="arrived_amount" property="arrivedAmount" />
+		<result column="arrived_rates" property="arrivedRates" />
+		<result column="assessed_value" property="assessedValue" />
+		<result column="fast_bid" property="fastBid" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			consult_id,
+			process_instance_id,
+			project_id,
+			name_identification_consistent,
+			affiliates_number,
+			follow_enterprises_category,
+			is_executed,
+			items,
+			money,
+			concluded,
+			occupied_channel,
+			maximum_mortgage,
+			judicial_inquiry,
+			arrived_nature,
+			against_bank_name,
+			arrived_amount,
+			arrived_rates,
+			assessed_value,
+			fast_bid			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="nameIdentificationConsistent !='' and nameIdentificationConsistent !=null">
+            	and name_identification_consistent = #{nameIdentificationConsistent}
+            </if>
+            <if test="affiliatesNumber !='' and affiliatesNumber !=null">
+            	and affiliates_number = #{affiliatesNumber}
+            </if>
+            <if test="followEnterprisesCategory !='' and followEnterprisesCategory !=null">
+            	and follow_enterprises_category = #{followEnterprisesCategory}
+            </if>
+            <if test="isExecuted !='' and isExecuted !=null">
+            	and is_executed = #{isExecuted}
+            </if>
+            <if test="items !='' and items !=null">
+            	and items = #{items}
+            </if>
+            <if test="money !='' and money !=null">
+            	and money = #{money}
+            </if>
+            <if test="concluded !='' and concluded !=null">
+            	and concluded = #{concluded}
+            </if>
+            <if test="occupiedChannel !='' and occupiedChannel !=null">
+            	and occupied_channel = #{occupiedChannel}
+            </if>
+            <if test="maximumMortgage !='' and maximumMortgage !=null">
+            	and maximum_mortgage = #{maximumMortgage}
+            </if>
+            <if test="judicialInquiry !='' and judicialInquiry !=null">
+            	and judicial_inquiry = #{judicialInquiry}
+            </if>
+            <if test="arrivedNature !='' and arrivedNature !=null">
+            	and arrived_nature = #{arrivedNature}
+            </if>
+            <if test="againstBankName !='' and againstBankName !=null">
+            	and against_bank_name = #{againstBankName}
+            </if>
+            <if test="arrivedAmount !='' and arrivedAmount !=null">
+            	and arrived_amount = #{arrivedAmount}
+            </if>
+            <if test="arrivedRates !='' and arrivedRates !=null">
+            	and arrived_rates = #{arrivedRates}
+            </if>
+            <if test="assessedValue !='' and assessedValue !=null">
+            	and assessed_value = #{assessedValue}
+            </if>
+            <if test="fastBid !='' and fastBid !=null">
+            	and fast_bid = #{fastBid}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="nameIdentificationConsistent!= null">		
+	    		name_identification_consistent = #{nameIdentificationConsistent},		
+	    	</if>
+	    	<if test="affiliatesNumber!= null">		
+	    		affiliates_number = #{affiliatesNumber},		
+	    	</if>
+	    	<if test="followEnterprisesCategory!= null">		
+	    		follow_enterprises_category = #{followEnterprisesCategory},		
+	    	</if>
+	    	<if test="isExecuted!= null">		
+	    		is_executed = #{isExecuted},		
+	    	</if>
+	    	<if test="items!= null">		
+	    		items = #{items},		
+	    	</if>
+	    	<if test="money!= null">		
+	    		money = #{money},		
+	    	</if>
+	    	<if test="concluded!= null">		
+	    		concluded = #{concluded},		
+	    	</if>
+	    	<if test="occupiedChannel!= null">		
+	    		occupied_channel = #{occupiedChannel},		
+	    	</if>
+	    	<if test="maximumMortgage!= null">		
+	    		maximum_mortgage = #{maximumMortgage},		
+	    	</if>
+	    	<if test="judicialInquiry!= null">		
+	    		judicial_inquiry = #{judicialInquiry},		
+	    	</if>
+	    	<if test="arrivedNature!= null">		
+	    		arrived_nature = #{arrivedNature},		
+	    	</if>
+	    	<if test="againstBankName!= null">		
+	    		against_bank_name = #{againstBankName},		
+	    	</if>
+	    	<if test="arrivedAmount!= null">		
+	    		arrived_amount = #{arrivedAmount},		
+	    	</if>
+	    	<if test="arrivedRates!= null">		
+	    		arrived_rates = #{arrivedRates},		
+	    	</if>
+	    	<if test="assessedValue!= null">		
+	    		assessed_value = #{assessedValue},		
+	    	</if>
+	    	<if test="fastBid!= null">		
+	    		fast_bid = #{fastBid},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousControlInformation">
+		insert into hous_control_information(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	name_identification_consistent,
+        	affiliates_number,
+        	follow_enterprises_category,
+        	is_executed,
+        	items,
+        	money,
+        	concluded,
+        	occupied_channel,
+        	maximum_mortgage,
+        	judicial_inquiry,
+        	arrived_nature,
+        	against_bank_name,
+        	arrived_amount,
+        	arrived_rates,
+        	assessed_value,
+        	fast_bid			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{nameIdentificationConsistent},
+        	#{affiliatesNumber},
+        	#{followEnterprisesCategory},
+        	#{isExecuted},
+        	#{items},
+        	#{money},
+        	#{concluded},
+        	#{occupiedChannel},
+        	#{maximumMortgage},
+        	#{judicialInquiry},
+        	#{arrivedNature},
+        	#{againstBankName},
+        	#{arrivedAmount},
+        	#{arrivedRates},
+        	#{assessedValue},
+        	#{fastBid}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousControlInformation">
+        update hous_control_information
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousControlInformationResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_control_information
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousControlInformationResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_control_information
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousControlInformationResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_control_information
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_control_information
+        where
+        id  = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="relieveProcess" name="relieveHouse" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="usertask-relieveTaskAssign" name="解押任务分配" activiti:assignee="SAME_AS_TASK:usertask-householdTaskAssign">
+      <documentation>warrantManager</documentation>
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.rongdu.eloan.modules.workflow.utils.listener.ZZJFAssignmentTaskCreationListener"></activiti:taskListener>
+        <activiti:taskListener event="complete" class="com.rongdu.eloan.modules.collateral.workflow.listener.CollateralRelieveAssignCompletionListener"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="usertask-relieve-tasks" name="解押登记" activiti:assignee="SAME_AS_TASK:usertask-householdInvestigate">
+      <documentation>warrantStaff</documentation>
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.rongdu.eloan.modules.workflow.utils.listener.ZZJFAssignmentTaskCreationListener"></activiti:taskListener>
+        <activiti:taskListener event="complete" class="com.rongdu.eloan.modules.collateral.workflow.listener.CollateralRelieveCompletionListener"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask-relieveTaskAssign"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="usertask-relieveTaskAssign" targetRef="usertask-relieve-tasks"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="usertask-relieve-tasks" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_relieveProcess">
+    <bpmndi:BPMNPlane bpmnElement="relieveProcess" id="BPMNPlane_relieveProcess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="180.0" y="300.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask-relieveTaskAssign" id="BPMNShape_usertask-relieveTaskAssign">
+        <omgdc:Bounds height="55.0" width="105.0" x="292.0" y="290.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask-relieve-tasks" id="BPMNShape_usertask-relieve-tasks">
+        <omgdc:Bounds height="55.0" width="105.0" x="460.0" y="290.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="630.0" y="300.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="215.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="292.0" y="317.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="397.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="460.0" y="317.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="565.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="630.0" y="317.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

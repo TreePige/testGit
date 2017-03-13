@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--感谢ibatis持久层框架 2014-10 by wu-->
+<mapper namespace="com.rongdu.eloan.modules.system.dao.SysDictDetailDao">
+	
+	<!--返回MAP-->		
+	<resultMap id="sysDictDetailResult" type="sysDictDetail">
+		<id column="id" property="id" />
+		<result column="item_code" property="itemCode" />
+		<result column="item_value" property="itemValue" />
+		<result column="parent_id" property="parentId" />
+	</resultMap>
+	<resultMap id="sysDictDetailResultMap" type="java.util.HashMap">
+		<id column="id" property="id" />
+		<result column="item_code" property="itemCode" />
+		<result column="item_value" property="itemValue" />
+		<result column="parent_id" property="parentId" />
+	</resultMap>
+	
+	
+		<!--基本的sql查询条件公共引用...-->
+	<sql id="baseSysDictDetailWhereSql">
+		 <where> 
+		    <if test="id != null and id !=''">
+		         ID = #{id}
+		    </if> 
+		    <if test="itemCode != null and itemCode !=''">
+		        AND ITEM_CODE = #{itemCode}
+		    </if>
+		    <if test="itemValue != null and itemValue !=''">
+		        AND ITEM_VALUE = #{itemValue}
+		    </if>
+		    <if test="parentId != null and parentId !=''">
+		        AND PARENT_ID = #{parentId}
+		    </if>
+		  </where>
+	</sql>
+	
+	<sql id="baseSql">
+		ID,
+		ITEM_CODE as itemCode,
+		ITEM_VALUE as itemValue,
+		PARENT_ID as parentId	
+	</sql>
+	
+	<sql id="pageEnd">
+		where rownum &lt;= #{end}) where rnum &gt;#{startRow}
+	</sql>
+
+	<sql id="pageStart">
+		select * from (select rownum rnum,a.* from (
+	</sql>
+	
+	<!-- 分页列表 map-->
+	<select id="getPageListMap" resultMap="sysDictDetailResultMap" parameterType="java.util.HashMap" >
+	 	select 
+			id,
+			item_code ,
+			item_value ,
+			parent_id 
+	    from sys_dict_detail
+		<include refid="baseSysDictDetailWhereSql"/>
+		order by ID desc
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Long" parameterType="java.util.HashMap" >
+		select 
+			count(1)		
+	    from sys_dict_detail
+		<include refid="baseSysDictDetailWhereSql"/>
+	</select>
+	
+	<insert id="insert" parameterType="sysDictDetail">
+		insert into sys_dict_detail(
+			item_code,
+			item_value,
+			parent_id				
+		)
+		values (
+			#{itemCode},
+			#{itemValue},
+			#{parentId}				
+		)
+		<selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+	
+	
+	<!--更新所有字段-->
+	<update id="update" parameterType="sysDictDetail">
+		update sys_dict_detail
+		set
+			item_code=#{itemCode},
+			item_value=#{itemValue},
+			parent_id=#{parentId}				
+		where
+			id = #{id}
+	</update>
+	
+	<!--根据ID删除-->
+	<delete id="deleteByPrimary" parameterType="long">
+		delete from sys_dict_detail
+		where
+		id  = #{id}
+ 	</delete>
+ 	
+ 	<select id="queryAllDic" resultMap="sysDictDetailResultMap">
+	 	SELECT
+		    dic.type_code,
+		    dic.type_name,
+		    dd.item_code,
+		    dd.item_value
+		FROM
+		    sys_dict dic
+		JOIN sys_dict_detail dd ON dd.parent_id = dic.id
+ 	</select>
+</mapper>

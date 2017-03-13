@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_data_list表:资料清单表(权证下户)模块 -->
+<mapper namespace="com.rongdu.eloan.modules.warrant.dao.HousDataListDao">
+	<!--返回MAP-->		
+	<resultMap id="HousDataListResult" type="HousDataList">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="account_book" property="accountBook" />
+		<result column="marriage_certificate" property="marriageCertificate" />
+		<result column="divorce_certificate" property="divorceCertificate" />
+		<result column="divorce_agreement" property="divorceAgreement" />
+		<result column="civil_mediation" property="civilMediation" />
+		<result column="court_verdict" property="courtVerdict" />
+		<result column="only_housing" property="onlyHousing" />
+		<result column="deed" property="deed" />
+		<result column="purchase_contract" property="purchaseContract" />
+		<result column="lease_contract" property="leaseContract" />
+		<result column="mortgage_loan_contract" property="mortgageLoanContract" />
+		<result column="loan_card" property="loanCard" />
+		<result column="credit_report" property="creditReport" />
+		<result column="two_or_five" property="twoOrFive" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			is_delete,
+			consult_id,
+			process_instance_id,
+			project_id,
+			account_book,
+			marriage_certificate,
+			divorce_certificate,
+			divorce_agreement,
+			civil_mediation,
+			court_verdict,
+			only_housing,
+			deed,
+			purchase_contract,
+			lease_contract,
+			mortgage_loan_contract,
+			loan_card,
+			credit_report,
+			two_or_five			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="accountBook !='' and accountBook !=null">
+            	and account_book = #{accountBook}
+            </if>
+            <if test="marriageCertificate !='' and marriageCertificate !=null">
+            	and marriage_certificate = #{marriageCertificate}
+            </if>
+            <if test="divorceCertificate !='' and divorceCertificate !=null">
+            	and divorce_certificate = #{divorceCertificate}
+            </if>
+            <if test="divorceAgreement !='' and divorceAgreement !=null">
+            	and divorce_agreement = #{divorceAgreement}
+            </if>
+            <if test="civilMediation !='' and civilMediation !=null">
+            	and civil_mediation = #{civilMediation}
+            </if>
+            <if test="courtVerdict !='' and courtVerdict !=null">
+            	and court_verdict = #{courtVerdict}
+            </if>
+            <if test="onlyHousing !='' and onlyHousing !=null">
+            	and only_housing = #{onlyHousing}
+            </if>
+            <if test="deed !='' and deed !=null">
+            	and deed = #{deed}
+            </if>
+            <if test="purchaseContract !='' and purchaseContract !=null">
+            	and purchase_contract = #{purchaseContract}
+            </if>
+            <if test="leaseContract !='' and leaseContract !=null">
+            	and lease_contract = #{leaseContract}
+            </if>
+            <if test="mortgageLoanContract !='' and mortgageLoanContract !=null">
+            	and mortgage_loan_contract = #{mortgageLoanContract}
+            </if>
+            <if test="loanCard !='' and loanCard !=null">
+            	and loan_card = #{loanCard}
+            </if>
+            <if test="creditReport !='' and creditReport !=null">
+            	and credit_report = #{creditReport}
+            </if>
+            <if test="twoOrFive !='' and twoOrFive !=null">
+            	and two_or_five = #{twoOrFive}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="accountBook!= null">		
+	    		account_book = #{accountBook},		
+	    	</if>
+	    	<if test="marriageCertificate!= null">		
+	    		marriage_certificate = #{marriageCertificate},		
+	    	</if>
+	    	<if test="divorceCertificate!= null">		
+	    		divorce_certificate = #{divorceCertificate},		
+	    	</if>
+	    	<if test="divorceAgreement!= null">		
+	    		divorce_agreement = #{divorceAgreement},		
+	    	</if>
+	    	<if test="civilMediation!= null">		
+	    		civil_mediation = #{civilMediation},		
+	    	</if>
+	    	<if test="courtVerdict!= null">		
+	    		court_verdict = #{courtVerdict},		
+	    	</if>
+	    	<if test="onlyHousing!= null">		
+	    		only_housing = #{onlyHousing},		
+	    	</if>
+	    	<if test="deed!= null">		
+	    		deed = #{deed},		
+	    	</if>
+	    	<if test="purchaseContract!= null">		
+	    		purchase_contract = #{purchaseContract},		
+	    	</if>
+	    	<if test="leaseContract!= null">		
+	    		lease_contract = #{leaseContract},		
+	    	</if>
+	    	<if test="mortgageLoanContract!= null">		
+	    		mortgage_loan_contract = #{mortgageLoanContract},		
+	    	</if>
+	    	<if test="loanCard!= null">		
+	    		loan_card = #{loanCard},		
+	    	</if>
+	    	<if test="creditReport!= null">		
+	    		credit_report = #{creditReport},		
+	    	</if>
+	    	<if test="twoOrFive!= null">		
+	    		two_or_five = #{twoOrFive},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousDataList">
+		insert into hous_data_list(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	account_book,
+        	marriage_certificate,
+        	divorce_certificate,
+        	divorce_agreement,
+        	civil_mediation,
+        	court_verdict,
+        	only_housing,
+        	deed,
+        	purchase_contract,
+        	lease_contract,
+        	mortgage_loan_contract,
+        	loan_card,
+        	credit_report,
+        	two_or_five			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{accountBook},
+        	#{marriageCertificate},
+        	#{divorceCertificate},
+        	#{divorceAgreement},
+        	#{civilMediation},
+        	#{courtVerdict},
+        	#{onlyHousing},
+        	#{deed},
+        	#{purchaseContract},
+        	#{leaseContract},
+        	#{mortgageLoanContract},
+        	#{loanCard},
+        	#{creditReport},
+        	#{twoOrFive}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousDataList">
+        update hous_data_list
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousDataListResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_data_list
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousDataListResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_data_list
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousDataListResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_data_list
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_data_list
+        where
+        id  = #{id}
+    </delete>
+</mapper>

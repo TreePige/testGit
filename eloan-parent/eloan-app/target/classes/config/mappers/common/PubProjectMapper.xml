@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- pub_project表:项目模块 -->
+<mapper namespace="com.rongdu.eloan.common.dao.PubProjectDao">
+	<!--返回MAP-->		
+	<resultMap id="PubProjectResult" type="PubProject">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="project_name" property="projectName" />
+		<result column="type" property="type" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			code,
+        	project_name,
+        	type,
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="code !='' and code !=null">
+            	and code = #{code}
+            </if>
+            <if test="projectName !='' and projectName !=null">
+            	and project_name = #{projectName}
+            </if>
+            <if test="type !='' and type !=null">
+            	and type = #{type}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="code!= null">		
+	    		code = #{code},		
+	    	</if>
+	    	<if test="projectName!= null">		
+	    		project_name = #{projectName},		
+	    	</if>
+	    	<if test="type!= null">		
+	    		type = #{type},		
+	    	</if>
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="PubProject">
+		insert into pub_project(
+        	code,
+        	project_name,
+        	type,
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete			
+        )values(
+        	#{code},
+        	#{projectName},
+        	#{type},
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="PubProject">
+        update pub_project
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+    
+    <!-- 查询项目代码最大值 -->
+	<select id="getMaxProjectCode" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select max(code) as projectCode from pub_project where code like concat('',#{projectCode}, '%') 
+	</select>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="PubProjectResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from pub_project
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="PubProjectResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from pub_project
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="PubProjectResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from pub_project
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from pub_project
+        where
+        id  = #{id}
+    </delete>
+</mapper>

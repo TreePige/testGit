@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.eloan.modules.workflow.dao.RDZZTaskDao">
+	
+	<sql id="housLowerCostBaseSql">
+		task.ASSIGNEE_ as assignee,
+		task.PROC_INST_ID_ as processInstanceId,
+		task.TASK_DEF_KEY_ as processStateCode,
+		sdd.item_value as currentProcessStateCode,
+		<!--pi.property_area as propertyArea,
+		bb.`name` as customerName,-->
+		br.account as account,
+		br.time_limit as timeLimit,
+		pp.`code` as projectCode,
+		pp.project_name as projectName,
+		pc.customer_manager as customerManager,
+		pp.id as projectId,
+		task.ID_ as taskId,
+		pc.id as consultId,
+		pc.name as customerName,
+	</sql>
+	
+	<sql id="housLowerCostBaseJoin">
+		<!--INNER JOIN hous_property_information pi ON pi.process_instance_id = task.PROC_INST_ID_
+		INNER JOIN hous_borrowing_basics bb ON bb.process_instance_id = task.PROC_INST_ID_-->
+		INNER JOIN pl_borrow_requirement br ON br.process_instance_id = task.PROC_INST_ID_
+		INNER JOIN pub_project pp ON pp.id = br.project_id
+		INNER JOIN sys_role r on r.nid = task.DESCRIPTION_
+		INNER JOIN sys_user assignee ON assignee.user_name = task.ASSIGNEE_
+		INNER JOIN pl_consult pc ON pc.process_instance_id = task.PROC_INST_ID_
+		INNER JOIN sys_dict_detail as sdd on sdd.item_code = pc.`status`
+	</sql>
+	
+	<sql id="housLowerCostBaseWhere">
+		<where> 
+			<if test="projectCode !='' and projectCode !=null">
+	                pp.`code` like concat('',#{projectCode}, '%') 
+	        </if>
+	        <if test="projectName !='' and projectName !=null">
+	                AND pp.project_name like concat('',#{projectName}, '%') 
+	        </if>
+	        <if test="customerName !='' and customerName !=null">
+	                AND pc.`name` like concat('',#{customerName}, '%') 
+	        </if>
+	        <if test="status !='' and status !=null">
+	                AND pc.`status` = #{status}
+	        </if>
+	        <if test="taskDefinition !='' and taskDefinition !=null">
+	                AND task.TASK_DEF_KEY_ = #{taskDefinition}
+	        </if>
+	        <if test="flowStatus !='' and flowStatus !=null">
+	                AND task.TASK_DEF_KEY_ = #{flowStatus}
+	        </if>
+	        <if test="customerManager !='' and customerManager !=null">
+	                AND pc.customer_manager like concat('',#{customerManager}, '%') 
+	        </if>
+	        <if test="processInstanceId !='' and processInstanceId !=null">
+	                AND task.PROC_INST_ID_ = #{processInstanceId}
+	        </if>
+	        <if test="isCompleted == true ">
+	                AND task.END_TIME_ is not null
+	        </if>
+			<if test="userName !=null or roleId !=null or coverdOffices != null" >
+	         and ((
+		        <if test="userName !='' and userName !=null">
+		                 task.ASSIGNEE_ = #{userName}
+		        </if>
+		        <if test="roleId !='' and roleId !=null">
+		                AND r.id = #{roleId}
+		        </if>
+	        	)
+	            or assignee.office_id IN
+		        <foreach item="item" index="index" collection="coverdOffices"
+			      open="(" separator="," close=")">
+			        #{item}
+			 	</foreach>
+		 	)
+		 	</if>
+		</where>
+	</sql>
+	
+	<select id="queryUndoHousLowerCostTasks" parameterType="map" resultType="java.util.HashMap">
+		SELECT
+			<include refid="housLowerCostBaseSql"/>
+			task.CREATE_TIME_ as createTime
+		FROM
+			ACT_RU_TASK task
+		<include refid="housLowerCostBaseJoin"/>
+		<include refid="housLowerCostBaseWhere"/>
+		order by task.CREATE_TIME_ asc
+	</select>
+	
+	<select id="queryUndoHousLowerCostTaskCount" parameterType="map" resultType="long">
+		SELECT
+			count(*)
+		FROM
+			ACT_RU_TASK task
+		<include refid="housLowerCostBaseJoin"/>
+		<include refid="housLowerCostBaseWhere"/>
+	</select>
+	
+	<select id="queryDoneHousLowerCostTasks" parameterType="map" resultType="java.util.HashMap">
+		SELECT
+			<include refid="housLowerCostBaseSql"/>
+			task.START_TIME_ as startTime,
+			task.END_TIME_ as endTime
+		FROM
+			ACT_HI_TASKINST task
+		<include refid="housLowerCostBaseJoin"/>
+		<include refid="housLowerCostBaseWhere"/>
+		order by task.END_TIME_ desc
+	</select>
+	
+	<select id="queryDoneHousLowerCostTaskCount" parameterType="map" resultType="long">
+		SELECT
+			count(*)
+		FROM
+			ACT_HI_TASKINST task
+		<include refid="housLowerCostBaseJoin"/>
+		<include refid="housLowerCostBaseWhere"/>
+	</select>
+</mapper>

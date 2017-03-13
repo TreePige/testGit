@@ -1,0 +1,37 @@
+{
+    "totalCount": 2,
+    "data": [
+        {
+            "taskId": "1482520",
+            "customerName": "123",
+            "customerManager": "吴彦祖",
+            "projectCode": "110000096",
+            "consultId": 125,
+            "executor": "吴彦祖",
+            "projectId": 289,
+            "businessOrigin": "0",
+            "startTime": "2016-08-22 17:38:53",
+            "processInstanceId": "1482508",
+            "currentProcessStateCode": "客服初评",
+            "projectName": "客户123借款",
+            "processStateCode": "usertask-collateralAssess"
+        },
+        {
+            "taskId": "1505020",
+            "customerName": "张三",
+            "customerManager": "吴彦祖",
+            "projectCode": "110000098",
+            "consultId": 127,
+            "executor": "吴彦祖",
+            "projectId": 292,
+            "businessOrigin": "0",
+            "startTime": "2016-08-23 09:45:55",
+            "processInstanceId": "1505008",
+            "currentProcessStateCode": "客服初评",
+            "projectName": "客户张三借款",
+            "processStateCode": "usertask-collateralAssess"
+        }
+    ],
+    "code": 200,
+    "msg": "操作成功"
+}

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- fel_param表:公式配置,参数模块模块 -->
+<mapper namespace="com.rongdu.eloan.modules.fel.dao.FelParamDao">
+	<!--返回MAP-->		
+	<resultMap id="felParamResult" type="felParam">
+		<id column="id" property="id" />
+		<result column="chinese_name" property="chineseName" />
+		<result column="english_name" property="englishName" />
+		<result column="data_type" property="dataType" />
+		<result column="data_source" property="dataSource" />
+		<result column="create_date" property="createDate" />
+		<result column="create_name" property="createName" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="modify_name" property="modifyName" />
+		<result column="state" property="state" />
+		<result column="delete_state" property="deleteState" />
+	</resultMap>
+	
+	<sql id="searchSql">
+     	id,
+		chinese_name,
+		english_name,
+		data_type,
+		data_source,
+		create_date,
+		create_name,
+		modify_date,
+		modify_name,
+		state,
+		delete_state
+	</sql>
+	
+	<!-- 动态查询 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+             <if test="id!=null and id!='' ">
+                 id = #{id}
+             </if>
+             <if test="chineseName!=null and chineseName!='' ">
+             	and chinese_name = #{chineseName}
+             </if>
+             <if test="englishName!=null and englishName!='' ">
+             	and english_name = #{englishName}
+             </if>
+             <if test="dataType!=null and dataType!='' ">
+             	and data_type = #{dataType}
+             </if>
+             <if test="dataSource!=null and dataSource!='' ">
+             	and data_source = #{dataSource}
+             </if>
+             <if test="createDate!=null and createDate!='' ">
+             	and create_date = #{createDate}
+             </if>
+             <if test="createName!=null and createName!='' ">
+             	and create_name = #{createName}
+             </if>
+             <if test="modifyDate!=null and modifyDate!='' ">
+             	and modify_date = #{modifyDate}
+             </if>
+             <if test="modifyName!=null and modifyName!='' ">
+             	and modify_name = #{modifyName}
+             </if>
+             <if test="state!=null and state!='' ">
+             	and state = #{state}
+             </if>
+             <if test="deleteState!=null">
+             	and delete_state = #{deleteState}
+             </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+        <trim prefix="set" suffixOverrides=",">
+            <if test="modifyDate!=null and modifyDate!='' ">
+            	modify_date = #{modifyDate},
+            </if>
+            <if test="chineseName!=null and chineseName!='' ">
+            	chinese_name = #{chineseName},
+            </if>
+            <if test="englishName!=null and englishName!='' ">
+            	english_name = #{englishName},
+            </if>
+            <if test="dataType!=null and dataType!='' ">
+             	data_type = #{dataType},
+             </if>
+            <if test="dataSource!=null and dataSource!='' ">
+            	data_source = #{dataSource},
+            </if>
+            <if test="modifyName!=null and modifyName!='' ">
+            	modify_name = #{modifyName},
+            </if>
+            <if test="state!=null and state!='' ">
+            	state = #{state},
+            </if>
+            <if test="deleteState!=null">
+            	delete_state = #{deleteState}
+            </if>
+        </trim>
+    </sql>
+    
+    <!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="felParam">
+		insert into fel_param(
+	        id,
+			chinese_name,
+			english_name,
+			data_type,
+			data_source,
+			create_date,
+			create_name,
+			modify_date,
+			modify_name,
+			state,
+			delete_state
+        )values(
+        	#{id},
+			#{chineseName},
+			#{englishName},
+			#{dataType},
+			#{dataSource},
+			#{createDate},
+			#{createName},
+			#{modifyDate},
+			#{modifyName},
+			#{state},
+			#{deleteState}
+        )
+        <selectKey resultType="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+    <!-- 动态更新 -->
+    <update id="Update" parameterType="felParam">
+        update fel_param
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+   <!-- 动态查询 -->
+    <select id="getListByMap" parameterType="java.util.HashMap" resultMap="felParamResult">
+        select * from fel_param 
+        <include refid="searchByPo"/>
+        order by id asc
+    </select>
+    
+   <!-- 动态查询 -->
+    <select id="getPageListByMap" parameterType="java.util.HashMap" resultMap="felParamResult">
+        select * from fel_param 
+        <include refid="searchByPo"/>
+        order by id asc
+    </select>
+    
+    <!-- 返回总数 -->
+    <select id="getPageCountByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from fel_param 
+        <include refid="searchByPo"/>
+    </select>
+
+    <!--根据ID删除-->
+    <delete id="delete" parameterType="int">
+        delete from fel_param
+        where
+        id  = #{id}
+    </delete>
+    
+    <!--根据对象查询公式参数  -->
+    <select id="Select" parameterType="felParam" resultMap="felParamResult">
+     select * from fel_param 
+        <include refid="searchByPo"/>
+    </select>
+    
+     <!--根据id查询参数  -->
+     <select id="selectParamById" parameterType="String" resultMap="felParamResult">
+     
+     	select * from fel_param 
+     	where id in (${id})
+    </select>
+</mapper>

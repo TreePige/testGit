@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- hous_borrowing_basics表:借款基本信息模块 -->
+<mapper namespace="com.rongdu.eloan.modules.instance.dao.HousBorrowingBasicsDao">
+	<!--返回MAP-->		
+	<resultMap id="HousBorrowingBasicsResult" type="HousBorrowingBasics">
+		<id column="id" property="id" />
+		<result column="creator" property="creator" />
+		<result column="create_time" property="createTime" />
+		<result column="modifier" property="modifier" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="consult_id" property="consultId" />
+		<result column="process_instance_id" property="processInstanceId" />
+		<result column="project_id" property="projectId" />
+		<result column="name" property="name" />
+		<result column="cert_number" property="certNumber" />
+		<result column="phone" property="phone" />
+		<result column="marry_status" property="marryStatus" />
+		<result column="spouse_name" property="spouseName" />
+		<result column="spouse_cert_number" property="spouseCertNumber" />
+		<result column="spouse_phone" property="spousePhone" />
+		<result column="total_borrowed" property="totalBorrowed" />
+		<result column="total_borrowed_cert_number" property="totalBorrowedCertNumber" />
+		<result column="residential_address_id" property="residentialAddressId" />
+		<result column="residential_address" property="residentialAddress" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<!--基本的sql查询字段 公共引用...-->
+	<sql id="searchSql">
+			id,
+			creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	name,
+        	cert_number,
+        	phone,
+        	marry_status,
+        	spouse_name,
+        	spouse_cert_number,
+        	spouse_phone,
+        	total_borrowed,
+        	total_borrowed_cert_number,
+        	residential_address_id,
+        	residential_address,
+        	remark			
+	</sql>
+	
+	<!-- 基本的sql查询条件公共引用 -->
+	<sql id="searchByPo">
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id !='' and id !=null">
+                id  = #{id}
+            </if>
+            <if test="creator !='' and creator !=null">
+            	and creator = #{creator}
+            </if>
+            <if test="createTime !='' and createTime !=null">
+            	and create_time = #{createTime}
+            </if>
+            <if test="modifier !='' and modifier !=null">
+            	and modifier = #{modifier}
+            </if>
+            <if test="modifyTime !='' and modifyTime !=null">
+            	and modify_time = #{modifyTime}
+            </if>
+            <if test="isDelete !='' and isDelete !=null">
+            	and is_delete = #{isDelete}
+            </if>
+            <if test="consultId !='' and consultId !=null">
+            	and consult_id = #{consultId}
+            </if>
+            <if test="processInstanceId !='' and processInstanceId !=null">
+            	and process_instance_id = #{processInstanceId}
+            </if>
+            <if test="projectId !='' and projectId !=null">
+            	and project_id = #{projectId}
+            </if>
+            <if test="name !='' and name !=null">
+            	and name = #{name}
+            </if>
+            <if test="certNumber !='' and certNumber !=null">
+            	and cert_number = #{certNumber}
+            </if>
+            <if test="phone !='' and phone !=null">
+            	and phone = #{phone}
+            </if>
+            <if test="marryStatus !='' and marryStatus !=null">
+            	and marry_status = #{marryStatus}
+            </if>
+            <if test="spouseName !='' and spouseName !=null">
+            	and spouse_name = #{spouseName}
+            </if>
+            <if test="spouseCertNumber !='' and spouseCertNumber !=null">
+            	and spouse_cert_number = #{spouseCertNumber}
+            </if>
+            <if test="spousePhone !='' and spousePhone !=null">
+            	and spouse_phone = #{spousePhone}
+            </if>
+            <if test="totalBorrowed !='' and totalBorrowed !=null">
+            	and total_borrowed = #{totalBorrowed}
+            </if>
+            <if test="totalBorrowedCertNumber !='' and totalBorrowedCertNumber !=null">
+            	and total_borrowed_cert_number = #{totalBorrowedCertNumber}
+            </if>
+            <if test="residentialAddressId !='' and residentialAddressId !=null">
+            	and residential_address_id = #{residentialAddressId}
+            </if>
+            <if test="residentialAddress !='' and residentialAddress !=null">
+            	and residential_address = #{residentialAddress}
+            </if>
+            <if test="remark !='' and remark !=null">
+            	and remark = #{remark}
+            </if>
+		</trim>
+	</sql>
+	
+	<!-- 动态更新 -->
+    <sql id="updateByPo">
+       	<trim prefix="set" suffixOverrides=",">
+	    	<if test="modifier!= null">		
+	    		modifier = #{modifier},		
+	    	</if>
+	    	<if test="modifyTime!= null">		
+	    		modify_time = #{modifyTime},		
+	    	</if>
+	    	<if test="isDelete!= null and isDelete != ''">		
+	    		is_delete = #{isDelete},		
+	    	</if>
+	    	<if test="consultId!= null">		
+	    		consult_id = #{consultId},		
+	    	</if>
+	    	<if test="processInstanceId!= null">		
+	    		process_instance_id = #{processInstanceId},		
+	    	</if>
+	    	<if test="projectId!= null">		
+	    		project_id = #{projectId},		
+	    	</if>
+	    	<if test="name!= null">		
+	    		name = #{name},		
+	    	</if>
+	    	<if test="certNumber!= null">		
+	    		cert_number = #{certNumber},		
+	    	</if>
+	    	<if test="phone!= null">		
+	    		phone = #{phone},		
+	    	</if>
+	    	<if test="marryStatus!= null">		
+	    		marry_status = #{marryStatus},		
+	    	</if>
+	    	<if test="spouseName!= null">		
+	    		spouse_name = #{spouseName},		
+	    	</if>
+	    	<if test="spouseCertNumber!= null">		
+	    		spouse_cert_number = #{spouseCertNumber},		
+	    	</if>
+	    	<if test="spousePhone!= null">		
+	    		spouse_phone = #{spousePhone},		
+	    	</if>
+	    	<if test="totalBorrowed!= null">		
+	    		total_borrowed = #{totalBorrowed},		
+	    	</if>
+	    	<if test="totalBorrowedCertNumber!= null">		
+	    		total_borrowed_cert_number = #{totalBorrowedCertNumber},		
+	    	</if>
+	    	<if test="residentialAddressId!= null">		
+	    		residential_address_id = #{residentialAddressId},		
+	    	</if>
+	    	<if test="residentialAddress!= null">		
+	    		residential_address = #{residentialAddress},		
+	    	</if>
+	    	<if test="remark != null">		
+	    		remark = #{remark},		
+	    	</if>
+	    </trim>
+    </sql>
+	
+	<!-- 动态的插入,必须要创建时间 -->
+	<insert id="insert" parameterType="HousBorrowingBasics">
+		insert into hous_borrowing_basics(
+        	creator,
+        	create_time,
+        	modifier,
+        	modify_time,
+        	is_delete,
+        	consult_id,
+        	process_instance_id,
+        	project_id,
+        	name,
+        	cert_number,
+        	phone,
+        	marry_status,
+        	spouse_name,
+        	spouse_cert_number,
+        	spouse_phone,
+        	total_borrowed,
+        	total_borrowed_cert_number,
+        	residential_address_id,
+        	residential_address,
+        	remark			
+        )values(
+        	#{creator},
+        	#{createTime},
+        	#{modifier},
+        	#{modifyTime},
+        	#{isDelete},
+        	#{consultId},
+        	#{processInstanceId},
+        	#{projectId},
+        	#{name},
+        	#{certNumber},
+        	#{phone},
+        	#{marryStatus},
+        	#{spouseName},
+        	#{spouseCertNumber},
+        	#{spousePhone},
+        	#{totalBorrowed},
+        	#{totalBorrowedCertNumber},
+        	#{residentialAddressId},
+        	#{residentialAddress},
+        	#{remark}			
+        )
+     <!-- 重新返回给实体类,插入的id值 -->
+     <selectKey resultType="long" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS ID
+	 </selectKey>
+	 </insert>
+	
+    <!-- 动态更新 -->
+    <update id="update" parameterType="HousBorrowingBasics">
+        update hous_borrowing_basics
+        <include refid="updateByPo"/>
+        where id = #{id}
+    </update>
+
+	<!--根据id查询-->
+	<select id="getItemInfoById" resultMap="HousBorrowingBasicsResult" parameterType="long" >
+		select 
+		<include refid="searchSql"/>
+		from hous_borrowing_basics
+		where id = #{id}	
+	</select>
+	
+	<!--根据流程id查询-->
+	<select id="getItemInfoByProcessInstanceId" resultMap="HousBorrowingBasicsResult" parameterType="java.lang.String" >
+		select 
+		<include refid="searchSql"/>
+		from hous_borrowing_basics
+		where process_instance_id = #{processInstanceId}	
+	</select>
+	
+	<!--分页列表查询-->
+	<select id="getPageListByMap" resultMap="HousBorrowingBasicsResult" parameterType="java.util.HashMap" >
+		select 
+		<include refid="searchSql"/>
+		from hous_borrowing_basics
+		<include refid="searchByPo"/>	
+		order by id desc
+	</select>
+
+    <!--根据ID删除-->
+    <delete id="deleteById">
+        delete from hous_borrowing_basics
+        where
+        id  = #{id}
+    </delete>
+</mapper>
