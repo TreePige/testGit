@@ -8,4 +8,6 @@ git's third change on add.txt
 
 git's fourth change on add.txt
 
-git add new branch dev.change.
+git add new branch dev.
+
+git change 1 test.
