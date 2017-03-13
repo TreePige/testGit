@@ -3,3 +3,5 @@
 git's first change on add.txt
 
 git's second change on add.txt
+
+git's third change on add.txt
