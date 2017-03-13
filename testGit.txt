@@ -6,3 +6,6 @@ git changes  once more.
 git repository change.
 
 feature1 changes.
+
+change is absolute.
+
